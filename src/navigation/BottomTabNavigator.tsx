@@ -10,7 +10,7 @@ import * as React from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import AccessScreen from '../screens/AccessScreen';
+import TabOneScreen from '../screens/TabTwoScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import { BottomTabParamList, AccessParamList, TabTwoParamList } from '../types';
 
@@ -25,8 +25,8 @@ export default function BottomTabNavigator() {
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint }}
     >
       <BottomTab.Screen
-        name="Access"
-        component={AccessNavigator}
+        name="TabOne"
+        component={TabOneNavigator}
         options={{
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="ios-code" color={color} />
@@ -59,12 +59,12 @@ function TabBarIcon(props: {
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
 const AccessStack = createStackNavigator<AccessParamList>();
 
-function AccessNavigator() {
+function TabOneNavigator() {
   return (
     <AccessStack.Navigator>
       <AccessStack.Screen
         name="AccessScreen"
-        component={AccessScreen}
+        component={TabOneScreen}
         options={{ headerTitle: 'Tab One Title' }}
       />
     </AccessStack.Navigator>
