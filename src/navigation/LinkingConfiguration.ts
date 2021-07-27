@@ -10,11 +10,12 @@ export default {
   prefixes: [Linking.makeUrl('/')],
   config: {
     screens: {
+      Access: 'access',
       Root: {
         screens: {
-          Access: {
+          TabOne: {
             screens: {
-              AccessScreen: 'access'
+              TabOneScreen: 'one'
             }
           },
           TabTwo: {
