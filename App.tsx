@@ -1,13 +1,23 @@
 import 'react-native-gesture-handler';
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import { GoogleSignin } from '@react-native-community/google-signin';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+import React, { useEffect } from 'react';
 
+import { env } from './.env';
 import useCachedResources from './src/hooks/useCachedResources';
 import useColorScheme from './src/hooks/useColorScheme';
 import Navigation from './src/navigation';
 
-export default function App() {
+const App = () => {
+  // useEffect(() => {
+  //   GoogleSignin.configure({
+  //     webClientId: env.WEB_CLIENT_ID,
+  //     offlineAccess: true,
+  //     forceCodeForRefreshToken: true
+  //   });
+  // });
+
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
@@ -21,4 +31,6 @@ export default function App() {
       </SafeAreaProvider>
     );
   }
-}
+};
+
+export default App;
