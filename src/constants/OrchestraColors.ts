@@ -18,7 +18,12 @@ export default {
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark
   },
+  primaryColor: '#191919',
+  primaryColorLight: '#27272C',
+  primaryColorLightest: '#454548',
   secondaryColor: '#FFD700',
   secondaryColorDark: '#BE8B00',
-  secondaryColorLight: '#F2C037'
+  secondaryColorLight: '#F2C037',
+  textColor: '#FFFFFF',
+  textColorDark: '#B8B8B8'
 };

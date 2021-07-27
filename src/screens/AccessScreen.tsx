@@ -11,7 +11,7 @@ import * as Google from 'expo-google-app-auth';
 
 import { RootStackParamList } from '../types';
 import { env } from '../../.env';
-import Colors from '../constants/Colors';
+import OrchestraColors from '../constants/OrchestraColors';
 
 // const handleGoogleSignIn = ({
 //   navigation
@@ -68,7 +68,7 @@ const AccessScreen = ({
 
 const styles = StyleSheet.create({
   accessScreen: {
-    backgroundColor: Colors.secondaryColor,
+    backgroundColor: OrchestraColors.secondaryColor,
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
