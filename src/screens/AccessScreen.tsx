@@ -1,7 +1,9 @@
 import React from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
-import * as Google from 'expo-google-app-auth';
+import * as Google from 'expo-auth-session/providers/google';
+import * as Application from 'expo-application';
+
 // import LinearGradient from 'expo-linear-gradient';
 // import {
 //   GoogleSignin,
@@ -12,38 +14,26 @@ import * as Google from 'expo-google-app-auth';
 import { RootStackParamList } from '../types';
 import { env } from '../../.env';
 import OrchestraColors from '../constants/OrchestraColors';
-
-// const handleGoogleSignIn = ({
-//   navigation
-// }: StackScreenProps<RootStackParamList, 'Access'>) => {
-//   const config = {
-//     androidClientId: env.ANDROID_CLIENT_ID,
-//     scopes: ['profile', 'email']
-//   };
-
-//   Google.logInAsync(config)
-//     .then(result => {
-//       const { type, user } = result;
-
-//       if (type == 'success') {
-//         const { email, name, photoUrl } = user;
-
-//         console.log('Google sigin was successful');
-//         setTimeout(() =>
-//           navigation.navigate('Root', { email, name, photoUrl })
-//         );
-//       } else {
-//         console.log('Google sigin was cancelled');
-//       }
-//     })
-//     .catch(error => {
-//       console.log(error);
-//     });
-// };
+import { Prompt } from 'expo-auth-session';
 
 const AccessScreen = ({
   navigation
 }: StackScreenProps<RootStackParamList, 'Access'>) => {
+  const expoClientId = `508188356154-frtsvubeuj37hbtn2k4ivp9in5o9lmad`;
+  const androidClientId = `508188356154-tim0ltfoft800n8o3f53q7ish55850fq`;
+  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+    expoClientId: `${expoClientId}.apps.googleusercontent.com`,
+    androidClientId: `${androidClientId}.apps.googleusercontent.com`,
+    prompt: Prompt.Login
+  });
+
+  React.useEffect(() => {
+    if (response?.type === 'success') {
+      const { params } = response;
+      console.log(params);
+    }
+  }, [response]);
+
   return (
     <View style={styles.accessScreen}>
       <View style={styles.logoView}>
@@ -55,10 +45,9 @@ const AccessScreen = ({
         <Text style={styles.logoSubTitle}>Conduct your book's soundtracks</Text>
       </View>
       <TouchableOpacity
+        disabled={!request}
         style={styles.signInButton}
-        onPress={() => {
-          navigation.navigate('Root');
-        }}
+        onPress={() => promptAsync()}
       >
         <Text style={styles.logoSubTitle}>Google Sign In</Text>
       </TouchableOpacity>

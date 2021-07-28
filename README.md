@@ -14,3 +14,5 @@
 <li>Run `yarn start` to launch the project.</li>
 <li>Select the Android emulator.</li>
 </ol>
+
+Note: remember to log into your expo account (`expo login`) to use the google sign in when developing
