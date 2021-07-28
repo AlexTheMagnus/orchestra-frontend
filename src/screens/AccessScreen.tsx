@@ -2,14 +2,6 @@ import React from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import * as Google from 'expo-auth-session/providers/google';
-import * as Application from 'expo-application';
-
-// import LinearGradient from 'expo-linear-gradient';
-// import {
-//   GoogleSignin,
-//   GoogleSigninButton,
-//   statusCodes
-// } from '@react-native-google-signin/google-signin';
 
 import { RootStackParamList } from '../types';
 import { env } from '../../.env';
@@ -31,6 +23,7 @@ const AccessScreen = ({
     if (response?.type === 'success') {
       const { params } = response;
       console.log(params);
+      navigation.push('Root');
     }
   }, [response]);
 
