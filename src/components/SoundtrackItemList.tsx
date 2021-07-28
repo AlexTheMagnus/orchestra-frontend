@@ -5,8 +5,9 @@ import SoundtrackItem from './SoundtrackItem';
 
 const SoundtrackItemList = () => {
   return (
-    <View style={styles.container}>
+    <View>
       <ScrollView>
+        <View style={styles.container} />
         <SoundtrackItem
           bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
           soundtrackTitle="El sonido de los cuervos"
@@ -79,11 +80,7 @@ const SoundtrackItemList = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly'
-  }
+  container: { height: 80 }
 });
 
 export default SoundtrackItemList;
