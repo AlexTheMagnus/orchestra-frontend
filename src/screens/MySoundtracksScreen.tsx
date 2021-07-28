@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { View } from '../components/Themed';
 
 import EmptyView from '../components/EmptyView';
-import SoundtrackItem from '../components/SoundtrackItem';
+import CreateSoundtrackButton from '../components/CreateSoundtrackButton';
 
 const MySoundtracksScreen = () => {
   const emptyMessage: string =
@@ -12,6 +12,7 @@ const MySoundtracksScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
+        <CreateSoundtrackButton />
         <EmptyView icon="mySoundtracks" message={emptyMessage} />
       </View>
     </View>
