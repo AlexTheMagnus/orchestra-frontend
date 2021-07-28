@@ -25,6 +25,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "host.exp.exponent",
+      "config": {
+        "googleSignIn": {
+          "apiKey": "508188356154-tim0ltfoft800n8o3f53q7ish55850fq.apps.googleusercontent.com"
+        }
       }
     },
     "web": {
