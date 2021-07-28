@@ -1,22 +1,21 @@
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
-
-import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
 
-export default function MySoundtracksScreen() {
+import EmptyView from '../components/EmptyView';
+
+const MySoundtracksScreen = () => {
+  const emptyMessage: string =
+    'Touch the button above to create your fisrt soundtrack';
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
-      />
-      <EditScreenInfo path="/screens/MySoundtracksScreen.tsx" />
+      <View style={styles.content}>
+        <EmptyView icon="mySoundtracks" message={emptyMessage} />
+      </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -24,13 +23,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold'
+  content: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 200
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%'
+  emptyIcon: {
+    margin: 20
+  },
+  emptyMessage: {
+    fontSize: 20,
+    lineHeight: 24,
+    textAlign: 'center'
   }
 });
+
+export default MySoundtracksScreen;

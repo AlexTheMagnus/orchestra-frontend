@@ -1,20 +1,19 @@
-import * as React from 'react';
+import React from 'react';
 import { StyleSheet } from 'react-native';
+import { Text, View } from '../components/Themed';
 
-import EmptyView from '../components/EmptyView';
-import { View } from '../components/Themed';
+import OrchestraIcon from './icons/OrchestraIcon';
 
-export default function SearchScreen() {
-  const emptyMessage: string = 'Search soundtracks for your books';
+const EmptyView = ({ ...props }) => {
+  const { icon, message } = props;
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <EmptyView icon="search" message={emptyMessage} />
-      </View>
+    <View style={styles.content}>
+      <OrchestraIcon icon={icon} color="black" style={styles.emptyIcon} />
+      <Text style={styles.emptyMessage}>{message}</Text>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -37,3 +36,5 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   }
 });
+
+export default EmptyView;
