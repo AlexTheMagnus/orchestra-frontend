@@ -10,9 +10,17 @@ import * as React from 'react';
 
 import OrchestraColors from '../constants/OrchestraColors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
-import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
+import MySoundtracksScreen from '../screens/MySoundtracksScreen';
+import FavoritesScreen from '../screens/FavoritesScreen';
+import SearchScreen from '../screens/SearchScreen';
+import MyProfileScreen from '../screens/MyProfileScreen';
+import {
+  BottomTabParamList,
+  MySoundtracksParamList,
+  FavoritesParamList,
+  SearchParamList,
+  MyProfileParamList
+} from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -21,24 +29,40 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="My soundtracks"
       tabBarOptions={{ activeTintColor: OrchestraColors[colorScheme].tint }}
     >
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="My soundtracks"
+        component={MySoundtracksNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <TabBarIcon name="musical-notes-outline" color={color} />
           )
         }}
       />
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="Favorites"
+        component={FavoritesNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <TabBarIcon name="ios-code" color={color} />
+            <TabBarIcon name="star-outline" color={color} />
+          )
+        }}
+      />
+      <BottomTab.Screen
+        name="Search"
+        component={SearchNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="search" color={color} />
+        }}
+      />
+      <BottomTab.Screen
+        name="My profile"
+        component={MyProfileNavigator}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="person-outline" color={color} />
           )
         }}
       />
@@ -57,30 +81,58 @@ function TabBarIcon(props: {
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const MySoundtracksStack = createStackNavigator<MySoundtracksParamList>();
 
-function TabOneNavigator() {
+function MySoundtracksNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
-        options={{ headerTitle: 'Tab One Title' }}
+    <MySoundtracksStack.Navigator>
+      <MySoundtracksStack.Screen
+        name="MySoundtracksScreen"
+        component={MySoundtracksScreen}
+        options={{ headerTitle: 'My soundtracks' }}
       />
-    </TabOneStack.Navigator>
+    </MySoundtracksStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const FavoritesStack = createStackNavigator<FavoritesParamList>();
 
-function TabTwoNavigator() {
+function FavoritesNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+    <FavoritesStack.Navigator>
+      <FavoritesStack.Screen
+        name="FavoritesScreen"
+        component={FavoritesScreen}
+        options={{ headerTitle: 'Favorites' }}
       />
-    </TabTwoStack.Navigator>
+    </FavoritesStack.Navigator>
+  );
+}
+
+const SearchStack = createStackNavigator<SearchParamList>();
+
+function SearchNavigator() {
+  return (
+    <SearchStack.Navigator>
+      <SearchStack.Screen
+        name="SearchScreen"
+        component={SearchScreen}
+        options={{ headerTitle: 'Search' }}
+      />
+    </SearchStack.Navigator>
+  );
+}
+
+const MyProfileStack = createStackNavigator<MyProfileParamList>();
+
+function MyProfileNavigator() {
+  return (
+    <MyProfileStack.Navigator>
+      <MyProfileStack.Screen
+        name="MyProfileScreen"
+        component={MyProfileScreen}
+        options={{ headerTitle: 'My profile' }}
+      />
+    </MyProfileStack.Navigator>
   );
 }

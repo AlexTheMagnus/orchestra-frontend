@@ -10,19 +10,28 @@ export type RootStackParamList = {
 };
 
 export type BottomTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
-  Access: undefined;
-};
-
-export type TabOneParamList = {
-  TabOneScreen: undefined;
-};
-
-export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+  'My soundtracks': undefined;
+  Favorites: undefined;
+  Search: undefined;
+  'My profile': undefined;
 };
 
 export type AccessParamList = {
   AccessScreen: undefined;
+};
+
+export type MySoundtracksParamList = {
+  MySoundtracksScreen: undefined;
+};
+
+export type FavoritesParamList = {
+  FavoritesScreen: undefined;
+};
+
+export type SearchParamList = {
+  SearchScreen: undefined;
+};
+
+export type MyProfileParamList = {
+  MyProfileScreen: undefined;
 };

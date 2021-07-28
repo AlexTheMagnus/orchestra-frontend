@@ -13,14 +13,24 @@ export default {
       Access: 'access',
       Root: {
         screens: {
-          TabOne: {
+          MySoundtracks: {
             screens: {
-              TabOneScreen: 'one'
+              MySoundtracksScreen: 'my-soundtracks'
             }
           },
-          TabTwo: {
+          Favorites: {
             screens: {
-              TabTwoScreen: 'two'
+              FavoritesScreen: 'favorites'
+            }
+          },
+          Search: {
+            screens: {
+              SearchScreen: 'search'
+            }
+          },
+          MyProfile: {
+            screens: {
+              MyProfileScreen: 'my-profile'
             }
           }
         }
