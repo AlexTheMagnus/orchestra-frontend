@@ -35,3 +35,10 @@ export type SearchParamList = {
 export type MyProfileParamList = {
   MyProfileScreen: undefined;
 };
+
+export type SoundtrackItemParamList = {
+  bookCover: string;
+  soundtrackTitle: string;
+  bookTitle: string;
+  author: string;
+};

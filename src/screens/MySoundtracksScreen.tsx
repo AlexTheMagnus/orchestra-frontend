@@ -1,8 +1,9 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 
 import EmptyView from '../components/EmptyView';
+import SoundtrackItem from '../components/SoundtrackItem';
 
 const MySoundtracksScreen = () => {
   const emptyMessage: string =
