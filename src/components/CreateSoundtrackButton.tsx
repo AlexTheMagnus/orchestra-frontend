@@ -26,7 +26,8 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     marginTop: 10,
     position: 'absolute',
-    zIndex: 10
+    zIndex: 10,
+    width: '60%'
   },
   buttonText: {
     color: 'black',
