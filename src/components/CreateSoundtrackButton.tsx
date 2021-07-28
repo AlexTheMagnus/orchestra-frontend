@@ -10,9 +10,9 @@ const CreateSoundtrackButton = ({ ...props }) => {
       mode="contained"
       color={OrchestraColors.secondaryColor}
       dark={true}
-      onPress={() => console.log('Pressed')}
       style={styles.button}
       labelStyle={styles.buttonText}
+      {...props}
     >
       CREATE SOUNDTRACK
     </Button>

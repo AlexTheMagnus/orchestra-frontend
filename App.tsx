@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
+import { Provider as PaperProvider } from 'react-native-paper';
 import React, { useEffect } from 'react';
 
 import { env } from './.env';
@@ -25,10 +26,12 @@ const App = () => {
     return null;
   } else {
     return (
-      <SafeAreaProvider>
-        <Navigation colorScheme={colorScheme} />
-        <StatusBar />
-      </SafeAreaProvider>
+      <PaperProvider>
+        <SafeAreaProvider>
+          <Navigation colorScheme={colorScheme} />
+          <StatusBar />
+        </SafeAreaProvider>
+      </PaperProvider>
     );
   }
 };
