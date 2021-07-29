@@ -12,7 +12,7 @@ import AppContext from '../../AppContext';
 const AccessScreen = ({
   navigation
 }: StackScreenProps<RootStackParamList, 'Access'>) => {
-  const myContext = useContext(AppContext);
+  const globalState = useContext(AppContext);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: `${EXPO_CLIENT_ID}.apps.googleusercontent.com`,
@@ -45,7 +45,7 @@ const AccessScreen = ({
       given_name: json.given_name,
       picture: json.picture
     };
-    myContext.setLoggedUser(user);
+    globalState.setLoggedUser(user);
     navigation.reset({
       index: 0,
       routes: [{ name: 'Root' }]
@@ -56,6 +56,7 @@ const AccessScreen = ({
     if (response?.type === 'success') {
       const { params } = response;
       const access_token = params.access_token;
+      globalState.setAccessToken(access_token);
       getGoogleUserProfileInfo(access_token);
     }
   }, [response]);

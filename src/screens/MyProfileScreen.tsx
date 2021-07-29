@@ -1,31 +1,70 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
+import { Avatar, Title, Button } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
+import { StackScreenProps } from '@react-navigation/stack';
 
-import EditScreenInfo from '../components/EditScreenInfo';
-import SoundtrackItemList from '../components/SoundtrackItemList';
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
+import { RootStackParamList } from '../types/types';
+import AppContext from '../../AppContext';
+import OrchestraColors from '../constants/OrchestraColors';
 
-export default function MySoundtracksScreen() {
+const MyProfileScreen = ({
+  navigation
+}: StackScreenProps<RootStackParamList, 'My profile'>) => {
+  const globalState = useContext(AppContext);
+
+  const cleanSessionData = () => {
+    globalState.setLoggedUser({
+      id: '',
+      given_name: '',
+      picture: ''
+    });
+    globalState.setAccessToken(null);
+  };
+
+  const logout = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Access' }]
+    });
+    cleanSessionData();
+  };
+
   return (
     <View style={styles.container}>
-      <SoundtrackItemList />
+      <Button
+        uppercase={false}
+        color={OrchestraColors.textColorDark}
+        labelStyle={styles.logoutText}
+        onPress={() => logout()}
+        style={styles.logoutButton}
+      >
+        Log out
+      </Button>
+      <View style={styles.centeredContent}>
+        <Avatar.Image
+          size={150}
+          source={{ uri: globalState.loggedUser.picture }}
+        />
+        <Title>{globalState.loggedUser.given_name}</Title>
+      </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center'
+  },
+  centeredContent: {
     alignItems: 'center',
-    justifyContent: 'center'
+    margin: 30
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold'
+  logoutText: {
+    color: OrchestraColors.textColorDark
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%'
-  }
+  logoutButton: { alignSelf: 'flex-end' }
 });
+
+export default MyProfileScreen;

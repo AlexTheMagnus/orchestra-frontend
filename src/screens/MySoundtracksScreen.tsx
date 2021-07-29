@@ -18,7 +18,7 @@ const MySoundtracksScreen = () => {
     setNewSoundtrackTitle('');
   };
 
-  const isMySoundtracksEmpty = true;
+  const isMySoundtracksEmpty = false;
   const emptyMessage: string =
     'Touch the button above to create your first soundtrack';
 
