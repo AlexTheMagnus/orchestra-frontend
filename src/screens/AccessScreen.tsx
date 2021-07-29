@@ -8,6 +8,7 @@ import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID } from '@env';
 import { RootStackParamList } from '../types/types';
 import OrchestraColors from '../constants/OrchestraColors';
 import AppContext from '../../AppContext';
+import GoogleSignInButton from '../components/GoogleSignInButton';
 
 const AccessScreen = ({
   navigation
@@ -71,13 +72,9 @@ const AccessScreen = ({
         <Text style={styles.logoText}>Orchestra</Text>
         <Text style={styles.logoSubTitle}>Conduct your book's soundtracks</Text>
       </View>
-      <TouchableOpacity
-        disabled={!request}
-        style={styles.signInButton}
-        onPress={() => promptAsync()}
-      >
-        <Text style={styles.logoSubTitle}>Google Sign In</Text>
-      </TouchableOpacity>
+      <View>
+        <GoogleSignInButton disabled={!request} onPress={() => promptAsync()} />
+      </View>
     </View>
   );
 };
@@ -111,11 +108,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     margin: 10
-  },
-  signInButton: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10
   }
 });
 
