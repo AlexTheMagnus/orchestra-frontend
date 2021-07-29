@@ -4,7 +4,7 @@
     "slug": "orchestra-frontend",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/images/orchestra-icon.png",
+    "icon": "./src/assets/images/favicon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
