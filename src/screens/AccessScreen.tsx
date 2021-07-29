@@ -33,6 +33,7 @@ const AccessScreen = ({
         routes: [{ name: 'Access' }]
       });
       const message = `An error has occured: Status error ${response.status}`;
+      alert(message);
       console.error(message);
       return;
     }
