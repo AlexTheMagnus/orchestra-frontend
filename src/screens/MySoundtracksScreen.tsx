@@ -18,6 +18,10 @@ const MySoundtracksScreen = () => {
     setNewSoundtrackTitle('');
   };
 
+  const isMySoundtracksEmpty = true;
+  const emptyMessage: string =
+    'Touch the button above to create your first soundtrack';
+
   const ChooseSoundtrackTitleModal = () => {
     return (
       <Portal>
@@ -61,11 +65,6 @@ const MySoundtracksScreen = () => {
       </Portal>
     );
   };
-
-  const emptyMessage: string =
-    'Touch the button above to create your first soundtrack';
-
-  const isMySoundtracksEmpty = false;
 
   return (
     <View style={styles.screeenContainer}>
