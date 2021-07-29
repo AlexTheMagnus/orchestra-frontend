@@ -20,7 +20,7 @@ import {
   FavoritesParamList,
   SearchParamList,
   MyProfileParamList
-} from '../types';
+} from '../types/types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 

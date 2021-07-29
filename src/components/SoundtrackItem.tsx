@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, View, ScrollView, StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
-import { SoundtrackItemParamList } from '../types';
+import { SoundtrackItemParamList } from '../types/types';
 
 const renderBookCover = (bookCover: string) => {
   return (
