@@ -3,10 +3,14 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
-export type RootStackParamList = {
+export type StackParamList = {
   Access: undefined;
   Root: undefined;
-  'My profile': undefined;
+  MySoundtracks: undefined;
+  ChooseBook: { soundtrackTitle: string };
+  Favorites: undefined;
+  Search: undefined;
+  MyProfile: undefined;
   NotFound: undefined;
 };
 
@@ -48,4 +52,11 @@ export type LoggedUserParamList = {
   id: string;
   given_name: string;
   picture: string;
+};
+
+export type bookResult = {
+  title: string;
+  cover: string;
+  author: string;
+  isbn: string;
 };

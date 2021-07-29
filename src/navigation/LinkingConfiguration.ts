@@ -15,7 +15,8 @@ export default {
         screens: {
           MySoundtracks: {
             screens: {
-              MySoundtracksScreen: 'my-soundtracks'
+              MySoundtracksScreen: 'my-soundtracks',
+              ChooseBookScreen: 'choose-book'
             }
           },
           Favorites: {

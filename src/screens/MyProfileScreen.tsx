@@ -4,13 +4,13 @@ import { StyleSheet } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 
 import { View } from '../components/Themed';
-import { RootStackParamList } from '../types/types';
+import { StackParamList } from '../types/types';
 import AppContext from '../../AppContext';
 import OrchestraColors from '../constants/OrchestraColors';
 
 const MyProfileScreen = ({
   navigation
-}: StackScreenProps<RootStackParamList, 'My profile'>) => {
+}: StackScreenProps<StackParamList, 'My profile'>) => {
   const globalState = useContext(AppContext);
 
   const cleanSessionData = () => {
