@@ -1,27 +1,22 @@
-import React, { useState } from 'react';
-import { StackScreenProps } from '@react-navigation/stack';
+import React, { useContext } from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 import * as Google from 'expo-auth-session/providers/google';
-
-import { LoggedUserParamList, RootStackParamList } from '../types';
-import { env } from '../../.env';
-import OrchestraColors from '../constants/OrchestraColors';
 import { Prompt } from 'expo-auth-session';
+import { StackScreenProps } from '@react-navigation/stack';
+import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID } from '@env';
+
+import { RootStackParamList } from '../types/types';
+import OrchestraColors from '../constants/OrchestraColors';
+import AppContext from '../../AppContext';
 
 const AccessScreen = ({
   navigation
 }: StackScreenProps<RootStackParamList, 'Access'>) => {
-  const expoClientId = `508188356154-frtsvubeuj37hbtn2k4ivp9in5o9lmad`;
-  const androidClientId = `508188356154-tim0ltfoft800n8o3f53q7ish55850fq`;
-  var access_token = null;
-
-  const [loggedUser, setLoggedUser] = useState<LoggedUserParamList | null>(
-    null
-  );
+  const myContext = useContext(AppContext);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: `${expoClientId}.apps.googleusercontent.com`,
-    androidClientId: `${androidClientId}.apps.googleusercontent.com`,
+    expoClientId: `${EXPO_CLIENT_ID}.apps.googleusercontent.com`,
+    androidClientId: `${ANDROID_CLIENT_ID}.apps.googleusercontent.com`,
     prompt: Prompt.Login,
     scopes: ['openid', 'https://www.googleapis.com/auth/userinfo.profile']
   });
@@ -49,23 +44,18 @@ const AccessScreen = ({
       given_name: json.given_name,
       picture: json.picture
     };
-    setLoggedUser(user);
-    console.log('USER:', user);
+    myContext.setLoggedUser(user);
     navigation.reset({
       index: 0,
       routes: [{ name: 'Root' }]
     });
-    return user;
   };
 
   React.useEffect(() => {
     if (response?.type === 'success') {
       const { params } = response;
-
-      console.log('RESPONSE:', response);
-      access_token = params.access_token;
+      const access_token = params.access_token;
       getGoogleUserProfileInfo(access_token);
-      console.log(loggedUser);
     }
   }, [response]);
 

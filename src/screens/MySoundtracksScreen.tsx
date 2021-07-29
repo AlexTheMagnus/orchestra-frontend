@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { View } from '../components/Themed';
 import { Dialog, Portal, TextInput, Button } from 'react-native-paper';
 
+import { View } from '../components/Themed';
 import EmptyView from '../components/EmptyView';
 import CreateSoundtrackButton from '../components/CreateSoundtrackButton';
 import SoundtrackItemList from '../components/SoundtrackItemList';
