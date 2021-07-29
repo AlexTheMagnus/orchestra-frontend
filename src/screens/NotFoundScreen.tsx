@@ -2,11 +2,11 @@ import { StackScreenProps } from '@react-navigation/stack';
 import * as React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { RootStackParamList } from '../types/types';
+import { StackParamList } from '../types/types';
 
 export default function NotFoundScreen({
   navigation
-}: StackScreenProps<RootStackParamList, 'NotFound'>) {
+}: StackScreenProps<StackParamList, 'NotFound'>) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Loading...</Text>

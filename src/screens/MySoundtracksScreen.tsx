@@ -1,68 +1,45 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Dialog, Portal, TextInput, Button } from 'react-native-paper';
+import DialogInput from 'react-native-dialog-input';
+import { StackScreenProps } from '@react-navigation/stack';
 
 import { View } from '../components/Themed';
+import { StackParamList } from '../types/types';
 import EmptyView from '../components/EmptyView';
 import CreateSoundtrackButton from '../components/CreateSoundtrackButton';
 import SoundtrackItemList from '../components/SoundtrackItemList';
 import OrchestraColors from '../constants/OrchestraColors';
 
-const MySoundtracksScreen = () => {
-  const [visible, setVisible] = React.useState(false);
-  const [newSoundtrackTitle, setNewSoundtrackTitle] = React.useState('');
-
-  const showDialog = () => setVisible(true);
-  const hideDialog = () => {
-    setVisible(false);
-    setNewSoundtrackTitle('');
-  };
-
+const MySoundtracksScreen = ({
+  navigation
+}: StackScreenProps<StackParamList, 'Access'>) => {
   const isMySoundtracksEmpty = false;
   const emptyMessage: string =
     'Touch the button above to create your first soundtrack';
 
+  const [isDialogVisible, setIsDialogVisible] = React.useState(false);
+
+  const showDialog = () => setIsDialogVisible(true);
+  const hideDialog = () => {
+    setIsDialogVisible(false);
+  };
+
+  const chooseBook = (inputText: string) => {
+    if (inputText) {
+      navigation.navigate('ChooseBook', { soundtrackTitle: inputText });
+    }
+  };
+
   const ChooseSoundtrackTitleModal = () => {
     return (
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog} style={styles.modal}>
-          <Dialog.Title style={styles.modalTitle}>
-            Choose a title for your soundtrack
-          </Dialog.Title>
-          <Dialog.Content style={styles.textInput}>
-            <TextInput
-              mode="flat"
-              selectionColor={OrchestraColors.primaryColorLightest}
-              underlineColor={OrchestraColors.primaryColorLightest}
-              outlineColor={OrchestraColors.primaryColorLightest}
-              label="NewSoundtrackTitle"
-              value={newSoundtrackTitle}
-              onChangeText={newSoundtrackTitle =>
-                setNewSoundtrackTitle(newSoundtrackTitle)
-              }
-              style={styles.textInput}
-            />
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button
-              uppercase={false}
-              color={OrchestraColors.primaryColorLightest}
-              labelStyle={styles.cancelButton}
-              onPress={hideDialog}
-            >
-              Cancel
-            </Button>
-            <Button
-              uppercase={false}
-              color={OrchestraColors.primaryColorLightest}
-              labelStyle={styles.nextButton}
-              onPress={hideDialog}
-            >
-              Next
-            </Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <DialogInput
+        isDialogVisible={isDialogVisible}
+        title="Choose a title for your soundtrack"
+        textInputProps={styles.modalTitle}
+        submitText="Next"
+        submitInput={(inputText: string) => chooseBook(inputText)}
+        closeDialog={hideDialog}
+      />
     );
   };
 
@@ -110,8 +87,6 @@ const styles = StyleSheet.create({
     color: OrchestraColors.textColor
   },
   modal: {
-    alignItems: 'center',
-    justifyContent: 'center',
     backgroundColor: OrchestraColors.primaryColor
   },
   textInput: {

@@ -1,18 +1,18 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, Text } from 'react-native';
 import * as Google from 'expo-auth-session/providers/google';
 import { Prompt } from 'expo-auth-session';
 import { StackScreenProps } from '@react-navigation/stack';
 import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID } from '@env';
 
-import { RootStackParamList } from '../types/types';
+import { StackParamList } from '../types/types';
 import OrchestraColors from '../constants/OrchestraColors';
 import AppContext from '../../AppContext';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 
 const AccessScreen = ({
   navigation
-}: StackScreenProps<RootStackParamList, 'Access'>) => {
+}: StackScreenProps<StackParamList, 'Access'>) => {
   const globalState = useContext(AppContext);
 
   const [request, response, promptAsync] = Google.useAuthRequest({
