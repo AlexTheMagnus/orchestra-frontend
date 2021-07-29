@@ -14,19 +14,25 @@ const App = () => {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
 
+  const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loggedUser, setLoggedUser] = useState<LoggedUserParamList>({
     id: '',
     given_name: '',
     picture: ''
   });
 
-  const userSettings = { loggedUser, setLoggedUser };
+  const globalState = {
+    accessToken,
+    setAccessToken,
+    loggedUser,
+    setLoggedUser
+  };
 
   if (!isLoadingComplete) {
     return null;
   } else {
     return (
-      <AppContext.Provider value={userSettings}>
+      <AppContext.Provider value={globalState}>
         <PaperProvider>
           <SafeAreaProvider>
             <Navigation colorScheme={colorScheme} />

@@ -6,6 +6,7 @@
 export type RootStackParamList = {
   Access: undefined;
   Root: undefined;
+  'My profile': undefined;
   NotFound: undefined;
 };
 
