@@ -10,21 +10,33 @@ export default {
   prefixes: [Linking.makeUrl('/')],
   config: {
     screens: {
+      Access: 'access',
       Root: {
         screens: {
-          TabOne: {
+          MySoundtracks: {
             screens: {
-              TabOneScreen: 'one',
-            },
+              MySoundtracksScreen: 'my-soundtracks',
+              ChooseBookScreen: 'choose-book'
+            }
           },
-          TabTwo: {
+          Favorites: {
             screens: {
-              TabTwoScreen: 'two',
-            },
+              FavoritesScreen: 'favorites'
+            }
           },
-        },
+          Search: {
+            screens: {
+              SearchScreen: 'search'
+            }
+          },
+          MyProfile: {
+            screens: {
+              MyProfileScreen: 'my-profile'
+            }
+          }
+        }
       },
-      NotFound: '*',
-    },
-  },
+      NotFound: '*'
+    }
+  }
 };
