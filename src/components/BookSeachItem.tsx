@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
 import { List } from 'react-native-paper';
-import { SoundtrackItemParamList } from '../types/types';
+import { BookSearchItemParamList } from '../types/types';
 
 const renderBookCover = (bookCover: string) => {
   return (
@@ -14,22 +14,15 @@ const renderBookCover = (bookCover: string) => {
   );
 };
 
-const renderOptionsIcon = () => {
-  return (
-    <List.Icon color="black" icon="dots-vertical" style={styles.optionsIcon} />
-  );
-};
-
-const SoundtrackItem = ({ ...props }: SoundtrackItemParamList) => {
-  const { bookCover, soundtrackTitle, bookTitle, author } = props;
+const BookSearchItem = ({ ...props }: BookSearchItemParamList) => {
+  const { bookCover, bookTitle, author, key } = props;
 
   return (
     <List.Item
-      // key={key}
-      title={soundtrackTitle}
-      description={bookTitle + ' · by ' + author}
+      title={bookTitle}
+      description={author}
+      key={key}
       left={() => renderBookCover(bookCover)}
-      right={() => renderOptionsIcon()}
     />
   );
 };
@@ -50,4 +43,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SoundtrackItem;
+export default BookSearchItem;

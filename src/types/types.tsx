@@ -54,9 +54,16 @@ export type LoggedUserParamList = {
   picture: string;
 };
 
-export type bookResult = {
+export type BookResultParamList = {
   title: string;
   cover: string;
   author: string;
   isbn: string;
+};
+
+export type BookSearchItemParamList = {
+  bookCover: string;
+  bookTitle: string;
+  author: string;
+  key: number;
 };
