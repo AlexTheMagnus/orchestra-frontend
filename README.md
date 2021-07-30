@@ -9,5 +9,10 @@
 
 ## Usage
 
-1. Run `yarn start` to launch the project.
-2. Select the Android emulator.
+<ol>
+<li>Check that you are using the correct node version. If not, use nvm to change your node version.</li>
+<li>Run `yarn start` to launch the project.</li>
+<li>Select the Android emulator.</li>
+</ol>
+
+Note: remember to log into your expo account (`expo login`) to use the google sign in when developing
