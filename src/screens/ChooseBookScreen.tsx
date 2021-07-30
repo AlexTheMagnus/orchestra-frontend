@@ -71,10 +71,6 @@ const ChooseBookScreen = ({
   };
 
   const createSoundtrack = async (isbn: string) => {
-    console.log('Creo soundtrack con los datos...', isbn);
-    console.log('Title:', soundtrackTitle);
-    console.log('BACKEND_URL:', BACKEND_URL);
-
     const response = await fetch(`${BACKEND_URL}/soundtracks`, {
       method: 'POST',
       headers: {
@@ -90,15 +86,17 @@ const ChooseBookScreen = ({
     });
 
     if (!response.ok) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Root' }]
+      });
       const message = `An error has occured: Status error ${response.status}`;
+      alert(message);
       console.error(message);
       return;
     }
 
-    console.log(
-      '\n\nDONE\n========================:\n Status code: ',
-      response.status
-    );
+    navigation.navigate('Root');
   };
 
   const listResults = () => {
