@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { Appbar, TextInput, TouchableRipple } from 'react-native-paper';
+import uuid from 'react-native-uuid';
 import { StackScreenProps } from '@react-navigation/stack';
+import { BACKEND_URL } from '@env';
 
 import { View } from '../components/Themed';
 import { StackParamList, BookResultParamList } from '../types/types';
+import AppContext from '../../AppContext';
 import EmptyView from '../components/EmptyView';
 import BookSearchItem from '../components/BookSeachItem';
 import OrchestraColors from '../constants/OrchestraColors';
@@ -15,6 +18,8 @@ const ChooseBookScreen = ({
 }: StackScreenProps<StackParamList, 'ChooseBook'>) => {
   const { soundtrackTitle } = route.params;
   const emptyMessage: string = 'Choose a book for your soundtrack';
+
+  const globalState = useContext(AppContext);
 
   const [resultsList, setResultsList] = useState<Array<BookResultParamList>>(
     []
@@ -65,10 +70,35 @@ const ChooseBookScreen = ({
     });
   };
 
-  const createSoundtrack = (isbn: string) => {
+  const createSoundtrack = async (isbn: string) => {
     console.log('Creo soundtrack con los datos...', isbn);
     console.log('Title:', soundtrackTitle);
-    console.log('isbn:', isbn);
+    console.log('BACKEND_URL:', BACKEND_URL);
+
+    const response = await fetch(`${BACKEND_URL}/soundtracks`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        soundtrack_id: uuid.v4(),
+        book: isbn,
+        soundtrack_title: soundtrackTitle,
+        author: globalState.loggedUser.id
+      })
+    });
+
+    if (!response.ok) {
+      const message = `An error has occured: Status error ${response.status}`;
+      console.error(message);
+      return;
+    }
+
+    console.log(
+      '\n\nDONE\n========================:\n Status code: ',
+      response.status
+    );
   };
 
   const listResults = () => {
