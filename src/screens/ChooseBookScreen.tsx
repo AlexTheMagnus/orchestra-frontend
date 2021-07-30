@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Text, ScrollView, StyleSheet } from 'react-native';
-import { Appbar, TextInput } from 'react-native-paper';
+import { ScrollView, StyleSheet } from 'react-native';
+import { Appbar, TextInput, TouchableRipple } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
 
 import { View } from '../components/Themed';
-import { StackParamList, bookResult } from '../types/types';
+import { StackParamList, BookResultParamList } from '../types/types';
 import EmptyView from '../components/EmptyView';
+import BookSearchItem from '../components/BookSeachItem';
 import OrchestraColors from '../constants/OrchestraColors';
 
 const ChooseBookScreen = ({
@@ -15,7 +16,9 @@ const ChooseBookScreen = ({
   const { soundtrackTitle } = route.params;
   const emptyMessage: string = 'Choose a book for your soundtrack';
 
-  const [resultsList, setResultsList] = useState<Array<bookResult>>([]);
+  const [resultsList, setResultsList] = useState<Array<BookResultParamList>>(
+    []
+  );
 
   const searchBooks = async (textToSearch: string) => {
     const response = await fetch(
@@ -31,9 +34,8 @@ const ChooseBookScreen = ({
     const json = await response.json();
 
     setResultsList([]);
-
     json.items.forEach((result: any) => {
-      var book: bookResult = {
+      var book: BookResultParamList = {
         title: result.volumeInfo.title,
         cover: '',
         author: '',
@@ -59,13 +61,31 @@ const ChooseBookScreen = ({
         : (book.author =
             'http://books.google.com/books/content?id=&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api');
 
-      setResultsList(resultsList.concat(book));
+      setResultsList(resultsList => resultsList.concat(book));
     });
   };
 
+  const createSoundtrack = (isbn: string) => {
+    console.log('Creo soundtrack con los datos...', isbn);
+    console.log('Title:', soundtrackTitle);
+    console.log('isbn:', isbn);
+  };
+
   const listResults = () => {
-    return resultsList.map(result => {
-      <Text>{result.title}</Text>;
+    return resultsList.map((result, index) => {
+      return (
+        <TouchableRipple
+          onPress={() => createSoundtrack(result.isbn)}
+          rippleColor="rgba(0, 0, 0, .32)"
+        >
+          <BookSearchItem
+            bookTitle={result.title}
+            author={result.author}
+            bookCover={result.cover}
+            key={index}
+          />
+        </TouchableRipple>
+      );
     });
   };
 
@@ -77,16 +97,20 @@ const ChooseBookScreen = ({
           placeholder="Search"
           selectionColor={OrchestraColors.textColorDark}
           outlineColor={OrchestraColors.transparent}
-          onChangeText={text => searchBooks(text)}
+          onChangeText={text => {
+            text ? searchBooks(text) : setResultsList([]);
+          }}
           style={styles.searchInput}
           theme={inputTheme}
         />
       </Appbar.Header>
       <View style={styles.container}>
-        {resultsList == [] ? (
+        {!resultsList.length ? (
           <EmptyView icon="search" message={emptyMessage} />
         ) : (
-          <ScrollView>{listResults()}</ScrollView>
+          <ScrollView style={styles.bookResultsContainer}>
+            {listResults()}
+          </ScrollView>
         )}
       </View>
     </View>
@@ -112,6 +136,10 @@ const styles = StyleSheet.create({
     height: 55,
     backgroundColor: OrchestraColors.primaryColorLightest,
     color: OrchestraColors.textColor
+  },
+  bookResultsContainer: {
+    flex: 1,
+    width: '100%'
   }
 });
 
