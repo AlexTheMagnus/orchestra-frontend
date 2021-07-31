@@ -1,9 +1,14 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 
+import { SoundtrackItemParamList } from '../types/types';
 import SoundtrackItem from './SoundtrackItem';
 
-const SoundtrackItemList = () => {
+const SoundtrackItemList = ({
+  soundtracksList
+}: {
+  soundtracksList: SoundtrackItemParamList[];
+}) => {
   return (
     <View>
       <ScrollView>
