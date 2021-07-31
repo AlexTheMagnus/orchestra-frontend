@@ -10,7 +10,7 @@ import OrchestraColors from '../constants/OrchestraColors';
 
 const MyProfileScreen = ({
   navigation
-}: StackScreenProps<StackParamList, 'My profile'>) => {
+}: StackScreenProps<StackParamList, 'MyProfile'>) => {
   const globalState = useContext(AppContext);
 
   const cleanSessionData = () => {
@@ -46,6 +46,7 @@ const MyProfileScreen = ({
           size={150}
           source={{ uri: globalState.loggedUser.picture }}
         />
+        {console.log(globalState.loggedUser.picture)}
         <Title>{globalState.loggedUser.given_name}</Title>
       </View>
     </View>

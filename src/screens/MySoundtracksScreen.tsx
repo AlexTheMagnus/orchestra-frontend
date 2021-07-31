@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
 import { StackScreenProps } from '@react-navigation/stack';
+import { BACKEND_URL } from '@env';
 
 import { View } from '../components/Themed';
-import { StackParamList } from '../types/types';
+import AppContext from '../../AppContext';
+import {
+  StackParamList,
+  SoundtrackItemParamList,
+  JsonSoundtrackParamList
+} from '../types/types';
 import EmptyView from '../components/EmptyView';
 import CreateSoundtrackButton from '../components/CreateSoundtrackButton';
 import SoundtrackItemList from '../components/SoundtrackItemList';
@@ -17,7 +23,14 @@ const MySoundtracksScreen = ({
   const emptyMessage: string =
     'Touch the button above to create your first soundtrack';
 
+  const globalState = useContext(AppContext);
+
   const [isDialogVisible, setIsDialogVisible] = React.useState(false);
+  const [userSoundtracksList, setUserSoundtracksList] = React.useState([]);
+
+  useEffect(() => {
+    getUserSoundtracks(globalState.loggedUser.id);
+  }, []);
 
   const showDialog = () => setIsDialogVisible(true);
   const hideDialog = () => {
@@ -43,6 +56,32 @@ const MySoundtracksScreen = ({
     );
   };
 
+  const getUserSoundtracks = async (author: string) => {
+    const response = await fetch(`${BACKEND_URL}/soundtracks/user/${author}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      setUserSoundtracksList([]);
+      const message = `An error has occured while loading your soundtracks: Status error ${response.status}`;
+      alert(message);
+      console.error(message);
+    }
+
+    const json = await response.json();
+    console.log(json.soundtracks_list);
+    // json.soundtracks_list.forEach(
+    //   (json_soundtrack: JsonSoundtrackParamList) => {
+
+    //   }
+    // );
+    setUserSoundtracksList([]);
+  };
+
   return (
     <View style={styles.screeenContainer}>
       <CreateSoundtrackButton onPress={showDialog} />
@@ -53,7 +92,7 @@ const MySoundtracksScreen = ({
         </View>
       ) : (
         <View style={styles.mySoundtrackListContainer}>
-          <SoundtrackItemList />
+          <SoundtrackItemList soundtracksList={userSoundtracksList} />
         </View>
       )}
     </View>

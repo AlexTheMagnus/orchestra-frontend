@@ -105,6 +105,7 @@ const ChooseBookScreen = ({
         <TouchableRipple
           onPress={() => createSoundtrack(result.isbn)}
           rippleColor="rgba(0, 0, 0, .32)"
+          key={index}
         >
           <BookSearchItem
             bookTitle={result.title}
