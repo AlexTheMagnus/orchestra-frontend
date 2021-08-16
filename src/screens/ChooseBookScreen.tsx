@@ -11,6 +11,7 @@ import AppContext from '../../AppContext';
 import EmptyView from '../components/EmptyView';
 import BookSearchItem from '../components/BookSeachItem';
 import OrchestraColors from '../constants/OrchestraColors';
+import { BOOK_COVER_PLACEHOLDER } from '../constants/placeholders';
 
 const ChooseBookScreen = ({
   route,
@@ -47,7 +48,7 @@ const ChooseBookScreen = ({
         isbn: ''
       };
 
-      result.volumeInfo.industryIdentifiers.forEach(
+      result.volumeInfo.industryIdentifiers!.forEach(
         (industryIdentifier: { type: string; identifier: string }) => {
           if (industryIdentifier.type == 'ISBN_13') {
             book.isbn = industryIdentifier.identifier;
@@ -56,15 +57,14 @@ const ChooseBookScreen = ({
       );
 
       result.volumeInfo.imageLinks.smallThumbnail
-        ? (book.cover = result.volumeInfo.imageLinks.smallThumbnail)
+        ? (book.cover = result.volumeInfo.imageLinks.smallThumbnail!)
         : result.volumeInfo.imageLinks.thumbnail
-        ? (book.cover = result.volumeInfo.imageLinks.thumbnail)
-        : (book.cover = '');
+        ? (book.cover = result.volumeInfo.imageLinks.thumbnail!)
+        : (book.cover = BOOK_COVER_PLACEHOLDER);
 
       result.volumeInfo.authors[0]
         ? (book.author = result.volumeInfo.authors[0])
-        : (book.author =
-            'http://books.google.com/books/content?id=&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api');
+        : (book.author = '');
 
       setResultsList(resultsList => resultsList.concat(book));
     });

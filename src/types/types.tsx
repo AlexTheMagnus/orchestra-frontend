@@ -46,6 +46,7 @@ export type SoundtrackItemParamList = {
   soundtrackTitle: string;
   bookTitle: string;
   author: string;
+  soundtrackId: string;
 };
 
 export type LoggedUserParamList = {

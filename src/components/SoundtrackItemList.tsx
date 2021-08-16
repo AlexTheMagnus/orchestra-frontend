@@ -13,72 +13,16 @@ const SoundtrackItemList = ({
     <View>
       <ScrollView>
         <View style={styles.container} />
-        <SoundtrackItem
-          bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          soundtrackTitle="El sonido de los cuervos"
-          bookTitle="Crooked kingdom"
-          author="AlexMagnus"
-        />
-        <SoundtrackItem
-          bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          soundtrackTitle="El sonido de los cuervos"
-          bookTitle="Crooked kingdom"
-          author="AlexMagnus"
-        />
-        <SoundtrackItem
-          bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          soundtrackTitle="El sonido de los cuervos"
-          bookTitle="Crooked kingdom"
-          author="AlexMagnus"
-        />
-        <SoundtrackItem
-          bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          soundtrackTitle="El sonido de los cuervos"
-          bookTitle="Crooked kingdom"
-          author="AlexMagnus"
-        />
-        <SoundtrackItem
-          bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          soundtrackTitle="El sonido de los cuervos"
-          bookTitle="Crooked kingdom"
-          author="AlexMagnus"
-        />
-        <SoundtrackItem
-          bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          soundtrackTitle="El sonido de los cuervos"
-          bookTitle="Crooked kingdom"
-          author="AlexMagnus"
-        />
-        <SoundtrackItem
-          bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          soundtrackTitle="El sonido de los cuervos"
-          bookTitle="Crooked kingdom"
-          author="AlexMagnus"
-        />
-        <SoundtrackItem
-          bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          soundtrackTitle="El sonido de los cuervos"
-          bookTitle="Crooked kingdom"
-          author="AlexMagnus"
-        />
-        <SoundtrackItem
-          bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          soundtrackTitle="El sonido de los cuervos"
-          bookTitle="Crooked kingdom"
-          author="AlexMagnus"
-        />
-        <SoundtrackItem
-          bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          soundtrackTitle="El sonido de los cuervos"
-          bookTitle="Crooked kingdom"
-          author="AlexMagnus"
-        />
-        <SoundtrackItem
-          bookCover="http://books.google.com/books/content?id=8Jh_CwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-          soundtrackTitle="El sonido de los cuervos"
-          bookTitle="Crooked kingdom"
-          author="AlexMagnus"
-        />
+        {soundtracksList.map((soundtrack, index) => (
+          <SoundtrackItem
+            key={index}
+            soundtrackId={soundtrack.soundtrackId}
+            bookCover={soundtrack.bookCover}
+            soundtrackTitle={soundtrack.soundtrackTitle}
+            bookTitle={soundtrack.bookTitle}
+            author={soundtrack.author}
+          />
+        ))}
       </ScrollView>
     </View>
   );
