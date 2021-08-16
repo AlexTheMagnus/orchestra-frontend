@@ -4,14 +4,23 @@ import { List } from 'react-native-paper';
 import { BookSearchItemParamList } from '../types/types';
 
 const renderBookCover = (bookCover: string) => {
-  return (
-    <Image
-      source={{
-        uri: bookCover
-      }}
-      style={styles.bookCover}
-    />
-  );
+  if (bookCover) {
+    return (
+      <Image
+        source={{
+          uri: bookCover
+        }}
+        style={styles.bookCover}
+      />
+    );
+  } else {
+    return (
+      <Image
+        source={require('../assets/images/book-cover-placeholder.jpeg')}
+        style={styles.bookCover}
+      />
+    );
+  }
 };
 
 const BookSearchItem = ({ ...props }: BookSearchItemParamList) => {

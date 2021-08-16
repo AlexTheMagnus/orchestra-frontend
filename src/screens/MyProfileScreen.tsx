@@ -10,7 +10,7 @@ import OrchestraColors from '../constants/OrchestraColors';
 
 const MyProfileScreen = ({
   navigation
-}: StackScreenProps<StackParamList, 'My profile'>) => {
+}: StackScreenProps<StackParamList, 'MyProfile'>) => {
   const globalState = useContext(AppContext);
 
   const cleanSessionData = () => {

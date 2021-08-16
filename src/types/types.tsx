@@ -46,6 +46,7 @@ export type SoundtrackItemParamList = {
   soundtrackTitle: string;
   bookTitle: string;
   author: string;
+  soundtrackId: string;
 };
 
 export type LoggedUserParamList = {
@@ -66,4 +67,11 @@ export type BookSearchItemParamList = {
   bookTitle: string;
   author: string;
   key: number;
+};
+
+export type JsonSoundtrackParamList = {
+  author: string;
+  book: string;
+  soundtrack_id: string;
+  soundtrack_title: string;
 };

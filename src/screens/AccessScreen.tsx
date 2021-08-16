@@ -3,9 +3,9 @@ import { StyleSheet, View, Image, Text } from 'react-native';
 import * as Google from 'expo-auth-session/providers/google';
 import { Prompt } from 'expo-auth-session';
 import { StackScreenProps } from '@react-navigation/stack';
-import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID } from '@env';
+import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID, BACKEND_URL } from '@env';
 
-import { StackParamList } from '../types/types';
+import { StackParamList, LoggedUserParamList } from '../types/types';
 import OrchestraColors from '../constants/OrchestraColors';
 import AppContext from '../../AppContext';
 import GoogleSignInButton from '../components/GoogleSignInButton';
@@ -22,30 +22,57 @@ const AccessScreen = ({
     scopes: ['openid', 'https://www.googleapis.com/auth/userinfo.profile']
   });
 
+  const handleErrorResponse = (response: Response) => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Access' }]
+    });
+    const message = `An error has occured: Status error ${response.status}`;
+    alert(message);
+    console.error(message);
+  };
+
+  const registerUser = async (user: LoggedUserParamList) => {
+    return await fetch(`${BACKEND_URL}/users`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: user.id,
+        username: user.given_name,
+        user_avatar: user.picture
+      })
+    });
+  };
+
   const getGoogleUserProfileInfo = async (access_token: string) => {
-    const response = await fetch(
+    const googleResponse = await fetch(
       'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' +
         access_token
     );
 
-    if (!response.ok) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Access' }]
-      });
-      const message = `An error has occured: Status error ${response.status}`;
-      alert(message);
-      console.error(message);
+    if (!googleResponse.ok) {
+      handleErrorResponse(googleResponse);
       return;
     }
 
-    console.log('Success login request');
-    const json = await response.json();
+    const json = await googleResponse.json();
     const user = {
       id: json.id,
       given_name: json.given_name,
       picture: json.picture
     };
+
+    const registerResponse = await registerUser(user);
+
+    if (!registerResponse.ok && registerResponse.status !== 409) {
+      handleErrorResponse(registerResponse);
+      return;
+    }
+
+    console.log('Success login request');
     globalState.setLoggedUser(user);
     navigation.reset({
       index: 0,
