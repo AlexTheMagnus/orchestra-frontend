@@ -46,7 +46,6 @@ const MyProfileScreen = ({
           size={150}
           source={{ uri: globalState.loggedUser.picture }}
         />
-        {console.log(globalState.loggedUser.picture)}
         <Title>{globalState.loggedUser.given_name}</Title>
       </View>
     </View>

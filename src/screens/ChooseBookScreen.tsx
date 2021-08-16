@@ -11,7 +11,6 @@ import AppContext from '../../AppContext';
 import EmptyView from '../components/EmptyView';
 import BookSearchItem from '../components/BookSeachItem';
 import OrchestraColors from '../constants/OrchestraColors';
-import { BOOK_COVER_PLACEHOLDER } from '../constants/placeholders';
 
 const ChooseBookScreen = ({
   route,
@@ -59,7 +58,7 @@ const ChooseBookScreen = ({
           ? (book.cover = result.volumeInfo.imageLinks.smallThumbnail!)
           : result.volumeInfo.imageLinks.thumbnail
           ? (book.cover = result.volumeInfo.imageLinks.thumbnail!)
-          : (book.cover = BOOK_COVER_PLACEHOLDER);
+          : null;
 
         result.volumeInfo.authors[0]
           ? (book.author = result.volumeInfo.authors[0]!)
