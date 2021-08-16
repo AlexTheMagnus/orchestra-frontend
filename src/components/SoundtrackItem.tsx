@@ -4,14 +4,23 @@ import { List } from 'react-native-paper';
 import { SoundtrackItemParamList } from '../types/types';
 
 const renderBookCover = (bookCover: string) => {
-  return (
-    <Image
-      source={{
-        uri: bookCover
-      }}
-      style={styles.bookCover}
-    />
-  );
+  if (bookCover) {
+    return (
+      <Image
+        source={{
+          uri: bookCover
+        }}
+        style={styles.bookCover}
+      />
+    );
+  } else {
+    return (
+      <Image
+        source={require('../assets/images/book-cover-placeholder.jpeg')}
+        style={styles.bookCover}
+      />
+    );
+  }
 };
 
 const renderOptionsIcon = () => {
@@ -21,7 +30,7 @@ const renderOptionsIcon = () => {
 };
 
 const SoundtrackItem = ({ ...props }: SoundtrackItemParamList) => {
-  const { bookCover, soundtrackTitle, bookTitle, author } = props;
+  const { bookCover, soundtrackTitle, bookTitle, author, soundtrackId } = props;
 
   return (
     <List.Item

@@ -15,7 +15,6 @@ import EmptyView from '../components/EmptyView';
 import CreateSoundtrackButton from '../components/CreateSoundtrackButton';
 import SoundtrackItemList from '../components/SoundtrackItemList';
 import OrchestraColors from '../constants/OrchestraColors';
-import { BOOK_COVER_PLACEHOLDER } from '../constants/placeholders';
 
 const MySoundtracksScreen = ({
   navigation
@@ -88,7 +87,7 @@ const MySoundtracksScreen = ({
 
   const getBookInfo = async (isbn: string) => {
     var bookInfo: { bookCover: string; bookTitle: string } = {
-      bookCover: BOOK_COVER_PLACEHOLDER,
+      bookCover: '',
       bookTitle: ''
     };
 
@@ -110,8 +109,11 @@ const MySoundtracksScreen = ({
     }
 
     const json = await response.json();
-    json.items[0].volumeInfo.imageLinks.thumbnailgreat
-      ? (bookInfo.bookCover = json.items[0].volumeInfo.imageLinks.thumbnail)
+    json.items[0].volumeInfo.imageLinks.smallThumbnail
+      ? (bookInfo.bookCover =
+          json.items[0].volumeInfo.imageLinks.smallThumbnail)
+      : json.items[0].volumeInfo.imageLinks.thumbnail
+      ? (bookInfo.bookCover = json.items[0].volumeInfo.imageLinks.thumbnail!)
       : null;
     json.items[0].volumeInfo.title
       ? (bookInfo.bookTitle = json.items[0].volumeInfo.title)
@@ -133,7 +135,7 @@ const MySoundtracksScreen = ({
     jsonSoundtrack: JsonSoundtrackParamList
   ) => {
     var soundtrackItem: SoundtrackItemParamList = {
-      bookCover: BOOK_COVER_PLACEHOLDER,
+      bookCover: '',
       soundtrackTitle: jsonSoundtrack.soundtrack_title,
       soundtrackId: jsonSoundtrack.soundtrack_id,
       bookTitle: '',
