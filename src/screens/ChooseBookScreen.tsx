@@ -41,32 +41,33 @@ const ChooseBookScreen = ({
 
     setResultsList([]);
     json.items.forEach((result: any) => {
-      var book: BookResultParamList = {
-        title: result.volumeInfo.title,
-        cover: '',
-        author: '',
-        isbn: ''
-      };
+      const isbn13IndustryIdentifier =
+        result.volumeInfo.industryIdentifiers.find(
+          (industryIdentifier: { type: string; identifier: string }) =>
+            industryIdentifier.type == 'ISBN_13'
+        );
 
-      result.volumeInfo.industryIdentifiers!.forEach(
-        (industryIdentifier: { type: string; identifier: string }) => {
-          if (industryIdentifier.type == 'ISBN_13') {
-            book.isbn = industryIdentifier.identifier;
-          }
-        }
-      );
+      if (isbn13IndustryIdentifier) {
+        var book: BookResultParamList = {
+          isbn: isbn13IndustryIdentifier.identifier,
+          title: result.volumeInfo.title,
+          cover: '',
+          author: ''
+        };
 
-      result.volumeInfo.imageLinks.smallThumbnail
-        ? (book.cover = result.volumeInfo.imageLinks.smallThumbnail!)
-        : result.volumeInfo.imageLinks.thumbnail
-        ? (book.cover = result.volumeInfo.imageLinks.thumbnail!)
-        : (book.cover = BOOK_COVER_PLACEHOLDER);
+        console.log('ISBN:', book.isbn);
 
-      result.volumeInfo.authors[0]
-        ? (book.author = result.volumeInfo.authors[0])
-        : (book.author = '');
+        result.volumeInfo.imageLinks.smallThumbnail
+          ? (book.cover = result.volumeInfo.imageLinks.smallThumbnail!)
+          : result.volumeInfo.imageLinks.thumbnail
+          ? (book.cover = result.volumeInfo.imageLinks.thumbnail!)
+          : (book.cover = BOOK_COVER_PLACEHOLDER);
 
-      setResultsList(resultsList => resultsList.concat(book));
+        result.volumeInfo.authors[0]
+          ? (book.author = result.volumeInfo.authors[0]!)
+          : (book.author = '');
+        setResultsList(resultsList => resultsList.concat(book));
+      }
     });
   };
 
@@ -90,13 +91,13 @@ const ChooseBookScreen = ({
         index: 0,
         routes: [{ name: 'Root' }]
       });
-      const message = `An error has occured: Status error ${response.status}`;
+      const message = `An error has occured "${isbn}": Status error ${response.status}`;
       alert(message);
       console.error(message);
       return;
     }
 
-    navigation.navigate('Root');
+    navigation.push('Root');
   };
 
   const listResults = () => {
