@@ -14,7 +14,6 @@ import { ColorSchemeName } from 'react-native';
 
 import AccessScreen from '../screens/AccessScreen';
 import ChooseBookScreen from '../screens/ChooseBookScreen';
-import SoundtrackScreen from '../screens/SoundtrackScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import { StackParamList } from '../types/types';
 import BottomTabNavigator from './BottomTabNavigator';
@@ -45,7 +44,6 @@ function RootNavigator() {
       <Stack.Screen name="Access" component={AccessScreen} />
       <Stack.Screen name="Root" component={BottomTabNavigator} />
       <Stack.Screen name="ChooseBook" component={ChooseBookScreen} />
-      <Stack.Screen name="Soundtrack" component={SoundtrackScreen} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} />
     </Stack.Navigator>
   );

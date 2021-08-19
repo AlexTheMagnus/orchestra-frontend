@@ -14,12 +14,14 @@ import MySoundtracksScreen from '../screens/MySoundtracksScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
 import SearchScreen from '../screens/SearchScreen';
 import MyProfileScreen from '../screens/MyProfileScreen';
+import SoundtrackScreen from '../screens/SoundtrackScreen';
 import {
   BottomTabParamList,
   MySoundtracksParamList,
   FavoritesParamList,
   SearchParamList,
-  MyProfileParamList
+  MyProfileParamList,
+  SoundtrackParamList
 } from '../types/types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -31,6 +33,13 @@ export default function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="My soundtracks"
       tabBarOptions={{ activeTintColor: OrchestraColors[colorScheme].tint }}
+      screenOptions={({ route }) => ({
+        tabBarButton: ['Soundtrack'].includes(route.name)
+          ? () => {
+              return null;
+            }
+          : undefined
+      })}
     >
       <BottomTab.Screen
         name="My soundtracks"
@@ -66,6 +75,7 @@ export default function BottomTabNavigator() {
           )
         }}
       />
+      <BottomTab.Screen name="Soundtrack" component={SoundtrackNavigator} />
     </BottomTab.Navigator>
   );
 }
@@ -134,5 +144,18 @@ function MyProfileNavigator() {
         options={{ headerTitle: 'My profile' }}
       />
     </MyProfileStack.Navigator>
+  );
+}
+
+const SoundtrackStack = createStackNavigator<SoundtrackParamList>();
+
+function SoundtrackNavigator() {
+  return (
+    <SoundtrackStack.Navigator>
+      <SoundtrackStack.Screen
+        name="SoundtrackScreen"
+        component={SoundtrackScreen}
+      />
+    </SoundtrackStack.Navigator>
   );
 }
