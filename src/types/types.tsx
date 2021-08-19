@@ -11,6 +11,7 @@ export type StackParamList = {
   Favorites: undefined;
   Search: undefined;
   MyProfile: undefined;
+  Soundtrack: { soundtrackId: string };
   NotFound: undefined;
 };
 
@@ -19,10 +20,6 @@ export type BottomTabParamList = {
   Favorites: undefined;
   Search: undefined;
   'My profile': undefined;
-};
-
-export type AccessParamList = {
-  AccessScreen: undefined;
 };
 
 export type MySoundtracksParamList = {

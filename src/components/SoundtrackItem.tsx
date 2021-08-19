@@ -1,6 +1,8 @@
 import React from 'react';
 import { Image, StyleSheet } from 'react-native';
-import { List } from 'react-native-paper';
+import { List, TouchableRipple } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+
 import { SoundtrackItemParamList } from '../types/types';
 
 const renderBookCover = (bookCover: string) => {
@@ -29,17 +31,32 @@ const renderOptionsIcon = () => {
   );
 };
 
-const SoundtrackItem = ({ ...props }: SoundtrackItemParamList) => {
-  const { bookCover, soundtrackTitle, bookTitle, author, soundtrackId } = props;
+const SoundtrackItem = ({
+  bookCover,
+  soundtrackTitle,
+  bookTitle,
+  author,
+  soundtrackId
+}: SoundtrackItemParamList) => {
+  const navigation = useNavigation();
+
+  const openSoundtrackScreen = (soundtrackId: string) => {
+    navigation.navigate('Soundtrack', { soundtrackId });
+  };
 
   return (
-    <List.Item
-      // key={key}
-      title={soundtrackTitle}
-      description={bookTitle + ' · by ' + author}
-      left={() => renderBookCover(bookCover)}
-      right={() => renderOptionsIcon()}
-    />
+    <TouchableRipple
+      onPress={() => openSoundtrackScreen(soundtrackId)}
+      rippleColor="rgba(0, 0, 0, .32)"
+    >
+      <List.Item
+        // key={key}
+        title={soundtrackTitle}
+        description={bookTitle + ' · by ' + author}
+        left={() => renderBookCover(bookCover)}
+        right={() => renderOptionsIcon()}
+      />
+    </TouchableRipple>
   );
 };
 
