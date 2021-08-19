@@ -1,24 +1,38 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StackParamList } from '../types/types';
+import { BottomTabParamList } from '../types/types';
+import {
+  blue100,
+  yellow100
+} from 'react-native-paper/lib/typescript/styles/colors';
 
 const SoundtrackScreen = ({
   navigation
-}: StackScreenProps<StackParamList, 'Soundtrack'>) => {
+}: StackScreenProps<BottomTabParamList, 'Soundtrack'>) => {
   return (
     <View style={styles.container}>
-      <Text>Hi boys!!!</Text>
+      <View style={styles.yellow}>
+        <Text>Hi boys!!!</Text>
+      </View>
+      <View style={styles.blue}>
+        <Text>Hi girls!!!</Text>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
-  }
+  },
+  yellow: {
+    backgroundColor: 'yellow',
+    textAlign: 'center'
+  },
+  blue: { backgroundColor: 'cyan' }
 });
 
 export default SoundtrackScreen;
