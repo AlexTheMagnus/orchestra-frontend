@@ -155,6 +155,7 @@ function SoundtrackNavigator() {
       <SoundtrackStack.Screen
         name="SoundtrackScreen"
         component={SoundtrackScreen}
+        options={{ headerShown: false }}
       />
     </SoundtrackStack.Navigator>
   );

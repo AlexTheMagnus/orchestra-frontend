@@ -50,6 +50,13 @@ export type SoundtrackItemParamList = {
   soundtrackId: string;
 };
 
+export type SoundtrackInfoParamList = {
+  bookCover: string;
+  soundtrackTitle: string;
+  bookTitle: string;
+  author: string;
+};
+
 export type LoggedUserParamList = {
   id: string;
   given_name: string;
