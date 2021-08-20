@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     aspectRatio: 2 / 3,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 30
+    marginTop: 50
   }
 });
 
