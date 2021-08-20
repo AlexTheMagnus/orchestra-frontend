@@ -1,38 +1,21 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
+import SoundtrackInfo from '../components/SoundtrackInfo';
+
 import { BottomTabParamList } from '../types/types';
-import {
-  blue100,
-  yellow100
-} from 'react-native-paper/lib/typescript/styles/colors';
 
 const SoundtrackScreen = ({
   navigation
 }: StackScreenProps<BottomTabParamList, 'Soundtrack'>) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.yellow}>
-        <Text>Hi boys!!!</Text>
-      </View>
-      <View style={styles.blue}>
-        <Text>Hi girls!!!</Text>
-      </View>
-    </View>
+    <SoundtrackInfo
+      bookCover="http://books.google.com/books/content?id=01lAtAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
+      soundtrackTitle="El sonido de los Cuervos"
+      bookTitle="Crooked kingdom"
+      author="AlexMagnus"
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  yellow: {
-    backgroundColor: 'yellow',
-    textAlign: 'center'
-  },
-  blue: { backgroundColor: 'cyan' }
-});
 
 export default SoundtrackScreen;
