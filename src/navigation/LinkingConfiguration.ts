@@ -33,10 +33,10 @@ export default {
             screens: {
               MyProfileScreen: 'my-profile'
             }
-          }
+          },
+          SoundtrackScreen: 'soundtrack'
         }
       },
-      SoundtrackScreen: 'soundtrack',
       NotFound: '*'
     }
   }

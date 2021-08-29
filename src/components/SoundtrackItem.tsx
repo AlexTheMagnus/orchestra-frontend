@@ -40,13 +40,13 @@ const SoundtrackItem = ({
 }: SoundtrackItemParamList) => {
   const navigation = useNavigation();
 
-  const openSoundtrackScreen = (soundtrackId: string) => {
+  const openSoundtrackScreen = () => {
     navigation.navigate('Soundtrack', { soundtrackId });
   };
 
   return (
     <TouchableRipple
-      onPress={() => openSoundtrackScreen(soundtrackId)}
+      onPress={() => openSoundtrackScreen()}
       rippleColor="rgba(0, 0, 0, .32)"
     >
       <List.Item

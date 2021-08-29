@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { IconButton } from 'react-native-paper';
 
@@ -8,8 +8,10 @@ import SoundtrackInfo from '../components/SoundtrackInfo';
 import EmptyView from '../components/EmptyView';
 
 const SoundtrackScreen = ({
+  route,
   navigation
 }: StackScreenProps<BottomTabParamList, 'Soundtrack'>) => {
+  const { soundtrackId } = route.params;
   const emptyMessage: string = 'This soundtrack is currently empty';
 
   return (
@@ -29,9 +31,9 @@ const SoundtrackScreen = ({
         style={styles.optionsButton}
       />
       <SoundtrackInfo
-        bookCover="http://books.google.com/books/content?id=01lAtAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api"
-        soundtrackTitle="El sonido de los Cuervos"
-        bookTitle="Crooked kingdom"
+        bookCover="http://books.google.com/books/content?id=yhIRBwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
+        soundtrackTitle={soundtrackId}
+        bookTitle="Six of crows"
         author="AlexMagnus"
       />
       <View style={styles.emptyViewContainer}>
