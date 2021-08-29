@@ -20,8 +20,7 @@ import {
   MySoundtracksParamList,
   FavoritesParamList,
   SearchParamList,
-  MyProfileParamList,
-  SoundtrackParamList
+  MyProfileParamList
 } from '../types/types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -75,7 +74,7 @@ export default function BottomTabNavigator() {
           )
         }}
       />
-      <BottomTab.Screen name="Soundtrack" component={SoundtrackNavigator} />
+      <BottomTab.Screen name="Soundtrack" component={SoundtrackScreen} />
     </BottomTab.Navigator>
   );
 }
@@ -144,19 +143,5 @@ function MyProfileNavigator() {
         options={{ headerTitle: 'My profile' }}
       />
     </MyProfileStack.Navigator>
-  );
-}
-
-const SoundtrackStack = createStackNavigator<SoundtrackParamList>();
-
-function SoundtrackNavigator() {
-  return (
-    <SoundtrackStack.Navigator>
-      <SoundtrackStack.Screen
-        name="SoundtrackScreen"
-        component={SoundtrackScreen}
-        options={{ headerShown: false }}
-      />
-    </SoundtrackStack.Navigator>
   );
 }
