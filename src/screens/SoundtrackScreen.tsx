@@ -1,13 +1,43 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import { IconButton } from 'react-native-paper';
+import { IconButton, Title, Text } from 'react-native-paper';
 import { BACKEND_URL } from '@env';
 
-import { BottomTabParamList, SoundtrackItemParamList } from '../types/types';
 import { fromJsonToSoundtrackItem } from '../components/utils';
-import SoundtrackInfo from '../components/SoundtrackInfo';
+import {
+  BottomTabParamList,
+  JsonSoundtrackParamList,
+  OrchestraButtonProps,
+  SoundtrackItemParamList
+} from '../types/types';
+import AppContext from '../../AppContext';
 import EmptyView from '../components/EmptyView';
+import OrchestraButton from '../components/OrchestraButton';
+import SoundtrackInfo from '../components/SoundtrackInfo';
+
+const AddChapterButton = ({
+  onPress,
+  message,
+  propStyles
+}: OrchestraButtonProps) => {
+  return (
+    <OrchestraButton
+      onPress={onPress}
+      message={message}
+      propStyles={propStyles}
+    />
+  );
+};
+
+const AddChapterMesage = () => {
+  return (
+    <View style={styles.addChapterMessageContainer}>
+      <Title>This soundtrack is currently empty</Title>
+      <Text>Press the button above to add a chapter</Text>
+    </View>
+  );
+};
 
 const SoundtrackScreen = ({
   route,
@@ -23,8 +53,12 @@ const SoundtrackScreen = ({
     soundtrackId: soundtrackId
   };
 
+  const globalState = useContext(AppContext);
+
   const [soundtrackInfo, setSoundtrackInfo] =
     React.useState<SoundtrackItemParamList>(defaultSoundtrackInfo);
+
+  const [authorId, setAuthorId] = React.useState('');
 
   useEffect(() => {
     getSoundtrackById(soundtrackId).then(soundtrack => {
@@ -47,14 +81,17 @@ const SoundtrackScreen = ({
       console.error(message);
     }
 
-    const json = await response.json();
+    const json: JsonSoundtrackParamList = await response.json();
+    setAuthorId(json.author);
+    console.log('authorId', authorId);
+    console.log('loggedUser', globalState.loggedUser.id);
     const soundtrackItem = await fromJsonToSoundtrackItem(json);
 
     return soundtrackItem;
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <IconButton
         icon="heart-outline"
         onPress={() => console.log('Corazón')}
@@ -75,14 +112,26 @@ const SoundtrackScreen = ({
         bookTitle={soundtrackInfo.bookTitle}
         author={soundtrackInfo.author}
       />
-      <View style={styles.emptyViewContainer}>
+      {globalState.loggedUser.id === authorId ? (
+        <View style={styles.container}>
+          <AddChapterButton
+            onPress={() => {}}
+            message="ADD CHAPTER"
+            propStyles={styles.addChapterButton}
+          />
+          <AddChapterMesage />
+        </View>
+      ) : (
         <EmptyView icon="mySoundtracks" message={emptyMessage} />
-      </View>
+      )}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center'
+  },
   favoriteButton: {
     position: 'absolute',
     left: 5,
@@ -93,9 +142,9 @@ const styles = StyleSheet.create({
     right: 5,
     top: 20
   },
-  emptyViewContainer: {
-    alignItems: 'center',
-    justifyContent: 'center'
+  addChapterButton: { marginVertical: 10 },
+  addChapterMessageContainer: {
+    alignItems: 'center'
   }
 });
 

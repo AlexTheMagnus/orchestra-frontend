@@ -1,12 +1,12 @@
 import React from 'react';
-import { Image } from 'react-native';
+import { Image, ImageStyle, StyleProp } from 'react-native';
 
 const BookCover = ({
   bookCoverUrl,
   styles
 }: {
   bookCoverUrl: string;
-  styles: Object;
+  styles: StyleProp<ImageStyle>;
 }) => {
   return (
     <Image

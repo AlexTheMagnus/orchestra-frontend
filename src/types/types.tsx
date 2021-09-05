@@ -3,6 +3,13 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
+import {
+  Falsy,
+  RecursiveArray,
+  RegisteredStyle,
+  TextStyle
+} from 'react-native';
+
 export type StackParamList = {
   Access: undefined;
   Root: undefined;
@@ -80,4 +87,14 @@ export type JsonSoundtrackParamList = {
   book: string;
   soundtrack_id: string;
   soundtrack_title: string;
+};
+
+export type OrchestraButtonProps = {
+  onPress: () => void;
+  message: string;
+  propStyles?:
+    | TextStyle
+    | Falsy
+    | RegisteredStyle<TextStyle>
+    | RecursiveArray<TextStyle>;
 };
