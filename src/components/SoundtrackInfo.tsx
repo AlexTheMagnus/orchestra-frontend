@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { Title } from 'react-native-paper';
 
 import { SoundtrackInfoParamList } from '../types/types';
+import BookCover from '../components/BookCover';
 
 const SoundtrackInfo = ({
   bookCover,
@@ -12,18 +13,16 @@ const SoundtrackInfo = ({
 }: SoundtrackInfoParamList) => {
   return (
     <View style={styles.container}>
-      <Image
-        source={{
-          uri: bookCover
-        }}
-        style={styles.bookCover}
-      ></Image>
-      <View style={styles.bookTextInfo}>
-        <Title>{soundtrackTitle}</Title>
-        <Text>
-          {bookTitle} · by {author}
-        </Text>
-      </View>
+      <BookCover bookCoverUrl={bookCover} styles={styles.bookCover} />
+
+      {soundtrackTitle && bookTitle && author ? (
+        <View style={styles.bookTextInfo}>
+          <Title>{soundtrackTitle}</Title>
+          <Text>
+            {bookTitle} · by {author}
+          </Text>
+        </View>
+      ) : null}
     </View>
   );
 };

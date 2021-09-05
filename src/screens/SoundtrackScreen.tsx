@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { IconButton } from 'react-native-paper';
+import { BACKEND_URL } from '@env';
 
-import { BottomTabParamList } from '../types/types';
+import { BottomTabParamList, SoundtrackItemParamList } from '../types/types';
+import { fromJsonToSoundtrackItem } from '../components/utils';
 import SoundtrackInfo from '../components/SoundtrackInfo';
 import EmptyView from '../components/EmptyView';
 
@@ -13,6 +15,43 @@ const SoundtrackScreen = ({
 }: StackScreenProps<BottomTabParamList, 'Soundtrack'>) => {
   const { soundtrackId } = route.params;
   const emptyMessage: string = 'This soundtrack is currently empty';
+  const defaultSoundtrackInfo = {
+    bookCover: '',
+    soundtrackTitle: '',
+    bookTitle: '',
+    author: '',
+    soundtrackId: soundtrackId
+  };
+
+  const [soundtrackInfo, setSoundtrackInfo] =
+    React.useState<SoundtrackItemParamList>(defaultSoundtrackInfo);
+
+  useEffect(() => {
+    getSoundtrackById(soundtrackId).then(soundtrack => {
+      setSoundtrackInfo(soundtrack);
+    });
+  }, []);
+
+  const getSoundtrackById = async (soundtrackId: string) => {
+    const response = await fetch(`${BACKEND_URL}/soundtracks/${soundtrackId}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      const message = `An error has occured while loading the soundtrack info: Status error ${response.status}`;
+      alert(message);
+      console.error(message);
+    }
+
+    const json = await response.json();
+    const soundtrackItem = await fromJsonToSoundtrackItem(json);
+
+    return soundtrackItem;
+  };
 
   return (
     <View>
@@ -31,10 +70,10 @@ const SoundtrackScreen = ({
         style={styles.optionsButton}
       />
       <SoundtrackInfo
-        bookCover="http://books.google.com/books/content?id=yhIRBwAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api"
-        soundtrackTitle={soundtrackId}
-        bookTitle="Six of crows"
-        author="AlexMagnus"
+        bookCover={soundtrackInfo.bookCover}
+        soundtrackTitle={soundtrackInfo.soundtrackTitle}
+        bookTitle={soundtrackInfo.bookTitle}
+        author={soundtrackInfo.author}
       />
       <View style={styles.emptyViewContainer}>
         <EmptyView icon="mySoundtracks" message={emptyMessage} />
