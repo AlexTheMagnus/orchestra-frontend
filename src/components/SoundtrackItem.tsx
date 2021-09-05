@@ -1,28 +1,14 @@
 import React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { List, TouchableRipple } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { SoundtrackItemParamList } from '../types/types';
+import BookCover from './BookCover';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const renderBookCover = (bookCover: string) => {
-  if (bookCover) {
-    return (
-      <Image
-        source={{
-          uri: bookCover
-        }}
-        style={styles.bookCover}
-      />
-    );
-  } else {
-    return (
-      <Image
-        source={require('../assets/images/book-cover-placeholder.jpeg')}
-        style={styles.bookCover}
-      />
-    );
-  }
+  return <BookCover bookCoverUrl={bookCover} styles={styles.bookCover} />;
 };
 
 const renderOptionsIcon = () => {
@@ -38,10 +24,10 @@ const SoundtrackItem = ({
   author,
   soundtrackId
 }: SoundtrackItemParamList) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const openSoundtrackScreen = () => {
-    navigation.navigate('Soundtrack', { soundtrackId });
+    navigation.push('Root', { screen: 'Soundtrack', params: { soundtrackId } });
   };
 
   return (
@@ -61,11 +47,6 @@ const SoundtrackItem = ({
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly'
-  },
   bookCover: {
     width: 64,
     height: undefined,
