@@ -7,15 +7,26 @@ import { BACKEND_URL } from '@env';
 import { View } from '../components/Themed';
 import AppContext from '../../AppContext';
 import {
-  StackParamList,
+  JsonSoundtrackParamList,
+  OrchestraButtonProps,
   SoundtrackItemParamList,
-  JsonSoundtrackParamList
+  StackParamList
 } from '../types/types';
 import { fromJsonToSoundtrackItem } from '../components/utils';
 import EmptyView from '../components/EmptyView';
-import CreateSoundtrackButton from '../components/CreateSoundtrackButton';
+import OrchestraButton from '../components/OrchestraButton';
 import SoundtrackItemList from '../components/SoundtrackItemList';
 import OrchestraColors from '../constants/OrchestraColors';
+
+const CreateSoundtrackButton = ({ onPress, message }: OrchestraButtonProps) => {
+  return (
+    <OrchestraButton
+      onPress={onPress}
+      message={message}
+      propStyles={styles.createSoundtrackButton}
+    />
+  );
+};
 
 const MySoundtracksScreen = ({
   navigation
@@ -93,7 +104,10 @@ const MySoundtracksScreen = ({
 
   return (
     <View style={styles.screeenContainer}>
-      <CreateSoundtrackButton onPress={showDialog} />
+      <CreateSoundtrackButton
+        onPress={showDialog}
+        message="CREATE SOUNDTRACK"
+      />
       <ChooseSoundtrackTitleModal />
       {!userSoundtracksList.length ? (
         <View style={styles.content}>
@@ -109,6 +123,7 @@ const MySoundtracksScreen = ({
 };
 
 const styles = StyleSheet.create({
+  createSoundtrackButton: { marginTop: 10, position: 'absolute', zIndex: 10 },
   screeenContainer: {
     flex: 1,
     alignItems: 'center'

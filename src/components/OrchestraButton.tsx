@@ -3,30 +3,30 @@ import { StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
 
 import OrchestraColors from '../constants/OrchestraColors';
+import { OrchestraButtonProps } from '../types/types';
 
-const CreateSoundtrackButton = ({ ...props }) => {
+const OrchestraButton = ({
+  onPress,
+  message,
+  propStyles
+}: OrchestraButtonProps) => {
   return (
     <Button
       mode="contained"
       color={OrchestraColors.secondaryColor}
       dark={true}
-      style={styles.button}
+      style={[styles.button, propStyles]}
       labelStyle={styles.buttonText}
-      {...props}
+      onPress={onPress}
     >
-      CREATE SOUNDTRACK
+      {message}
     </Button>
   );
 };
 
 const styles = StyleSheet.create({
   button: {
-    alignItems: 'center',
-    justifyContent: 'center',
     borderRadius: 30,
-    marginTop: 10,
-    position: 'absolute',
-    zIndex: 10,
     width: '60%'
   },
   buttonText: {
@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CreateSoundtrackButton;
+export default OrchestraButton;
