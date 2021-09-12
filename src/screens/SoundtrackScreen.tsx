@@ -83,8 +83,6 @@ const SoundtrackScreen = ({
 
     const json: JsonSoundtrackParamList = await response.json();
     setAuthorId(json.author);
-    console.log('authorId', authorId);
-    console.log('loggedUser', globalState.loggedUser.id);
     const soundtrackItem = await fromJsonToSoundtrackItem(json);
 
     return soundtrackItem;
