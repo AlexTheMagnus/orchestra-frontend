@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { IconButton, Title, Text } from 'react-native-paper';
+import { WebView } from 'react-native-webview';
 import { BACKEND_URL } from '@env';
 
 import { fromJsonToSoundtrackItem } from '../components/utils';
@@ -118,6 +119,13 @@ const SoundtrackScreen = ({
             propStyles={styles.addChapterButton}
           />
           <AddChapterMesage />
+          <WebView
+            style={styles.container2}
+            originWhitelist={['*']}
+            source={{
+              html: '<head><meta name="viewport" content="width=device-width, initial-scale=1"></meta>;<head/><iframe src="https://open.spotify.com/embed/track/0LmbmsBNz2rMyP0rpECbwD?theme=0" width="100%" height="80" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
+            }}
+          />
         </View>
       ) : (
         <EmptyView icon="mySoundtracks" message={emptyMessage} />
@@ -128,7 +136,14 @@ const SoundtrackScreen = ({
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center'
+    flex: 1,
+    marginTop: 10,
+    zIndex: 10
+  },
+  container2: {
+    flex: 1,
+    marginTop: 10,
+    zIndex: 10
   },
   favoriteButton: {
     position: 'absolute',

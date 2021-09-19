@@ -46,6 +46,8 @@
     "react-native-screens": "~3.4.0",
     "react-native-uuid": "^2.0.1",
     "react-native-web": "~0.13.12",
+    "react-native-webview": "11.6.2",
+    "react-spotify-player": "^1.0.4",
     "rn-google-sign-in": "^1.0.10"
   },
   "devDependencies": {
