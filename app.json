@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/images/favicon.png",
-    "scheme": "myapp",
+    "scheme": "orchestra",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./src/assets/images/splash.png",

@@ -1,26 +1,58 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
-import * as Google from 'expo-auth-session/providers/google';
-import { Prompt } from 'expo-auth-session';
+import { useAuthRequest } from 'expo-auth-session';
 import { StackScreenProps } from '@react-navigation/stack';
-import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID, BACKEND_URL } from '@env';
+import { SPOTIFY_CLIENT_ID, LOCAL_ORCHESTRA_URL, BACKEND_URL } from '@env';
 
 import { StackParamList, LoggedUserParamList } from '../types/types';
+import {
+  SPOTIFY_AUTH_ENDPOINT,
+  SPOTIFY_TOKEN_ENDPOINT
+} from '../constants/OrchestraConstants';
 import OrchestraColors from '../constants/OrchestraColors';
 import AppContext from '../../AppContext';
 import GoogleSignInButton from '../components/GoogleSignInButton';
+
+// Endpoint
+const discovery = {
+  authorizationEndpoint: SPOTIFY_AUTH_ENDPOINT,
+  tokenEndpoint: SPOTIFY_TOKEN_ENDPOINT
+};
 
 const AccessScreen = ({
   navigation
 }: StackScreenProps<StackParamList, 'Access'>) => {
   const globalState = useContext(AppContext);
+  const redirectUri = String(LOCAL_ORCHESTRA_URL);
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: `${EXPO_CLIENT_ID}.apps.googleusercontent.com`,
-    androidClientId: `${ANDROID_CLIENT_ID}.apps.googleusercontent.com`,
-    prompt: Prompt.Login,
-    scopes: ['openid', 'https://www.googleapis.com/auth/userinfo.profile']
-  });
+  const [request, response, promptAsync] = useAuthRequest(
+    {
+      clientId: SPOTIFY_CLIENT_ID,
+      scopes: [
+        'user-read-email',
+        'user-read-private',
+        'streaming',
+        'app-remote-control',
+        'user-read-playback-state',
+        'user-modify-playback-state',
+        'user-read-currently-playing'
+      ],
+      // In order to follow the "Authorization Code Flow" to fetch token after authorizationEndpoint
+      // this must be set to false
+      usePKCE: false,
+      redirectUri
+    },
+    discovery
+  );
+
+  React.useEffect(() => {
+    if (response?.type === 'success') {
+      const { code } = response.params;
+      console.log('Success loggin', code);
+    } else {
+      console.log('Error when logging in', response);
+    }
+  }, [response]);
 
   const handleErrorResponse = (response: Response) => {
     navigation.reset({
@@ -79,15 +111,6 @@ const AccessScreen = ({
       routes: [{ name: 'Root' }]
     });
   };
-
-  React.useEffect(() => {
-    if (response?.type === 'success') {
-      const { params } = response;
-      const access_token = params.access_token;
-      globalState.setAccessToken(access_token);
-      getGoogleUserProfileInfo(access_token);
-    }
-  }, [response]);
 
   return (
     <View style={styles.accessScreen}>
