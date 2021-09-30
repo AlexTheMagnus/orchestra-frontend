@@ -98,3 +98,10 @@ export type OrchestraButtonProps = {
     | RegisteredStyle<TextStyle>
     | RecursiveArray<TextStyle>;
 };
+
+export type AccessResponse = {
+  access_token: string;
+  user_id: string;
+  username: string;
+  user_avatar: string;
+};
