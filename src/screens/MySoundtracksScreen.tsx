@@ -42,9 +42,11 @@ const MySoundtracksScreen = ({
   >([]);
 
   useEffect(() => {
-    getUserSoundtracks(globalState.loggedUser.id).then(userSoundtracks => {
-      setUserSoundtracksList(userSoundtracks);
-    });
+    if (globalState.loggedUser.id) {
+      getUserSoundtracks(globalState.loggedUser.id).then(userSoundtracks => {
+        setUserSoundtracksList(userSoundtracks);
+      });
+    }
   }, []);
 
   const showDialog = () => setIsDialogVisible(true);
