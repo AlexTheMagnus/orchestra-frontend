@@ -47,7 +47,8 @@ const MySoundtracksScreen = ({
         setUserSoundtracksList(userSoundtracks);
       });
     }
-  }, []);
+    console.log('SOUNDTRACKS', userSoundtracksList);
+  }, [globalState.loggedUser.id]);
 
   const showDialog = () => setIsDialogVisible(true);
   const hideDialog = () => {
