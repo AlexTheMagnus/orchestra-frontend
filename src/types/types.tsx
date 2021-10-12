@@ -18,6 +18,10 @@ export type StackParamList = {
   Favorites: undefined;
   Search: undefined;
   MyProfile: undefined;
+  Soundtrack: {
+    soundtrackId: string;
+  };
+  ChooseTheme: { chapterTitle: string };
   NotFound: undefined;
 };
 
@@ -104,4 +108,18 @@ export type AccessResponse = {
   user_id: string;
   username: string;
   user_avatar: string;
+};
+
+export type ThemeParamList = {
+  title: string;
+  author: string;
+  themeUri: string;
+};
+
+export type ThemeItemParamList = {
+  title: string;
+  description: string;
+  themeUri: string;
+  key: number;
+  onPress(): void;
 };

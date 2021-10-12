@@ -18,7 +18,7 @@ const SoundtrackInfo = ({
       {soundtrackTitle && bookTitle && author ? (
         <View style={styles.bookTextInfo}>
           <Title>{soundtrackTitle}</Title>
-          <Text>
+          <Text style={styles.bookDescription}>
             {bookTitle} · by {author}
           </Text>
         </View>
@@ -29,10 +29,12 @@ const SoundtrackInfo = ({
 
 const styles = StyleSheet.create({
   container: {
+    textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
   },
+  bookDescription: { textAlign: 'center' },
   bookTextInfo: {
     alignItems: 'center',
     justifyContent: 'center',

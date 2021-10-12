@@ -9,9 +9,12 @@ const renderBookCover = (bookCover: string) => {
   return <BookCover bookCoverUrl={bookCover} styles={styles.bookCover} />;
 };
 
-const BookSearchItem = ({ ...props }: BookSearchItemParamList) => {
-  const { bookCover, bookTitle, author, key } = props;
-
+const BookSearchItem = ({
+  bookCover,
+  bookTitle,
+  author,
+  key
+}: BookSearchItemParamList) => {
   return (
     <List.Item
       title={bookTitle}
