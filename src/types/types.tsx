@@ -3,6 +3,13 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
+import {
+  Falsy,
+  RecursiveArray,
+  RegisteredStyle,
+  TextStyle
+} from 'react-native';
+
 export type StackParamList = {
   Access: undefined;
   Root: undefined;
@@ -11,6 +18,14 @@ export type StackParamList = {
   Favorites: undefined;
   Search: undefined;
   MyProfile: undefined;
+  Soundtrack: {
+    soundtrackId: string;
+  };
+  ChooseTheme: {
+    soundtrackId: string;
+    chapterNumber: number;
+    chapterTitle: string;
+  };
   NotFound: undefined;
 };
 
@@ -19,10 +34,9 @@ export type BottomTabParamList = {
   Favorites: undefined;
   Search: undefined;
   'My profile': undefined;
-};
-
-export type AccessParamList = {
-  AccessScreen: undefined;
+  Soundtrack: {
+    soundtrackId: string;
+  };
 };
 
 export type MySoundtracksParamList = {
@@ -47,6 +61,13 @@ export type SoundtrackItemParamList = {
   bookTitle: string;
   author: string;
   soundtrackId: string;
+};
+
+export type SoundtrackInfoParamList = {
+  bookCover: string;
+  soundtrackTitle: string;
+  bookTitle: string;
+  author: string;
 };
 
 export type LoggedUserParamList = {
@@ -74,4 +95,53 @@ export type JsonSoundtrackParamList = {
   book: string;
   soundtrack_id: string;
   soundtrack_title: string;
+};
+
+export type OrchestraButtonProps = {
+  onPress: () => void;
+  message: string;
+  propStyles?:
+    | TextStyle
+    | Falsy
+    | RegisteredStyle<TextStyle>
+    | RecursiveArray<TextStyle>;
+};
+
+export type AccessResponse = {
+  access_token: string;
+  user_id: string;
+  username: string;
+  user_avatar: string;
+};
+
+export type ThemeParamList = {
+  title: string;
+  author: string;
+  themeUri: string;
+};
+
+export type ThemeItemParamList = ThemeParamList & { onPress(): void };
+
+export type JsonChapterParamList = {
+  chapter_id: string;
+  chapter_number: number;
+  chapter_title: string;
+  soundtrack_id: string;
+  theme: string;
+};
+
+export type ChapterParamList = {
+  chapterId: string;
+  chapterNumber: number;
+  chapterTitle: string;
+  soundtrackId: string;
+  theme: string;
+};
+
+export type ChapterItemParamList = {
+  chapterId: string;
+  chapterNumber: number;
+  chapterTitle: string;
+  theme: string;
+  onPress(): void;
 };

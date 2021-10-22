@@ -1,85 +1,76 @@
 import React, { useState, useContext } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { Appbar, TextInput, TouchableRipple } from 'react-native-paper';
 import uuid from 'react-native-uuid';
-import { StackScreenProps } from '@react-navigation/stack';
+import { ScrollView, StyleSheet } from 'react-native';
+import { Appbar, TextInput } from 'react-native-paper';
+import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import { BACKEND_URL } from '@env';
 
 import { View } from '../components/Themed';
-import { StackParamList, BookResultParamList } from '../types/types';
+import { StackParamList, ThemeParamList } from '../types/types';
 import AppContext from '../../AppContext';
 import EmptyView from '../components/EmptyView';
-import BookSearchItem from '../components/BookSeachItem';
+import ThemeItem from '../components/ThemeItem';
 import OrchestraColors from '../constants/OrchestraColors';
+import { SPOTIFY_API_URL } from '../constants/OrchestraConstants';
 
-const ChooseBookScreen = ({
+const ChooseThemeScreen = ({
   route,
   navigation
-}: StackScreenProps<StackParamList, 'ChooseBook'>) => {
-  const { soundtrackTitle } = route.params;
-  const emptyMessage: string = 'Choose a book for your soundtrack';
-
+}: StackScreenProps<StackParamList, 'ChooseTheme'>) => {
+  const { soundtrackId, chapterNumber, chapterTitle } = route.params;
+  const appNavigation = useNavigation<StackNavigationProp<any>>();
   const globalState = useContext(AppContext);
+  const [resultsList, setResultsList] = useState<Array<ThemeParamList>>([]);
+  const emptyMessage: string = 'Choose a theme for your chapter';
 
-  const [resultsList, setResultsList] = useState<Array<BookResultParamList>>(
-    []
-  );
-
-  const searchBooks = async (textToSearch: string) => {
+  const searchThemes = async (textToSearch: string) => {
     const response = await fetch(
-      'https://www.googleapis.com/books/v1/volumes?q=' + textToSearch
+      `${SPOTIFY_API_URL}/search?query=${textToSearch}&type=track&offset=0&limit=10&market=ES`,
+      {
+        method: 'GET',
+        headers: new Headers({
+          Authorization: 'Bearer ' + globalState.accessToken
+        })
+      }
     );
 
     if (!response.ok) {
-      const message = `Google Books API request error: Status error ${response.status}`;
+      const message = `Spotify API - Get themes request error: Status error ${response.status}`;
       console.error(message);
       return;
     }
 
-    const json = await response.json();
+    const jsonResponse = await response.json();
+    const spotifyThemesList = jsonResponse['tracks']['items'];
 
     setResultsList([]);
-    json.items.forEach((result: any) => {
-      const isbn13IndustryIdentifier =
-        result.volumeInfo.industryIdentifiers.find(
-          (industryIdentifier: { type: string; identifier: string }) =>
-            industryIdentifier.type == 'ISBN_13'
-        );
 
-      if (isbn13IndustryIdentifier) {
-        var book: BookResultParamList = {
-          isbn: isbn13IndustryIdentifier.identifier,
-          title: result.volumeInfo.title,
-          cover: '',
-          author: ''
-        };
+    spotifyThemesList.forEach((result: any) => {
+      const artistsName = result.artists.map((artist: any) => artist.name);
+      const theme: ThemeParamList = {
+        title: result.name,
+        author: artistsName.join(', '),
+        themeUri: result.uri.split(':').pop()
+      };
 
-        result.volumeInfo.imageLinks.smallThumbnail
-          ? (book.cover = result.volumeInfo.imageLinks.smallThumbnail!)
-          : result.volumeInfo.imageLinks.thumbnail
-          ? (book.cover = result.volumeInfo.imageLinks.thumbnail!)
-          : null;
-
-        result.volumeInfo.authors[0]
-          ? (book.author = result.volumeInfo.authors[0]!)
-          : (book.author = '');
-        setResultsList(resultsList => resultsList.concat(book));
-      }
+      setResultsList(resultsList => resultsList.concat(theme));
     });
   };
 
-  const createSoundtrack = async (isbn: string) => {
-    const response = await fetch(`${BACKEND_URL}/soundtracks`, {
+  const createChapter = async (themeUri: string) => {
+    const response = await fetch(`${BACKEND_URL}/chapters`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        soundtrack_id: uuid.v4(),
-        book: isbn,
-        soundtrack_title: soundtrackTitle,
-        author: globalState.loggedUser.id
+        chapter_id: uuid.v4(),
+        soundtrack_id: soundtrackId,
+        chapter_number: chapterNumber,
+        theme: themeUri,
+        chapter_title: chapterTitle
       })
     });
 
@@ -94,24 +85,22 @@ const ChooseBookScreen = ({
       return;
     }
 
-    navigation.push('Root');
+    appNavigation.push('Root', {
+      screen: 'Soundtrack',
+      params: { soundtrackId }
+    });
   };
 
   const listResults = () => {
     return resultsList.map((result, index) => {
       return (
-        <TouchableRipple
-          onPress={() => createSoundtrack(result.isbn)}
-          rippleColor="rgba(0, 0, 0, .32)"
+        <ThemeItem
+          title={result.title}
+          author={result.author}
+          themeUri={result.themeUri}
           key={index}
-        >
-          <BookSearchItem
-            bookTitle={result.title}
-            author={result.author}
-            bookCover={result.cover}
-            key={index}
-          />
-        </TouchableRipple>
+          onPress={() => createChapter(result.themeUri)}
+        />
       );
     });
   };
@@ -125,7 +114,7 @@ const ChooseBookScreen = ({
           selectionColor={OrchestraColors.textColorDark}
           outlineColor={OrchestraColors.transparent}
           onChangeText={text => {
-            text ? searchBooks(text) : setResultsList([]);
+            text ? searchThemes(text) : setResultsList([]);
           }}
           style={styles.searchInput}
           theme={inputTheme}
@@ -178,4 +167,4 @@ const inputTheme = {
   }
 };
 
-export default ChooseBookScreen;
+export default ChooseThemeScreen;

@@ -33,6 +33,12 @@ export default {
             screens: {
               MyProfileScreen: 'my-profile'
             }
+          },
+          Soundtrack: {
+            screens: {
+              SoundtrackScreen: 'soundtrack',
+              ChooseThemeScreen: 'choose-theme'
+            }
           }
         }
       },

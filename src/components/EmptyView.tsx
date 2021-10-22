@@ -4,9 +4,7 @@ import { Text, View } from '../components/Themed';
 
 import OrchestraIcon from './icons/OrchestraIcon';
 
-const EmptyView = ({ ...props }) => {
-  const { icon, message } = props;
-
+const EmptyView = ({ icon, message }: { icon: string; message: string }) => {
   return (
     <View style={styles.content}>
       <OrchestraIcon icon={icon} color="black" style={styles.emptyIcon} />

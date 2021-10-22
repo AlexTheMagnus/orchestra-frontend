@@ -1,26 +1,14 @@
 import React from 'react';
-import { Image, StyleSheet } from 'react-native';
-import { List } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
+import { List, TouchableRipple } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
+
 import { SoundtrackItemParamList } from '../types/types';
+import BookCover from './BookCover';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const renderBookCover = (bookCover: string) => {
-  if (bookCover) {
-    return (
-      <Image
-        source={{
-          uri: bookCover
-        }}
-        style={styles.bookCover}
-      />
-    );
-  } else {
-    return (
-      <Image
-        source={require('../assets/images/book-cover-placeholder.jpeg')}
-        style={styles.bookCover}
-      />
-    );
-  }
+  return <BookCover bookCoverUrl={bookCover} styles={styles.bookCover} />;
 };
 
 const renderOptionsIcon = () => {
@@ -29,26 +17,36 @@ const renderOptionsIcon = () => {
   );
 };
 
-const SoundtrackItem = ({ ...props }: SoundtrackItemParamList) => {
-  const { bookCover, soundtrackTitle, bookTitle, author, soundtrackId } = props;
+const SoundtrackItem = ({
+  bookCover,
+  soundtrackTitle,
+  bookTitle,
+  author,
+  soundtrackId
+}: SoundtrackItemParamList) => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
+  const openSoundtrackScreen = () => {
+    navigation.push('Root', { screen: 'Soundtrack', params: { soundtrackId } });
+  };
 
   return (
-    <List.Item
-      // key={key}
-      title={soundtrackTitle}
-      description={bookTitle + ' · by ' + author}
-      left={() => renderBookCover(bookCover)}
-      right={() => renderOptionsIcon()}
-    />
+    <TouchableRipple
+      onPress={() => openSoundtrackScreen()}
+      rippleColor="rgba(0, 0, 0, .32)"
+    >
+      <List.Item
+        // key={key}
+        title={soundtrackTitle}
+        description={bookTitle + ' · by ' + author}
+        left={() => renderBookCover(bookCover)}
+        right={() => renderOptionsIcon()}
+      />
+    </TouchableRipple>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly'
-  },
   bookCover: {
     width: 64,
     height: undefined,

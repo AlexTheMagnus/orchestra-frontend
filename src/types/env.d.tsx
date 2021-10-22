@@ -1,6 +1,6 @@
 declare module '@env' {
-  export const EXPO_CLIENT_ID: string;
-  export const ANDROID_CLIENT_ID: string;
+  export const SPOTIFY_CLIENT_ID: string;
+  export const LOCAL_ORCHESTRA_URL: string;
   export const BACKEND_URL: string;
 }
 

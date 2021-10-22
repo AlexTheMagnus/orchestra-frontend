@@ -1,11 +1,10 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Button } from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
-
+import { FontAwesome5 } from '@expo/vector-icons';
 import OrchestraColors from '../constants/OrchestraColors';
 
-const GoogleSignInButton = ({ ...props }) => {
+const SpotifySignInButton = ({ ...props }) => {
   return (
     <Button
       mode="contained"
@@ -16,9 +15,9 @@ const GoogleSignInButton = ({ ...props }) => {
       labelStyle={styles.buttonText}
       {...props}
     >
-      <Ionicons name="logo-google" size={20} />
+      <FontAwesome5 name="spotify" size={22} />
       <View style={{ width: 16, height: 1 }} />
-      <Text>Sign in with Google</Text>
+      <Text>Sign in with Spotify</Text>
     </Button>
   );
 };
@@ -32,9 +31,9 @@ const styles = StyleSheet.create({
   buttonText: {
     color: OrchestraColors.textColor,
     paddingVertical: 10,
-    fontSize: 18,
+    fontSize: 20,
     paddingHorizontal: 20
   }
 });
 
-export default GoogleSignInButton;
+export default SpotifySignInButton;
