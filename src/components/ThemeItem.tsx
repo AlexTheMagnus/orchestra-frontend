@@ -2,8 +2,6 @@ import React from 'react';
 import WebView from 'react-native-webview';
 import { StyleSheet } from 'react-native';
 import { List, TouchableRipple } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
 
 import { ThemeItemParamList } from '../types/types';
 import { View } from './Themed';
@@ -24,12 +22,10 @@ const SpotifyPreview = ({ themeUri }: { themeUri: string }) => {
 
 const ThemeItem = ({
   title,
-  description,
+  author,
   themeUri,
   onPress
 }: ThemeItemParamList) => {
-  // const navigation = useNavigation<StackNavigationProp<any>>();
-
   return (
     <View style={styles.container}>
       <SpotifyPreview themeUri={themeUri} />
@@ -38,7 +34,7 @@ const ThemeItem = ({
         onPress={onPress}
         rippleColor="rgba(0, 0, 0, .32)"
       >
-        <List.Item title={title} description={description}></List.Item>
+        <List.Item title={title} description={author}></List.Item>
       </TouchableRipple>
     </View>
   );

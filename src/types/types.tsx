@@ -21,7 +21,7 @@ export type StackParamList = {
   Soundtrack: {
     soundtrackId: string;
   };
-  ChooseTheme: { chapterTitle: string };
+  ChooseTheme: { soundtrackId: string; chapterTitle: string };
   NotFound: undefined;
 };
 
@@ -116,10 +116,28 @@ export type ThemeParamList = {
   themeUri: string;
 };
 
-export type ThemeItemParamList = {
-  title: string;
-  description: string;
-  themeUri: string;
-  key: number;
+export type ThemeItemParamList = ThemeParamList & { onPress(): void };
+
+export type JsonChapterParamList = {
+  chapter_id: string;
+  chapter_number: number;
+  chapter_title: string;
+  soundtrack_id: string;
+  theme: string;
+};
+
+export type ChapterParamList = {
+  chapterId: string;
+  chapterNumber: number;
+  chapterTitle: string;
+  soundtrackId: string;
+  theme: string;
+};
+
+export type ChapterItemParamList = {
+  chapterId: string;
+  chapterNumber: number;
+  chapterTitle: string;
+  theme: string;
   onPress(): void;
 };
