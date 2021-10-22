@@ -21,7 +21,11 @@ export type StackParamList = {
   Soundtrack: {
     soundtrackId: string;
   };
-  ChooseTheme: { soundtrackId: string; chapterTitle: string };
+  ChooseTheme: {
+    soundtrackId: string;
+    chapterNumber: number;
+    chapterTitle: string;
+  };
   NotFound: undefined;
 };
 

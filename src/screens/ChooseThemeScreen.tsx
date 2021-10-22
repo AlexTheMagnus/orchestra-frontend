@@ -1,8 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { Appbar, TextInput, TouchableRipple } from 'react-native-paper';
 import uuid from 'react-native-uuid';
-import { StackScreenProps } from '@react-navigation/stack';
+import { ScrollView, StyleSheet } from 'react-native';
+import { Appbar, TextInput } from 'react-native-paper';
+import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 import { BACKEND_URL } from '@env';
 
 import { View } from '../components/Themed';
@@ -17,12 +18,11 @@ const ChooseThemeScreen = ({
   route,
   navigation
 }: StackScreenProps<StackParamList, 'ChooseTheme'>) => {
-  const { soundtrackId, chapterTitle } = route.params;
-  const emptyMessage: string = 'Choose a theme for your chapter';
-
+  const { soundtrackId, chapterNumber, chapterTitle } = route.params;
+  const appNavigation = useNavigation<StackNavigationProp<any>>();
   const globalState = useContext(AppContext);
-
   const [resultsList, setResultsList] = useState<Array<ThemeParamList>>([]);
+  const emptyMessage: string = 'Choose a theme for your chapter';
 
   const searchThemes = async (textToSearch: string) => {
     const response = await fetch(
@@ -68,7 +68,7 @@ const ChooseThemeScreen = ({
       body: JSON.stringify({
         chapter_id: uuid.v4(),
         soundtrack_id: soundtrackId,
-        chapter_number: 0,
+        chapter_number: chapterNumber,
         theme: themeUri,
         chapter_title: chapterTitle
       })
@@ -85,7 +85,10 @@ const ChooseThemeScreen = ({
       return;
     }
 
-    navigation.push('Root');
+    appNavigation.push('Root', {
+      screen: 'Soundtrack',
+      params: { soundtrackId }
+    });
   };
 
   const listResults = () => {
