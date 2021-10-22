@@ -13,8 +13,7 @@ import {
   JsonChapterParamList,
   ChapterParamList,
   OrchestraButtonProps,
-  SoundtrackItemParamList,
-  ChapterItemParamList
+  SoundtrackItemParamList
 } from '../types/types';
 import AppContext from '../../AppContext';
 import EmptyView from '../components/EmptyView';
@@ -80,14 +79,35 @@ const SoundtrackScreen = ({
     getSoundtrackById(soundtrackId).then(async soundtrack => {
       soundtrack && setSoundtrackInfo(soundtrack);
       const chapters = await getSoundtrackChapters();
-      chapters && setChaptersList(chapters);
+      chapters &&
+        setChaptersList(
+          chapters.sort((a, b) => a.chapterNumber - b.chapterNumber)
+        );
     });
   }, []);
 
   const chooseTheme = (inputText: string) => {
     const chapterTitle = inputText ?? '';
+    const chapterNumber = getNextChapterNumber();
     hideDialog();
-    navigation.push('ChooseTheme', { soundtrackId, chapterTitle });
+    navigation.push('ChooseTheme', {
+      soundtrackId,
+      chapterNumber,
+      chapterTitle
+    });
+  };
+
+  const getNextChapterNumber = () => {
+    for (var i = 0, previousChapterNumber = 1; i < chaptersList.length; i++) {
+      if (
+        !(chaptersList[i].chapterNumber == previousChapterNumber) &&
+        !(chaptersList[i].chapterNumber == previousChapterNumber + 1)
+      ) {
+        return previousChapterNumber + 1;
+      }
+      previousChapterNumber = chaptersList[i].chapterNumber;
+    }
+    return previousChapterNumber + 1;
   };
 
   const ChooseChapterTitleModal = () => {
@@ -219,11 +239,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center'
   },
-  // container2: {
-  //   flex: 1,
-  //   marginTop: 10,
-  //   zIndex: 10
-  // },
   favoriteButton: {
     position: 'absolute',
     left: 5,

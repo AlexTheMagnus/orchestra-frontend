@@ -1,9 +1,7 @@
 import { BACKEND_URL } from '@env';
 import {
   JsonSoundtrackParamList,
-  SoundtrackItemParamList,
-  JsonChapterParamList,
-  ChapterItemParamList
+  SoundtrackItemParamList
 } from '../types/types';
 
 const getAuthorName = async (authorId: string) => {
