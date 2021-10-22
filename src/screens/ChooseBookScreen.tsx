@@ -88,7 +88,7 @@ const ChooseBookScreen = ({
         index: 0,
         routes: [{ name: 'Root' }]
       });
-      const message = `An error has occured "${isbn}": Status error ${response.status}`;
+      const message = `An error has occured when creating your new soundtrack: Status error ${response.status}`;
       alert(message);
       console.error(message);
       return;

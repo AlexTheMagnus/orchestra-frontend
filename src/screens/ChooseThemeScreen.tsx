@@ -6,21 +6,18 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { BACKEND_URL } from '@env';
 
 import { View } from '../components/Themed';
-import {
-  StackParamList,
-  BookResultParamList,
-  ThemeParamList
-} from '../types/types';
+import { StackParamList, ThemeParamList } from '../types/types';
 import AppContext from '../../AppContext';
 import EmptyView from '../components/EmptyView';
 import ThemeItem from '../components/ThemeItem';
 import OrchestraColors from '../constants/OrchestraColors';
+import { SPOTIFY_API_URL } from '../constants/OrchestraConstants';
 
 const ChooseThemeScreen = ({
   route,
   navigation
 }: StackScreenProps<StackParamList, 'ChooseTheme'>) => {
-  const { chapterTitle } = route.params;
+  const { soundtrackId, chapterTitle } = route.params;
   const emptyMessage: string = 'Choose a theme for your chapter';
 
   const globalState = useContext(AppContext);
@@ -29,11 +26,9 @@ const ChooseThemeScreen = ({
 
   const searchThemes = async (textToSearch: string) => {
     const response = await fetch(
-      'https://api.spotify.com/v1/search?query=' +
-        textToSearch +
-        '&type=track&offset=0&limit=10&market=ES',
+      `${SPOTIFY_API_URL}/search?query=${textToSearch}&type=track&offset=0&limit=10&market=ES`,
       {
-        method: 'get',
+        method: 'GET',
         headers: new Headers({
           Authorization: 'Bearer ' + globalState.accessToken
         })
@@ -46,8 +41,8 @@ const ChooseThemeScreen = ({
       return;
     }
 
-    const responseInDict = await response.json();
-    const spotifyThemesList = responseInDict['tracks']['items'];
+    const jsonResponse = await response.json();
+    const spotifyThemesList = jsonResponse['tracks']['items'];
 
     setResultsList([]);
 
@@ -63,44 +58,45 @@ const ChooseThemeScreen = ({
     });
   };
 
-  // const createChapter = async (themeUri: string) => {
-  //   const response = await fetch(`${BACKEND_URL}/soundtracks`, {
-  //     method: 'POST',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       soundtrack_id: uuid.v4(),
-  //       book: isbn,
-  //       soundtrack_title: chapterTitle,
-  //       author: globalState.loggedUser.id
-  //     })
-  //   });
+  const createChapter = async (themeUri: string) => {
+    const response = await fetch(`${BACKEND_URL}/chapters`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        chapter_id: uuid.v4(),
+        soundtrack_id: soundtrackId,
+        chapter_number: 0,
+        theme: themeUri,
+        chapter_title: chapterTitle
+      })
+    });
 
-  //   if (!response.ok) {
-  //     navigation.reset({
-  //       index: 0,
-  //       routes: [{ name: 'Root' }]
-  //     });
-  //     const message = `An error has occured "${isbn}": Status error ${response.status}`;
-  //     alert(message);
-  //     console.error(message);
-  //     return;
-  //   }
+    if (!response.ok) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Root' }]
+      });
+      const message = `An error has occured when creating your new soundtrack: Status error ${response.status}`;
+      alert(message);
+      console.error(message);
+      return;
+    }
 
-  //   navigation.push('Root');
-  // };
+    navigation.push('Root');
+  };
 
   const listResults = () => {
     return resultsList.map((result, index) => {
       return (
         <ThemeItem
           title={result.title}
-          description={result.author}
+          author={result.author}
           themeUri={result.themeUri}
           key={index}
-          onPress={() => {}}
+          onPress={() => createChapter(result.themeUri)}
         />
       );
     });

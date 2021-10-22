@@ -1,22 +1,26 @@
 import React, { useEffect, useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { StackScreenProps } from '@react-navigation/stack';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import * as Linking from 'expo-linking';
 import { IconButton, Title, Text } from 'react-native-paper';
 import DialogInput from 'react-native-dialog-input';
-import { WebView } from 'react-native-webview';
+import { StackScreenProps } from '@react-navigation/stack';
 import { BACKEND_URL } from '@env';
 
 import { fromJsonToSoundtrackItem } from '../components/utils';
 import {
   StackParamList,
   JsonSoundtrackParamList,
+  JsonChapterParamList,
+  ChapterParamList,
   OrchestraButtonProps,
-  SoundtrackItemParamList
+  SoundtrackItemParamList,
+  ChapterItemParamList
 } from '../types/types';
 import AppContext from '../../AppContext';
 import EmptyView from '../components/EmptyView';
 import OrchestraButton from '../components/OrchestraButton';
 import SoundtrackInfo from '../components/SoundtrackInfo';
+import ChapterItem from '../components/ChapterItem';
 import OrchestraColors from '../constants/OrchestraColors';
 
 const AddChapterButton = ({
@@ -63,6 +67,9 @@ const SoundtrackScreen = ({
 
   const [authorId, setAuthorId] = React.useState('');
   const [isDialogVisible, setIsDialogVisible] = React.useState(false);
+  const [chaptersList, setChaptersList] = React.useState<ChapterParamList[]>(
+    []
+  );
 
   const showDialog = () => setIsDialogVisible(true);
   const hideDialog = () => {
@@ -70,15 +77,17 @@ const SoundtrackScreen = ({
   };
 
   useEffect(() => {
-    getSoundtrackById(soundtrackId).then(soundtrack => {
-      setSoundtrackInfo(soundtrack);
+    getSoundtrackById(soundtrackId).then(async soundtrack => {
+      soundtrack && setSoundtrackInfo(soundtrack);
+      const chapters = await getSoundtrackChapters();
+      chapters && setChaptersList(chapters);
     });
   }, []);
 
   const chooseTheme = (inputText: string) => {
     const chapterTitle = inputText ?? '';
     hideDialog();
-    navigation.navigate('ChooseTheme', { chapterTitle });
+    navigation.push('ChooseTheme', { soundtrackId, chapterTitle });
   };
 
   const ChooseChapterTitleModal = () => {
@@ -107,17 +116,51 @@ const SoundtrackScreen = ({
       const message = `An error has occured while loading the soundtrack info: Status error ${response.status}`;
       alert(message);
       console.error(message);
+      return;
     }
 
-    const json: JsonSoundtrackParamList = await response.json();
-    setAuthorId(json.author);
-    const soundtrackItem = await fromJsonToSoundtrackItem(json);
+    const body: JsonSoundtrackParamList = await response.json();
+    setAuthorId(body.author);
+    const soundtrackItem = await fromJsonToSoundtrackItem(body);
 
     return soundtrackItem;
   };
 
+  const getSoundtrackChapters = async (): Promise<
+    ChapterParamList[] | undefined
+  > => {
+    const response = await fetch(
+      `${BACKEND_URL}/chapters/soundtrack/${soundtrackId}`,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    if (!response.ok) {
+      const message = `An error has occured while loading your soundtrack: Status error ${response.status}`;
+      alert(message);
+      console.error(message);
+      return;
+    }
+
+    const body = await response.json();
+    return body.chapters_list.map((chapter: JsonChapterParamList) => {
+      return {
+        chapterId: chapter.chapter_id,
+        chapterNumber: chapter.chapter_number,
+        chapterTitle: chapter.chapter_title,
+        soundtrackId: chapter.soundtrack_id,
+        theme: chapter.theme
+      };
+    });
+  };
+
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <ChooseChapterTitleModal />
       <IconButton
         icon="heart-outline"
@@ -146,19 +189,29 @@ const SoundtrackScreen = ({
             message="ADD CHAPTER"
             propStyles={styles.addChapterButton}
           />
-          <AddChapterMesage />
-          {/* <WebView
-            style={styles.container2}
-            originWhitelist={['*']}
-            source={{
-              html: '<head><meta name="viewport" content="width=device-width, initial-scale=1"></meta>;<head/><iframe src="https://open.spotify.com/embed/track/0LmbmsBNz2rMyP0rpECbwD?theme=0" width="100%" height="80" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>'
-            }}
-          /> */}
+          {!chaptersList.length ? (
+            <AddChapterMesage />
+          ) : (
+            chaptersList.map((chapter, index) => (
+              <ChapterItem
+                key={index}
+                chapterId={chapter.chapterId}
+                chapterNumber={chapter.chapterNumber}
+                theme={chapter.theme}
+                chapterTitle={chapter.chapterTitle}
+                onPress={() => {
+                  Linking.openURL(
+                    `https://open.spotify.com/track/${chapter.theme}`
+                  );
+                }}
+              />
+            ))
+          )}
         </View>
       ) : (
         <EmptyView icon="mySoundtracks" message={emptyMessage} />
       )}
-    </View>
+    </ScrollView>
   );
 };
 

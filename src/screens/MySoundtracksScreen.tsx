@@ -57,7 +57,7 @@ const MySoundtracksScreen = ({
   const chooseBook = (inputText: string) => {
     if (inputText) {
       hideDialog();
-      navigation.navigate('ChooseBook', { soundtrackTitle: inputText });
+      navigation.push('ChooseBook', { soundtrackTitle: inputText });
     }
   };
 
