@@ -7,14 +7,26 @@ import { BACKEND_URL } from '@env';
 import { View } from '../components/Themed';
 import AppContext from '../../AppContext';
 import {
-  StackParamList,
+  JsonSoundtrackParamList,
+  OrchestraButtonProps,
   SoundtrackItemParamList,
-  JsonSoundtrackParamList
+  StackParamList
 } from '../types/types';
+import { fromJsonToSoundtrackItem } from '../components/utils';
 import EmptyView from '../components/EmptyView';
-import CreateSoundtrackButton from '../components/CreateSoundtrackButton';
+import OrchestraButton from '../components/OrchestraButton';
 import SoundtrackItemList from '../components/SoundtrackItemList';
 import OrchestraColors from '../constants/OrchestraColors';
+
+const CreateSoundtrackButton = ({ onPress, message }: OrchestraButtonProps) => {
+  return (
+    <OrchestraButton
+      onPress={onPress}
+      message={message}
+      propStyles={styles.createSoundtrackButton}
+    />
+  );
+};
 
 const MySoundtracksScreen = ({
   navigation
@@ -30,10 +42,12 @@ const MySoundtracksScreen = ({
   >([]);
 
   useEffect(() => {
-    getUserSoundtracks(globalState.loggedUser.id).then(userSoundtracks => {
-      setUserSoundtracksList(userSoundtracks);
-    });
-  }, []);
+    if (globalState.loggedUser.id) {
+      getUserSoundtracks(globalState.loggedUser.id).then(userSoundtracks => {
+        setUserSoundtracksList(userSoundtracks);
+      });
+    }
+  }, [globalState.loggedUser.id]);
 
   const showDialog = () => setIsDialogVisible(true);
   const hideDialog = () => {
@@ -42,7 +56,8 @@ const MySoundtracksScreen = ({
 
   const chooseBook = (inputText: string) => {
     if (inputText) {
-      navigation.navigate('ChooseBook', { soundtrackTitle: inputText });
+      hideDialog();
+      navigation.push('ChooseBook', { soundtrackTitle: inputText });
     }
   };
 
@@ -57,94 +72,6 @@ const MySoundtracksScreen = ({
         closeDialog={hideDialog}
       />
     );
-  };
-
-  const getAuthorName = async (authorId: string) => {
-    const response = await fetch(`${BACKEND_URL}/users/${authorId}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      const message = `An error has occured while getting the name of the user with ID ${authorId}: Status error ${response.status}`;
-      console.error(message);
-      return;
-    }
-
-    const json = await response.json();
-    return json.username;
-  };
-
-  const setAuthorName = async (
-    soundtracksList: JsonSoundtrackParamList,
-    soundtrackItem: SoundtrackItemParamList
-  ) => {
-    soundtrackItem.author = await getAuthorName(soundtracksList.author);
-  };
-
-  const getBookInfo = async (isbn: string) => {
-    var bookInfo: { bookCover: string; bookTitle: string } = {
-      bookCover: '',
-      bookTitle: ''
-    };
-
-    const response = await fetch(
-      `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-
-    if (!response.ok) {
-      const message = `An error has occured while getting the info of the book with ISBN ${isbn}: Status error ${response.status}`;
-      console.error(message);
-      return bookInfo;
-    }
-
-    const json = await response.json();
-    json.items[0].volumeInfo.imageLinks.smallThumbnail
-      ? (bookInfo.bookCover =
-          json.items[0].volumeInfo.imageLinks.smallThumbnail)
-      : json.items[0].volumeInfo.imageLinks.thumbnail
-      ? (bookInfo.bookCover = json.items[0].volumeInfo.imageLinks.thumbnail!)
-      : null;
-    json.items[0].volumeInfo.title
-      ? (bookInfo.bookTitle = json.items[0].volumeInfo.title)
-      : null;
-
-    return bookInfo;
-  };
-
-  const setBookInfo = async (
-    soundtracksList: JsonSoundtrackParamList,
-    soundtrackItem: SoundtrackItemParamList
-  ) => {
-    const bookInfo = await getBookInfo(soundtracksList.book);
-    soundtrackItem.bookCover = bookInfo.bookCover;
-    soundtrackItem.bookTitle = bookInfo.bookTitle;
-  };
-
-  const fromJsonToSoundtrackItem = async (
-    jsonSoundtrack: JsonSoundtrackParamList
-  ) => {
-    var soundtrackItem: SoundtrackItemParamList = {
-      bookCover: '',
-      soundtrackTitle: jsonSoundtrack.soundtrack_title,
-      soundtrackId: jsonSoundtrack.soundtrack_id,
-      bookTitle: '',
-      author: ''
-    };
-
-    await setAuthorName(jsonSoundtrack, soundtrackItem);
-    await setBookInfo(jsonSoundtrack, soundtrackItem);
-    return soundtrackItem;
   };
 
   const getUserSoundtracks = async (userId: string) => {
@@ -179,7 +106,10 @@ const MySoundtracksScreen = ({
 
   return (
     <View style={styles.screeenContainer}>
-      <CreateSoundtrackButton onPress={showDialog} />
+      <CreateSoundtrackButton
+        onPress={showDialog}
+        message="CREATE SOUNDTRACK"
+      />
       <ChooseSoundtrackTitleModal />
       {!userSoundtracksList.length ? (
         <View style={styles.content}>
@@ -195,6 +125,7 @@ const MySoundtracksScreen = ({
 };
 
 const styles = StyleSheet.create({
+  createSoundtrackButton: { marginTop: 10, position: 'absolute', zIndex: 10 },
   screeenContainer: {
     flex: 1,
     alignItems: 'center'

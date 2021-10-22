@@ -1,26 +1,83 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
-import * as Google from 'expo-auth-session/providers/google';
-import { Prompt } from 'expo-auth-session';
+import { useAuthRequest } from 'expo-auth-session';
 import { StackScreenProps } from '@react-navigation/stack';
-import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID, BACKEND_URL } from '@env';
+import { SPOTIFY_CLIENT_ID, LOCAL_ORCHESTRA_URL, BACKEND_URL } from '@env';
 
-import { StackParamList, LoggedUserParamList } from '../types/types';
+import { StackParamList, AccessResponse } from '../types/types';
+import {
+  SPOTIFY_AUTH_ENDPOINT,
+  SPOTIFY_TOKEN_ENDPOINT
+} from '../constants/OrchestraConstants';
 import OrchestraColors from '../constants/OrchestraColors';
 import AppContext from '../../AppContext';
-import GoogleSignInButton from '../components/GoogleSignInButton';
+import SpotifySignInButton from '../components/SpotifySignInButton';
+
+// Endpoint
+const discovery = {
+  authorizationEndpoint: SPOTIFY_AUTH_ENDPOINT,
+  tokenEndpoint: SPOTIFY_TOKEN_ENDPOINT
+};
 
 const AccessScreen = ({
   navigation
 }: StackScreenProps<StackParamList, 'Access'>) => {
   const globalState = useContext(AppContext);
+  const redirectUri = String(LOCAL_ORCHESTRA_URL);
 
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: `${EXPO_CLIENT_ID}.apps.googleusercontent.com`,
-    androidClientId: `${ANDROID_CLIENT_ID}.apps.googleusercontent.com`,
-    prompt: Prompt.Login,
-    scopes: ['openid', 'https://www.googleapis.com/auth/userinfo.profile']
-  });
+  const [request, response, promptAsync] = useAuthRequest(
+    {
+      clientId: SPOTIFY_CLIENT_ID,
+      scopes: [
+        'user-read-email',
+        'user-read-private',
+        'streaming',
+        'app-remote-control',
+        'user-read-playback-state',
+        'user-modify-playback-state',
+        'user-read-currently-playing'
+      ],
+      // In order to follow the "Authorization Code Flow" to fetch token after authorizationEndpoint
+      // this must be set to false
+      usePKCE: false,
+      redirectUri
+    },
+    discovery
+  );
+
+  React.useEffect(() => {
+    if (response?.type === 'success') {
+      const { code } = response.params;
+      sendAccessRequest(code).then(accessResponse =>
+        setStateOnLogin(accessResponse)
+      );
+      console.log('Successful login!');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Root' }]
+      });
+    }
+  }, [response]);
+
+  const sendAccessRequest = async (code: string) => {
+    const accessResponse = await fetch(`${BACKEND_URL}/users`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        access_code: code
+      })
+    });
+
+    if (!accessResponse.ok) {
+      handleErrorResponse(accessResponse);
+      return;
+    }
+
+    return await accessResponse.json();
+  };
 
   const handleErrorResponse = (response: Response) => {
     navigation.reset({
@@ -32,62 +89,14 @@ const AccessScreen = ({
     console.error(message);
   };
 
-  const registerUser = async (user: LoggedUserParamList) => {
-    return await fetch(`${BACKEND_URL}/users`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        user_id: user.id,
-        username: user.given_name,
-        user_avatar: user.picture
-      })
+  const setStateOnLogin = async (accessResponse: AccessResponse) => {
+    globalState.setAccessToken(accessResponse.access_token);
+    globalState.setLoggedUser({
+      id: accessResponse.user_id,
+      given_name: accessResponse.username,
+      picture: accessResponse.user_avatar
     });
   };
-
-  const getGoogleUserProfileInfo = async (access_token: string) => {
-    const googleResponse = await fetch(
-      'https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=' +
-        access_token
-    );
-
-    if (!googleResponse.ok) {
-      handleErrorResponse(googleResponse);
-      return;
-    }
-
-    const json = await googleResponse.json();
-    const user = {
-      id: json.id,
-      given_name: json.given_name,
-      picture: json.picture
-    };
-
-    const registerResponse = await registerUser(user);
-
-    if (!registerResponse.ok && registerResponse.status !== 409) {
-      handleErrorResponse(registerResponse);
-      return;
-    }
-
-    console.log('Success login request');
-    globalState.setLoggedUser(user);
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Root' }]
-    });
-  };
-
-  React.useEffect(() => {
-    if (response?.type === 'success') {
-      const { params } = response;
-      const access_token = params.access_token;
-      globalState.setAccessToken(access_token);
-      getGoogleUserProfileInfo(access_token);
-    }
-  }, [response]);
 
   return (
     <View style={styles.accessScreen}>
@@ -100,7 +109,10 @@ const AccessScreen = ({
         <Text style={styles.logoSubTitle}>Conduct your book's soundtracks</Text>
       </View>
       <View>
-        <GoogleSignInButton disabled={!request} onPress={() => promptAsync()} />
+        <SpotifySignInButton
+          disabled={!request}
+          onPress={() => promptAsync()}
+        />
       </View>
     </View>
   );
