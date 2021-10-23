@@ -191,7 +191,9 @@ const SoundtrackScreen = ({
       />
       <IconButton
         icon="dots-vertical"
-        onPress={() => console.log('Opciones')}
+        onPress={() =>
+          navigation.navigate('Modal', { screen: 'SoundtrackOptions' })
+        }
         color="black"
         size={30}
         style={styles.optionsButton}

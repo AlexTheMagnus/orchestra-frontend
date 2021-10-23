@@ -12,31 +12,26 @@ export default {
     screens: {
       Access: 'access',
       Root: {
+        path: 'root',
         screens: {
           MySoundtracks: {
+            path: 'my-soundtracks',
             screens: {
-              MySoundtracksScreen: 'my-soundtracks',
               ChooseBookScreen: 'choose-book'
             }
           },
           Favorites: {
-            screens: {
-              FavoritesScreen: 'favorites'
-            }
+            path: 'favorites'
           },
           Search: {
-            screens: {
-              SearchScreen: 'search'
-            }
+            path: 'search'
           },
           MyProfile: {
-            screens: {
-              MyProfileScreen: 'my-profile'
-            }
+            path: 'my-profile'
           },
           Soundtrack: {
+            path: 'soundtrack',
             screens: {
-              SoundtrackScreen: 'soundtrack',
               ChooseThemeScreen: 'choose-theme'
             }
           }
