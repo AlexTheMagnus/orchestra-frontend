@@ -10,10 +10,11 @@ import {
   TextStyle
 } from 'react-native';
 
-export type StackParamList = {
+export type StackParamList = ModalsParamList & {
   Access: undefined;
   Root: undefined;
   MySoundtracks: undefined;
+  SountrackOptions: undefined;
   ChooseBook: { soundtrackTitle: string };
   Favorites: undefined;
   Search: undefined;
@@ -27,6 +28,13 @@ export type StackParamList = {
     chapterTitle: string;
   };
   NotFound: undefined;
+  Modal: {
+    screen: string;
+  };
+};
+
+export type ModalsParamList = {
+  SoundtrackOptions: undefined;
 };
 
 export type BottomTabParamList = {

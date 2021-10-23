@@ -36,7 +36,6 @@ const SoundtrackItem = ({
       rippleColor="rgba(0, 0, 0, .32)"
     >
       <List.Item
-        // key={key}
         title={soundtrackTitle}
         description={bookTitle + ' · by ' + author}
         left={() => renderBookCover(bookCover)}
