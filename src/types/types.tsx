@@ -14,7 +14,7 @@ export type StackParamList = ModalsParamList & {
   Access: undefined;
   Root: undefined;
   MySoundtracks: undefined;
-  SountrackOptions: undefined;
+  SoundtrackOptions: undefined;
   ChooseBook: { soundtrackTitle: string };
   Favorites: undefined;
   Search: undefined;
@@ -30,11 +30,12 @@ export type StackParamList = ModalsParamList & {
   NotFound: undefined;
   Modal: {
     screen: string;
+    params: Object;
   };
 };
 
 export type ModalsParamList = {
-  SoundtrackOptions: undefined;
+  SoundtrackOptions: SoundtrackItemParamList;
 };
 
 export type BottomTabParamList = {

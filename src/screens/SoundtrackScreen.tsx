@@ -90,11 +90,16 @@ const SoundtrackScreen = ({
     const chapterTitle = inputText ?? '';
     const chapterNumber = getNextChapterNumber();
     hideDialog();
-    navigation.push('ChooseTheme', {
-      soundtrackId,
-      chapterNumber,
-      chapterTitle
-    });
+    navigation.push(
+      // 'as never' is being used to avoid the 'type string is not assignable to never' error
+      // This error occurs due to a ts error. There is an open issue to fix it
+      'ChooseTheme' as never,
+      {
+        soundtrackId,
+        chapterNumber,
+        chapterTitle
+      } as never
+    );
   };
 
   const getNextChapterNumber = () => {
@@ -192,7 +197,15 @@ const SoundtrackScreen = ({
       <IconButton
         icon="dots-vertical"
         onPress={() =>
-          navigation.navigate('Modal', { screen: 'SoundtrackOptions' })
+          navigation.navigate(
+            // 'as never' is being used to avoid the 'type string is not assignable to never' error
+            // This error occurs due to a ts error. There is an open issue to fix it
+            'Modal' as never,
+            {
+              screen: 'SoundtrackOptions',
+              params: { ...soundtrackInfo }
+            } as never
+          )
         }
         color="black"
         size={30}

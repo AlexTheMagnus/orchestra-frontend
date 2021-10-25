@@ -16,7 +16,7 @@ import AccessScreen from '../screens/AccessScreen';
 import ChooseBookScreen from '../screens/ChooseBookScreen';
 import ChooseThemeScreen from '../screens/ChooseThemeScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import { StackParamList } from '../types/types';
+import { ModalsParamList, StackParamList } from '../types/types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
 import SoundtrackOptionsModal from '../components/SoundtrackOptionsModal';
@@ -39,7 +39,7 @@ export default function Navigation({
 // A root stack navigator is often used for displaying modals on top of all other content
 // Read more here: https://reactnavigation.org/docs/modal
 const RootStack = createStackNavigator<StackParamList>();
-const ModalStack = createStackNavigator();
+const ModalStack = createStackNavigator<ModalsParamList>();
 
 function RootNavigator() {
   return (
@@ -56,9 +56,9 @@ function RootNavigator() {
 
 function ModalStackNavigator() {
   return (
-    <ModalStack.Navigator screenOptions={{ headerShown: false }}>
+    <ModalStack.Navigator mode="modal" screenOptions={{ headerShown: false }}>
       <ModalStack.Screen
-        name="SountrackOptions"
+        name="SoundtrackOptions"
         component={SoundtrackOptionsModal}
       />
     </ModalStack.Navigator>
