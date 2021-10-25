@@ -37,6 +37,12 @@ export default {
           }
         }
       },
+      Modal: {
+        path: 'modal',
+        screens: {
+          SoundtrackOptions: 'soundtrack-options'
+        }
+      },
       NotFound: '*'
     }
   }
