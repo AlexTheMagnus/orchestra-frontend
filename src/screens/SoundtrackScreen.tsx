@@ -257,12 +257,14 @@ const styles = StyleSheet.create({
   favoriteButton: {
     position: 'absolute',
     left: 5,
-    top: 20
+    top: 30,
+    zIndex: 10
   },
   optionsButton: {
     position: 'absolute',
     right: 5,
-    top: 20
+    top: 30,
+    zIndex: 10
   },
   addChapterButton: { marginVertical: 10 },
   addChapterMessageContainer: {

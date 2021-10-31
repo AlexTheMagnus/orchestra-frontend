@@ -57,6 +57,7 @@ const MySoundtracksScreen = ({
   const chooseBook = (inputText: string) => {
     if (inputText) {
       hideDialog();
+      // @ts-ignore: Type 'string' is not assignable to type 'never'.ts(2322)
       navigation.push('ChooseBook', { soundtrackTitle: inputText });
     }
   };
