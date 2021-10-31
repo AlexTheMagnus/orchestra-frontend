@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { List, TouchableRipple } from 'react-native-paper';
+import { List, TouchableRipple, IconButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 
 import { SoundtrackItemParamList } from '../types/types';
@@ -11,9 +11,27 @@ const renderBookCover = (bookCover: string) => {
   return <BookCover bookCoverUrl={bookCover} styles={styles.bookCover} />;
 };
 
-const renderOptionsIcon = () => {
+const renderOptionsIcon = (soundtrackInfo: SoundtrackItemParamList) => {
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
   return (
-    <List.Icon color="black" icon="dots-vertical" style={styles.optionsIcon} />
+    <IconButton
+      icon="dots-vertical"
+      onPress={() =>
+        navigation.navigate(
+          // 'as never' is being used to avoid the 'type string is not assignable to never' error
+          // This error occurs due to a ts error. There is an open issue to fix it
+          'Modal' as never,
+          {
+            screen: 'SoundtrackOptions',
+            params: { ...soundtrackInfo }
+          } as never
+        )
+      }
+      color="black"
+      size={30}
+      style={styles.optionsIcon}
+    />
   );
 };
 
@@ -39,7 +57,15 @@ const SoundtrackItem = ({
         title={soundtrackTitle}
         description={bookTitle + ' · by ' + author}
         left={() => renderBookCover(bookCover)}
-        right={() => renderOptionsIcon()}
+        right={() =>
+          renderOptionsIcon({
+            bookCover,
+            soundtrackTitle,
+            bookTitle,
+            author,
+            soundtrackId
+          })
+        }
       />
     </TouchableRipple>
   );
