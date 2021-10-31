@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, TouchableRipple, Dialog, Portal } from 'react-native-paper';
-import DialogInput from 'react-native-dialog-input';
-import CSS from 'csstype';
 import { StackScreenProps } from '@react-navigation/stack';
+import DialogInput from 'react-native-dialog-input';
 
 import { StackParamList } from '../types/types';
 import SoundtrackInfo from './SoundtrackInfo';
@@ -50,6 +49,11 @@ const SoundtrackOptionsModal = ({
 
   const isFavorite = true;
 
+  const showUpdateSoundtrackTitleDialog = () =>
+    setIsUpdateSoundtrackTitleDialogVisible(true);
+  const hideUpdateSoundtrackTitleDialog = () =>
+    setIsUpdateSoundtrackTitleDialogVisible(false);
+
   const showDeleteSoundtrackDialog = () =>
     setIsDeleteSoundtrackDialogVisible(true);
   const hideDeleteSoundtrackDialog = () =>
@@ -72,27 +76,53 @@ const SoundtrackOptionsModal = ({
       alert(message);
     }
 
+    hideDeleteSoundtrackDialog();
     navigation.reset({
       index: 0,
       routes: [{ name: 'Root' }]
     });
-    hideDeleteSoundtrackDialog();
   };
 
-  // const UpdateSoundtrackTitleModal = () => {
-  //   return (
-  //     <DialogInput
-  //       isDialogVisible={isDeleteSoundtrackDialogVisible}
-  //       title="Are you sure you want to delete it?"
-  //       textInputProps={styles.modalTitle}
-  //       submitText="DELETE"
-  //       submitInput={(newTitle: string) =>
-  //         updateSoundtrackTitle(soundtrackId, newTitle)
-  //       }
-  //       closeDialog={}
-  //     />
-  //   );
-  // };
+  const UpdateSoundtrackTitleModal = () => {
+    console.log(isUpdateSoundtrackTitleDialogVisible);
+    return (
+      <DialogInput
+        isDialogVisible={isUpdateSoundtrackTitleDialogVisible}
+        title="Choose a title for your soundtrack"
+        textInputProps={styles.modalTitle}
+        submitText="Next"
+        submitInput={(newTitle: string) => updateSoundtrackTitle(newTitle)}
+        closeDialog={hideUpdateSoundtrackTitleDialog}
+      />
+    );
+  };
+
+  const updateSoundtrackTitle = async (newTitle: string) => {
+    const updateResponse = await fetch(
+      `${BACKEND_URL}/soundtracks/update/${soundtrackId}`,
+      {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          soundtrack_title: newTitle
+        })
+      }
+    );
+
+    if (!updateResponse.ok) {
+      const message = `An error has occured: Status error ${updateResponse.status}`;
+      alert(message);
+    }
+
+    hideUpdateSoundtrackTitleDialog();
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Root' }]
+    });
+  };
 
   // const UpdateSoundtrackBookModal = () => {
   //   return (
@@ -138,8 +168,8 @@ const SoundtrackOptionsModal = ({
 
   return (
     <FullScreenModal>
-      {/* <UpdateSoundtrackTitleModal />
-      <UpdateSoundtrackBookModal /> */}
+      <UpdateSoundtrackTitleModal />
+      {/* <UpdateSoundtrackBookModal /> */}
       <TouchableRipple onPress={() => {}}>
         <DeleteSoundtrackModal />
       </TouchableRipple>
@@ -155,7 +185,7 @@ const SoundtrackOptionsModal = ({
           <TextButton
             style={styles.soundtrackOptions}
             message="Change title"
-            onPress={() => {}}
+            onPress={showUpdateSoundtrackTitleDialog}
           />
           <TextButton
             style={styles.soundtrackOptions}
