@@ -15,7 +15,7 @@ export type StackParamList = ModalsParamList & {
   Root: undefined;
   MySoundtracks: undefined;
   SoundtrackOptions: undefined;
-  ChooseBook: { soundtrackTitle: string };
+  ChooseBook: { soundtrackTitle: string; soundtrackToUpdate: string };
   Favorites: undefined;
   Search: undefined;
   MyProfile: undefined;

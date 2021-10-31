@@ -42,10 +42,6 @@ const SoundtrackOptionsModal = ({
     isUpdateSoundtrackTitleDialogVisible,
     setIsUpdateSoundtrackTitleDialogVisible
   ] = React.useState(false);
-  const [
-    isUpdateSoundtrackBookDialogVisible,
-    setIsUpdateSoundtrackBookDialogVisible
-  ] = React.useState(false);
 
   const isFavorite = true;
 
@@ -124,21 +120,6 @@ const SoundtrackOptionsModal = ({
     });
   };
 
-  // const UpdateSoundtrackBookModal = () => {
-  //   return (
-  //     <DialogInput
-  //       isDialogVisible={isDeleteSoundtrackDialogVisible}
-  //       title="Are you sure you want to delete it?"
-  //       textInputProps={styles.modalTitle}
-  //       submitText="DELETE"
-  //       submitInput={(newBook: string) =>
-  //         updateSoundtrackBook(soundtrackId, newBook)
-  //       }
-  //       closeDialog={setIsUpdateSoundtrackBookDialogVisible(false)}
-  //     />
-  //   );
-  // };
-
   const DeleteSoundtrackModal = () => {
     return (
       <Portal>
@@ -169,7 +150,6 @@ const SoundtrackOptionsModal = ({
   return (
     <FullScreenModal>
       <UpdateSoundtrackTitleModal />
-      {/* <UpdateSoundtrackBookModal /> */}
       <TouchableRipple onPress={() => {}}>
         <DeleteSoundtrackModal />
       </TouchableRipple>
@@ -190,7 +170,12 @@ const SoundtrackOptionsModal = ({
           <TextButton
             style={styles.soundtrackOptions}
             message="Change book"
-            onPress={() => {}}
+            onPress={() => {
+              navigation.push('ChooseBook', {
+                soundtrackTitle,
+                soundtrackToUpdate: soundtrackId
+              } as never);
+            }}
           />
         </View>
       ) : (
