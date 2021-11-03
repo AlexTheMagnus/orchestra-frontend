@@ -16,9 +16,10 @@ import AccessScreen from '../screens/AccessScreen';
 import ChooseBookScreen from '../screens/ChooseBookScreen';
 import ChooseThemeScreen from '../screens/ChooseThemeScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
-import { StackParamList } from '../types/types';
+import { ModalsParamList, StackParamList } from '../types/types';
 import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
+import SoundtrackOptionsModal from '../components/SoundtrackOptionsModal';
 
 export default function Navigation({
   colorScheme
@@ -37,16 +38,29 @@ export default function Navigation({
 
 // A root stack navigator is often used for displaying modals on top of all other content
 // Read more here: https://reactnavigation.org/docs/modal
-const Stack = createStackNavigator<StackParamList>();
+const RootStack = createStackNavigator<StackParamList>();
+const ModalStack = createStackNavigator<ModalsParamList>();
 
 function RootNavigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Access" component={AccessScreen} />
-      <Stack.Screen name="Root" component={BottomTabNavigator} />
-      <Stack.Screen name="ChooseBook" component={ChooseBookScreen} />
-      <Stack.Screen name="ChooseTheme" component={ChooseThemeScreen} />
-      <Stack.Screen name="NotFound" component={NotFoundScreen} />
-    </Stack.Navigator>
+    <RootStack.Navigator screenOptions={{ headerShown: false }}>
+      <RootStack.Screen name="Access" component={AccessScreen} />
+      <RootStack.Screen name="Root" component={BottomTabNavigator} />
+      <RootStack.Screen name="ChooseBook" component={ChooseBookScreen} />
+      <RootStack.Screen name="ChooseTheme" component={ChooseThemeScreen} />
+      <RootStack.Screen name="NotFound" component={NotFoundScreen} />
+      <RootStack.Screen name="Modal" component={ModalStackNavigator} />
+    </RootStack.Navigator>
+  );
+}
+
+function ModalStackNavigator() {
+  return (
+    <ModalStack.Navigator mode="modal" screenOptions={{ headerShown: false }}>
+      <ModalStack.Screen
+        name="SoundtrackOptions"
+        component={SoundtrackOptionsModal}
+      />
+    </ModalStack.Navigator>
   );
 }

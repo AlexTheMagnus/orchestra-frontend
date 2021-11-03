@@ -50,7 +50,7 @@ const ChapterItem = ({
     <View style={styles.container}>
       <Text style={styles.chapterItemTitle}>
         <Text style={styles.chapterNumber}>Chapter {chapterNumber}</Text>
-        <Text> - {chapterTitle}</Text>
+        {chapterTitle && <Text> - {chapterTitle}</Text>}
       </Text>
       <ThemeItem
         title={themeInfo.title}
