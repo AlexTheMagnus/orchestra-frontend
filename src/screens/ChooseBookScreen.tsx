@@ -16,7 +16,7 @@ const ChooseBookScreen = ({
   route,
   navigation
 }: StackScreenProps<StackParamList, 'ChooseBook'>) => {
-  const { soundtrackTitle } = route.params;
+  const { soundtrackTitle, soundtrackToUpdate } = route.params;
   const emptyMessage: string = 'Choose a book for your soundtrack';
 
   const globalState = useContext(AppContext);
@@ -94,14 +94,47 @@ const ChooseBookScreen = ({
       return;
     }
 
-    navigation.push('Root');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Root' }]
+    });
+  };
+
+  const updateSoundtrack = async (newBook: string) => {
+    const updateResponse = await fetch(
+      `${BACKEND_URL}/soundtracks/update/${soundtrackToUpdate}`,
+      {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          book: newBook
+        })
+      }
+    );
+
+    if (!updateResponse.ok) {
+      const message = `An error has occured: Status error ${updateResponse.status}`;
+      alert(message);
+    }
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Root' }]
+    });
   };
 
   const listResults = () => {
     return resultsList.map((result, index) => {
       return (
         <TouchableRipple
-          onPress={() => createSoundtrack(result.isbn)}
+          onPress={
+            soundtrackToUpdate
+              ? () => updateSoundtrack(result.isbn)
+              : () => createSoundtrack(result.isbn)
+          }
           rippleColor="rgba(0, 0, 0, .32)"
           key={index}
         >
