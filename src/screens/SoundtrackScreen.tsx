@@ -20,6 +20,7 @@ import EmptyView from '../components/EmptyView';
 import OrchestraButton from '../components/OrchestraButton';
 import SoundtrackInfo from '../components/SoundtrackInfo';
 import ChapterItem from '../components/ChapterItem';
+import SoundtrackLike from '../components/SoundtrackLike';
 import OrchestraColors from '../constants/OrchestraColors';
 
 const AddChapterButton = ({
@@ -187,13 +188,7 @@ const SoundtrackScreen = ({
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <ChooseChapterTitleModal />
-      <IconButton
-        icon="heart-outline"
-        onPress={() => console.log(globalState.accessToken)}
-        color="black"
-        size={30}
-        style={styles.favoriteButton}
-      />
+      <SoundtrackLike soundtrackId={soundtrackId} />
       <IconButton
         icon="dots-vertical"
         onPress={() =>
@@ -254,12 +249,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center'
   },
-  favoriteButton: {
-    position: 'absolute',
-    left: 5,
-    top: 30,
-    zIndex: 10
-  },
+
   optionsButton: {
     position: 'absolute',
     right: 5,
