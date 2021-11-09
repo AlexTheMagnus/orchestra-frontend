@@ -154,3 +154,7 @@ export type ChapterItemParamList = {
   theme: string;
   onPress(): void;
 };
+
+export type SoundtrackLikeProps = {
+  soundtrackId: string;
+};
