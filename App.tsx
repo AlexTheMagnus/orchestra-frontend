@@ -5,7 +5,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import React, { useState } from 'react';
 
 import AppContext from './AppContext';
-import { LoggedUserParamList } from './src/types/types';
+import { LoggedUserParamList, GlobalState } from './src/types/types';
 import useCachedResources from './src/hooks/useCachedResources';
 import useColorScheme from './src/hooks/useColorScheme';
 import Navigation from './src/navigation';
@@ -20,12 +20,17 @@ const App = () => {
     given_name: '',
     picture: ''
   });
+  const [loggedUserFavorites, setLoggedUserFavorites] = useState<
+    string[] | null
+  >(null);
 
-  const globalState = {
+  const globalState: GlobalState = {
     accessToken,
     setAccessToken,
     loggedUser,
-    setLoggedUser
+    setLoggedUser,
+    loggedUserFavorites,
+    setLoggedUserFavorites
   };
 
   if (!isLoadingComplete) {

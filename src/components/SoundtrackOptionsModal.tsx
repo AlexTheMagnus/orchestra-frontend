@@ -80,7 +80,6 @@ const SoundtrackOptionsModal = ({
   };
 
   const UpdateSoundtrackTitleModal = () => {
-    console.log(isUpdateSoundtrackTitleDialogVisible);
     return (
       <DialogInput
         isDialogVisible={isUpdateSoundtrackTitleDialogVisible}

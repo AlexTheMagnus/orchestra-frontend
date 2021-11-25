@@ -37,7 +37,6 @@ const SoundtrackLike = ({ soundtrackId }: SoundtrackLikeProps) => {
 
     const jsonResponse = await response.json();
     const likes = jsonResponse.likes_list;
-    console.log(likes);
 
     return likes.includes(globalState.loggedUser.id);
   };
