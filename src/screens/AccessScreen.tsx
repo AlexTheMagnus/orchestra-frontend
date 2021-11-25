@@ -48,10 +48,16 @@ const AccessScreen = ({
   React.useEffect(() => {
     if (response?.type === 'success') {
       const { code } = response.params;
-      sendAccessRequest(code).then(accessResponse =>
-        setStateOnLogin(accessResponse)
-      );
-      console.log('Successful login!');
+      sendAccessRequest(code).then(accessResponse => {
+        setUserInfoOnLogin(accessResponse);
+        getUserFavoritesRequest(accessResponse.user_id).then(userFavorites =>
+          globalState.setLoggedUserFavorites(
+            userFavorites.favorite_soundtracks_list
+          )
+        );
+      });
+
+      console.info('Successful login!');
       navigation.reset({
         index: 0,
         routes: [{ name: 'Root' }]
@@ -76,7 +82,27 @@ const AccessScreen = ({
       return;
     }
 
-    return await accessResponse.json();
+    return accessResponse.json();
+  };
+
+  const getUserFavoritesRequest = async (userId: string) => {
+    const getUserFavoritesResponse = await fetch(
+      `${BACKEND_URL}/users/${userId}/favorites`,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    if (!getUserFavoritesResponse.ok) {
+      handleErrorResponse(getUserFavoritesResponse);
+      return;
+    }
+
+    return getUserFavoritesResponse.json();
   };
 
   const handleErrorResponse = (response: Response) => {
@@ -89,12 +115,13 @@ const AccessScreen = ({
     console.error(message);
   };
 
-  const setStateOnLogin = async (accessResponse: AccessResponse) => {
+  const setUserInfoOnLogin = async (accessResponse: AccessResponse) => {
     globalState.setAccessToken(accessResponse.access_token);
     globalState.setLoggedUser({
       id: accessResponse.user_id,
       given_name: accessResponse.username,
-      picture: accessResponse.user_avatar
+      picture: accessResponse.user_avatar,
+      favorites: globalState.loggedUser.favorites
     });
   };
 
