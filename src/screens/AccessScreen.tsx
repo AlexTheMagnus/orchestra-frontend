@@ -12,6 +12,7 @@ import {
 import OrchestraColors from '../constants/OrchestraColors';
 import AppContext from '../../AppContext';
 import SpotifySignInButton from '../components/SpotifySignInButton';
+import { getUserFavoritesRequest } from '../components/utils';
 
 // Endpoint
 const discovery = {
@@ -83,26 +84,6 @@ const AccessScreen = ({
     }
 
     return accessResponse.json();
-  };
-
-  const getUserFavoritesRequest = async (userId: string) => {
-    const getUserFavoritesResponse = await fetch(
-      `${BACKEND_URL}/users/${userId}/favorites`,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-
-    if (!getUserFavoritesResponse.ok) {
-      handleErrorResponse(getUserFavoritesResponse);
-      return;
-    }
-
-    return getUserFavoritesResponse.json();
   };
 
   const handleErrorResponse = (response: Response) => {
