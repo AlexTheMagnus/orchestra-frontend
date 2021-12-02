@@ -45,7 +45,10 @@ const SoundtrackItem = ({
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const openSoundtrackScreen = () => {
-    navigation.push('Root', { screen: 'Soundtrack', params: { soundtrackId } });
+    navigation.navigate('Root', {
+      screen: 'Soundtrack',
+      params: { soundtrackId }
+    });
   };
 
   return (
