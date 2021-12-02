@@ -22,7 +22,7 @@ const MyProfileScreen = ({
     globalState.setAccessToken(null);
     globalState.setLoggedUserFavorites(null);
   };
-  console.log('loggedUserFavorites', globalState.loggedUserFavorites);
+
   const logout = () => {
     navigation.reset({
       index: 0,

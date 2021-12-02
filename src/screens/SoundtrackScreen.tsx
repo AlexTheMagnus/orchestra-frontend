@@ -6,10 +6,9 @@ import DialogInput from 'react-native-dialog-input';
 import { StackScreenProps } from '@react-navigation/stack';
 import { BACKEND_URL } from '@env';
 
-import { fromJsonToSoundtrackItem } from '../components/utils';
+import { getSoundtrackById } from '../components/utils';
 import {
   StackParamList,
-  JsonSoundtrackParamList,
   JsonChapterParamList,
   ChapterParamList,
   OrchestraButtonProps,
@@ -78,6 +77,7 @@ const SoundtrackScreen = ({
 
   useEffect(() => {
     getSoundtrackById(soundtrackId).then(async soundtrack => {
+      soundtrack && setAuthorId(soundtrack.author);
       soundtrack && setSoundtrackInfo(soundtrack);
       const chapters = await getSoundtrackChapters();
       chapters &&
@@ -127,29 +127,6 @@ const SoundtrackScreen = ({
         closeDialog={hideDialog}
       />
     );
-  };
-
-  const getSoundtrackById = async (soundtrackId: string) => {
-    const response = await fetch(`${BACKEND_URL}/soundtracks/${soundtrackId}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      const message = `An error has occured while loading the soundtrack info: Status error ${response.status}`;
-      alert(message);
-      console.error(message);
-      return;
-    }
-
-    const body: JsonSoundtrackParamList = await response.json();
-    setAuthorId(body.author);
-    const soundtrackItem = await fromJsonToSoundtrackItem(body);
-
-    return soundtrackItem;
   };
 
   const getSoundtrackChapters = async (): Promise<

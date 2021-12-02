@@ -90,3 +90,45 @@ export const fromJsonToSoundtrackItem = async (
   await setBookInfo(jsonSoundtrack, soundtrackItem);
   return soundtrackItem;
 };
+
+export const getUserFavoritesRequest = async (userId: string) => {
+  const getUserFavoritesResponse = await fetch(
+    `${BACKEND_URL}/users/${userId}/favorites`,
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+
+  if (!getUserFavoritesResponse.ok) {
+    const message = `An error has occured: Status error ${getUserFavoritesResponse.status}`;
+    alert(message);
+    return;
+  }
+
+  return getUserFavoritesResponse.json();
+};
+
+export const getSoundtrackById = async (soundtrackId: string) => {
+  const response = await fetch(`${BACKEND_URL}/soundtracks/${soundtrackId}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    const message = `An error has occured while loading the soundtrack info: Status error ${response.status}`;
+    alert(message);
+    return;
+  }
+
+  const body: JsonSoundtrackParamList = await response.json();
+  const soundtrackItem = await fromJsonToSoundtrackItem(body);
+
+  return soundtrackItem;
+};
