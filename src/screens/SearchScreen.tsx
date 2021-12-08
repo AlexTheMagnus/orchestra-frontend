@@ -1,26 +1,155 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
+import { Appbar, TextInput } from 'react-native-paper';
 
-import EmptyView from '../components/EmptyView';
+import {
+  JsonSoundtrackParamList,
+  SoundtrackItemParamList
+} from '../types/types';
 import { View } from '../components/Themed';
+import EmptyView from '../components/EmptyView';
+import OrchestraColors from '../constants/OrchestraColors';
+import SoundtrackItemList from '../components/SoundtrackItemList';
+import { MAX_ELMENTENS_ON_SEARCH } from '../constants/OrchestraConstants';
+import { BACKEND_URL } from '@env';
+import { fromJsonToSoundtrackItem } from '../components/utils';
 
 export default function SearchScreen() {
   const emptyMessage: string = 'Search soundtracks for your books';
 
+  const [resultsList, setResultsList] = useState<
+    Array<SoundtrackItemParamList>
+  >([]);
+
+  const searchBooks = async (textToSearch: string) => {
+    const response = await fetch(
+      'https://www.googleapis.com/books/v1/volumes?q=' + textToSearch
+    );
+
+    if (!response.ok) {
+      const message = `Google Books API request error: Status error ${response.status}`;
+      console.error(message);
+      return;
+    }
+
+    const json = await response.json();
+    const bookResults: string[] = [];
+
+    json.items.forEach((result: any) => {
+      const foundIsbn13 =
+        result.volumeInfo.industryIdentifiers &&
+        result.volumeInfo.industryIdentifiers.find(
+          (industryIdentifier: { type: string; identifier: string }) =>
+            industryIdentifier && industryIdentifier.type == 'ISBN_13'
+        );
+
+      foundIsbn13 && bookResults.push(foundIsbn13.identifier);
+    });
+
+    return bookResults;
+  };
+
+  const searchSoundtracksByBook = async (
+    isbn: string
+  ): Promise<SoundtrackItemParamList[] | undefined> => {
+    const response = await fetch(`${BACKEND_URL}/soundtracks/search`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        book: isbn
+      })
+    });
+
+    if (!response.ok) {
+      const message = `An error has occured: Status error ${response.status}`;
+      console.error(message);
+      return;
+    }
+
+    const json = await response.json();
+
+    return await Promise.all(
+      json.soundtracks_list.map(
+        async (soundtrackJson: JsonSoundtrackParamList) =>
+          await fromJsonToSoundtrackItem(soundtrackJson)
+      )
+    );
+  };
+
+  const searchSoundtracks = async (textToSeach: string) => {
+    const bookResults = await searchBooks(textToSeach);
+    const soundtrackResults: SoundtrackItemParamList[] = [];
+    var i = 0;
+
+    if (bookResults) {
+      while (
+        soundtrackResults.length < MAX_ELMENTENS_ON_SEARCH &&
+        i < bookResults.length
+      ) {
+        const foundSoundtracks = await searchSoundtracksByBook(bookResults[i]);
+
+        if (foundSoundtracks) {
+          soundtrackResults.push(...foundSoundtracks);
+          console.log('soundtrackResults', soundtrackResults);
+        }
+        i++;
+      }
+    }
+    setResultsList(soundtrackResults);
+  };
+
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <EmptyView icon="search" message={emptyMessage} />
+    <View style={styles.screen}>
+      <Appbar.Header style={styles.header}>
+        <TextInput
+          mode="outlined"
+          placeholder="Search"
+          selectionColor={OrchestraColors.textColorDark}
+          outlineColor={OrchestraColors.transparent}
+          onChangeText={text => {
+            text ? searchSoundtracks(text) : setResultsList([]);
+          }}
+          style={styles.searchInput}
+          theme={inputTheme}
+        />
+      </Appbar.Header>
+      <View style={styles.container}>
+        {!resultsList.length ? (
+          <View style={styles.content}>
+            <EmptyView icon="search" message={emptyMessage} />
+          </View>
+        ) : (
+          <View style={styles.soundtrackListContainer}>
+            <SoundtrackItemList soundtracksList={resultsList} />
+          </View>
+        )}
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  screen: { flex: 1 },
   container: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  header: {
+    height: 100,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: OrchestraColors.primaryColorLight
+  },
+  searchInput: {
+    width: '80%',
+    height: 55,
+    backgroundColor: OrchestraColors.primaryColorLightest,
+    color: OrchestraColors.textColor
   },
   content: {
     flex: 1,
@@ -28,12 +157,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 200
   },
-  emptyIcon: {
-    margin: 20
-  },
-  emptyMessage: {
-    fontSize: 20,
-    lineHeight: 24,
-    textAlign: 'center'
+  soundtrackListContainer: {
+    flex: 1,
+    width: '100%'
   }
 });
+
+const inputTheme = {
+  colors: {
+    placeholder: 'white',
+    text: 'white',
+    primary: OrchestraColors.primaryColorLightest
+  }
+};

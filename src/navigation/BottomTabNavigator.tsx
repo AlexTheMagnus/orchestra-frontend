@@ -122,7 +122,7 @@ const SearchStack = createStackNavigator<SearchParamList>();
 
 function SearchNavigator() {
   return (
-    <SearchStack.Navigator>
+    <SearchStack.Navigator screenOptions={{ headerShown: false }}>
       <SearchStack.Screen
         name="SearchScreen"
         component={SearchScreen}
