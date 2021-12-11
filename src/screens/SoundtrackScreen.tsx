@@ -12,7 +12,8 @@ import {
   JsonChapterParamList,
   ChapterParamList,
   OrchestraButtonProps,
-  SoundtrackItemParamList
+  SoundtrackItemParamList,
+  GlobalState
 } from '../types/types';
 import AppContext from '../../AppContext';
 import EmptyView from '../components/EmptyView';
@@ -59,7 +60,7 @@ const SoundtrackScreen = ({
     soundtrackId: soundtrackId
   };
 
-  const globalState = useContext(AppContext);
+  const globalState: GlobalState = useContext(AppContext);
 
   const [soundtrackInfo, setSoundtrackInfo] =
     React.useState<SoundtrackItemParamList>(defaultSoundtrackInfo);
@@ -84,6 +85,8 @@ const SoundtrackScreen = ({
         setChaptersList(
           chapters.sort((a, b) => a.chapterNumber - b.chapterNumber)
         );
+      console.log('authorId', authorId);
+      console.log('global authorId', globalState.loggedUser.id);
     });
   }, []);
 
@@ -104,7 +107,7 @@ const SoundtrackScreen = ({
   };
 
   const getNextChapterNumber = () => {
-    for (var i = 0, previousChapterNumber = 1; i < chaptersList.length; i++) {
+    for (var i = 0, previousChapterNumber = 0; i < chaptersList.length; i++) {
       if (
         !(chaptersList[i].chapterNumber == previousChapterNumber) &&
         !(chaptersList[i].chapterNumber == previousChapterNumber + 1)
@@ -189,32 +192,34 @@ const SoundtrackScreen = ({
         bookTitle={soundtrackInfo.bookTitle}
         author={soundtrackInfo.author}
       />
-      {globalState.loggedUser.id === authorId ? (
+
+      {globalState.loggedUser.given_name === authorId && (
         <View style={styles.container}>
           <AddChapterButton
             onPress={showDialog}
             message="ADD CHAPTER"
             propStyles={styles.addChapterButton}
           />
-          {!chaptersList.length ? (
-            <AddChapterMesage />
-          ) : (
-            chaptersList.map((chapter, index) => (
-              <ChapterItem
-                key={index}
-                chapterId={chapter.chapterId}
-                chapterNumber={chapter.chapterNumber}
-                theme={chapter.theme}
-                chapterTitle={chapter.chapterTitle}
-                onPress={() => {
-                  Linking.openURL(
-                    `https://open.spotify.com/track/${chapter.theme}`
-                  );
-                }}
-              />
-            ))
-          )}
         </View>
+      )}
+
+      {chaptersList.length ? (
+        chaptersList.map((chapter, index) => (
+          <ChapterItem
+            key={index}
+            chapterId={chapter.chapterId}
+            chapterNumber={chapter.chapterNumber}
+            theme={chapter.theme}
+            chapterTitle={chapter.chapterTitle}
+            onPress={() => {
+              Linking.openURL(
+                `https://open.spotify.com/track/${chapter.theme}`
+              );
+            }}
+          />
+        ))
+      ) : globalState.loggedUser.given_name === authorId ? (
+        <AddChapterMesage />
       ) : (
         <EmptyView icon="mySoundtracks" message={emptyMessage} />
       )}

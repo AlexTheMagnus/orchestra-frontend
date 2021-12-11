@@ -45,7 +45,8 @@ const SoundtrackItem = ({
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const openSoundtrackScreen = () => {
-    navigation.navigate('Root', {
+    //TODO: push o navigate o yo qeu sé. Pero no deja añadir caps a una sountrack
+    navigation.push('Root', {
       screen: 'Soundtrack',
       params: { soundtrackId }
     });
