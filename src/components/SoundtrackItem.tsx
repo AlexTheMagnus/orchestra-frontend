@@ -44,8 +44,12 @@ const SoundtrackItem = ({
 }: SoundtrackItemParamList) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
+  const description =
+    (bookTitle ?? '') +
+    (bookTitle && author ? ' · ' : '') +
+    (author ? 'by ' + author : '');
+
   const openSoundtrackScreen = () => {
-    //TODO: push o navigate o yo qeu sé. Pero no deja añadir caps a una sountrack
     navigation.push('Root', {
       screen: 'Soundtrack',
       params: { soundtrackId }
@@ -58,8 +62,8 @@ const SoundtrackItem = ({
       rippleColor="rgba(0, 0, 0, .32)"
     >
       <List.Item
-        title={soundtrackTitle}
-        description={bookTitle + ' · by ' + author}
+        title={soundtrackTitle ?? ''}
+        description={description}
         left={() => renderBookCover(bookCover)}
         right={() =>
           renderOptionsIcon({
