@@ -39,15 +39,16 @@ const SoundtrackItem = ({
   bookCover,
   soundtrackTitle,
   bookTitle,
-  author,
+  authorId,
+  authorName,
   soundtrackId
 }: SoundtrackItemParamList) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   const description =
     (bookTitle ?? '') +
-    (bookTitle && author ? ' · ' : '') +
-    (author ? 'by ' + author : '');
+    (bookTitle && authorName ? ' · ' : '') +
+    (authorName ? 'by ' + authorName : '');
 
   const openSoundtrackScreen = () => {
     navigation.push('Root', {
@@ -70,7 +71,8 @@ const SoundtrackItem = ({
             bookCover,
             soundtrackTitle,
             bookTitle,
-            author,
+            authorId,
+            authorName,
             soundtrackId
           })
         }

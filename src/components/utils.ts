@@ -27,7 +27,7 @@ const setAuthorName = async (
   jsonSoundtrack: JsonSoundtrackParamList,
   soundtrackItem: SoundtrackItemParamList
 ) => {
-  soundtrackItem.author = await getAuthorName(jsonSoundtrack.author);
+  soundtrackItem.authorName = await getAuthorName(jsonSoundtrack.author);
 };
 
 const getBookInfo = async (isbn: string) => {
@@ -83,7 +83,8 @@ export const fromJsonToSoundtrackItem = async (
     soundtrackTitle: jsonSoundtrack.soundtrack_title,
     soundtrackId: jsonSoundtrack.soundtrack_id,
     bookTitle: '',
-    author: ''
+    authorId: jsonSoundtrack.author,
+    authorName: ''
   };
 
   await setAuthorName(jsonSoundtrack, soundtrackItem);
