@@ -6,7 +6,11 @@ import DialogInput from 'react-native-dialog-input';
 
 import { BACKEND_URL } from '@env';
 import { getUserFavoritesRequest } from './utils';
-import { StackParamList, GlobalState } from '../types/types';
+import {
+  StackParamList,
+  GlobalState,
+  SoundtrackItemParamList
+} from '../types/types';
 import { View } from 'react-native';
 import AppContext from '../../AppContext';
 import FullScreenModal from './FullScreenModal';
@@ -40,7 +44,7 @@ const SoundtrackOptionsModal = ({
     authorId,
     authorName,
     soundtrackId
-  } = route.params;
+  }: SoundtrackItemParamList = route.params;
 
   const globalState: GlobalState = useContext(AppContext);
   const [isDeleteSoundtrackDialogVisible, setIsDeleteSoundtrackDialogVisible] =
@@ -275,7 +279,12 @@ const SoundtrackOptionsModal = ({
         <TextButton
           style={styles.soundtrackOptions}
           message="Go to author"
-          onPress={() => console.log(isFavorite())}
+          onPress={() => {
+            navigation.push('Root', {
+              screen: 'UserProfile',
+              params: { userId: authorId }
+            } as never);
+          }}
         />
       ) : (
         <View />
