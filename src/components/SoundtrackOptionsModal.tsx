@@ -4,13 +4,14 @@ import { Text, TouchableRipple, Dialog, Portal } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
 import DialogInput from 'react-native-dialog-input';
 
-import { StackParamList } from '../types/types';
-import SoundtrackInfo from './SoundtrackInfo';
-import FullScreenModal from './FullScreenModal';
-import AppContext from '../../AppContext';
-import { View } from 'react-native';
-import OrchestraColors from '../constants/OrchestraColors';
 import { BACKEND_URL } from '@env';
+import { getUserFavoritesRequest } from './utils';
+import { StackParamList, GlobalState } from '../types/types';
+import { View } from 'react-native';
+import AppContext from '../../AppContext';
+import FullScreenModal from './FullScreenModal';
+import OrchestraColors from '../constants/OrchestraColors';
+import SoundtrackInfo from './SoundtrackInfo';
 
 const TextButton = ({
   message,
@@ -35,7 +36,7 @@ const SoundtrackOptionsModal = ({
   const { bookCover, soundtrackTitle, bookTitle, author, soundtrackId } =
     route.params;
 
-  const globalState = useContext(AppContext);
+  const globalState: GlobalState = useContext(AppContext);
   const [isDeleteSoundtrackDialogVisible, setIsDeleteSoundtrackDialogVisible] =
     React.useState(false);
   const [
@@ -43,7 +44,10 @@ const SoundtrackOptionsModal = ({
     setIsUpdateSoundtrackTitleDialogVisible
   ] = React.useState(false);
 
-  const isFavorite = true;
+  const isFavorite = () =>
+    globalState.loggedUserFavorites
+      ? globalState.loggedUserFavorites.includes(soundtrackId)
+      : false;
 
   const showUpdateSoundtrackTitleDialog = () =>
     setIsUpdateSoundtrackTitleDialogVisible(true);
@@ -54,6 +58,67 @@ const SoundtrackOptionsModal = ({
     setIsDeleteSoundtrackDialogVisible(true);
   const hideDeleteSoundtrackDialog = () =>
     setIsDeleteSoundtrackDialogVisible(false);
+
+  const updateLoggedUserFavoriteSoundtracks = async () => {
+    getUserFavoritesRequest(globalState.loggedUser.id).then(userFavorites => {
+      if (userFavorites) {
+        globalState.setLoggedUserFavorites(
+          userFavorites.favorite_soundtracks_list
+        );
+      }
+    });
+  };
+
+  const addSoundtrackToFavorites = async () => {
+    const addToFavResponse = await fetch(`${BACKEND_URL}/users/favorite`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: globalState.loggedUser.id,
+        soundtrack_id: soundtrackId
+      })
+    });
+
+    updateLoggedUserFavoriteSoundtracks();
+
+    if (!addToFavResponse.ok) {
+      const message = `An error has occured: Status error ${addToFavResponse.status}`;
+      alert(message);
+    }
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Root' }]
+    });
+  };
+
+  const removeSoundtrackFromFavorites = async () => {
+    const removeFromFavResponse = await fetch(
+      `${BACKEND_URL}/users/${globalState.loggedUser.id}/unfavorite/${soundtrackId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    updateLoggedUserFavoriteSoundtracks();
+
+    if (!removeFromFavResponse.ok) {
+      const message = `An error has occured: Status error ${removeFromFavResponse.status}`;
+      alert(message);
+    }
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Root' }]
+    });
+  };
 
   const deleteSoundtrack = async () => {
     const deleteResponse = await fetch(
@@ -80,7 +145,6 @@ const SoundtrackOptionsModal = ({
   };
 
   const UpdateSoundtrackTitleModal = () => {
-    console.log(isUpdateSoundtrackTitleDialogVisible);
     return (
       <DialogInput
         isDialogVisible={isUpdateSoundtrackTitleDialogVisible}
@@ -182,24 +246,24 @@ const SoundtrackOptionsModal = ({
         <View />
       )}
 
-      {isFavorite ? (
+      {isFavorite() ? (
         <TextButton
           style={styles.soundtrackOptions}
           message="Remove from favorites"
-          onPress={() => {}}
+          onPress={() => removeSoundtrackFromFavorites()}
         />
       ) : (
         <TextButton
           style={styles.soundtrackOptions}
           message="Add to favorites"
-          onPress={() => {}}
+          onPress={() => addSoundtrackToFavorites()}
         />
       )}
 
       <TextButton
         style={styles.soundtrackOptions}
         message="Go to author"
-        onPress={() => {}}
+        onPress={() => console.log(isFavorite())}
       />
 
       {author === globalState.loggedUser.given_name ? (

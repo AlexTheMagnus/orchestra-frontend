@@ -1,18 +1,20 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView, ImageStyle, StyleProp } from 'react-native';
 
 import { SoundtrackItemParamList } from '../types/types';
 import SoundtrackItem from './SoundtrackItem';
 
 const SoundtrackItemList = ({
-  soundtracksList
+  soundtracksList,
+  styles
 }: {
   soundtracksList: SoundtrackItemParamList[];
+  styles?: StyleProp<ImageStyle>;
 }) => {
   return (
     <View>
       <ScrollView>
-        <View style={styles.container} />
+        <View style={styles} />
         {soundtracksList.map((soundtrack, index) => (
           <SoundtrackItem
             key={index}
@@ -28,8 +30,8 @@ const SoundtrackItemList = ({
   );
 };
 
-const styles = StyleSheet.create({
-  container: { height: 80 }
-});
+// const styles = StyleSheet.create({
+//   container: { height: 80 }
+// });
 
 export default SoundtrackItemList;

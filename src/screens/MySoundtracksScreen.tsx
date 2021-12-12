@@ -118,7 +118,10 @@ const MySoundtracksScreen = ({
         </View>
       ) : (
         <View style={styles.mySoundtrackListContainer}>
-          <SoundtrackItemList soundtracksList={userSoundtracksList} />
+          <SoundtrackItemList
+            soundtracksList={userSoundtracksList}
+            styles={styles.soundtrackItemList}
+          />
         </View>
       )}
     </View>
@@ -140,6 +143,9 @@ const styles = StyleSheet.create({
   mySoundtrackListContainer: {
     flex: 1,
     width: '100%'
+  },
+  soundtrackItemList: {
+    height: 80
   },
   emptyMessage: {
     fontSize: 20,

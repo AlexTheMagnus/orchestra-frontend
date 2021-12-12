@@ -6,14 +6,14 @@ import DialogInput from 'react-native-dialog-input';
 import { StackScreenProps } from '@react-navigation/stack';
 import { BACKEND_URL } from '@env';
 
-import { fromJsonToSoundtrackItem } from '../components/utils';
+import { getSoundtrackById } from '../components/utils';
 import {
   StackParamList,
-  JsonSoundtrackParamList,
   JsonChapterParamList,
   ChapterParamList,
   OrchestraButtonProps,
-  SoundtrackItemParamList
+  SoundtrackItemParamList,
+  GlobalState
 } from '../types/types';
 import AppContext from '../../AppContext';
 import EmptyView from '../components/EmptyView';
@@ -60,7 +60,7 @@ const SoundtrackScreen = ({
     soundtrackId: soundtrackId
   };
 
-  const globalState = useContext(AppContext);
+  const globalState: GlobalState = useContext(AppContext);
 
   const [soundtrackInfo, setSoundtrackInfo] =
     React.useState<SoundtrackItemParamList>(defaultSoundtrackInfo);
@@ -78,12 +78,15 @@ const SoundtrackScreen = ({
 
   useEffect(() => {
     getSoundtrackById(soundtrackId).then(async soundtrack => {
+      soundtrack && setAuthorId(soundtrack.author);
       soundtrack && setSoundtrackInfo(soundtrack);
       const chapters = await getSoundtrackChapters();
       chapters &&
         setChaptersList(
           chapters.sort((a, b) => a.chapterNumber - b.chapterNumber)
         );
+      console.log('authorId', authorId);
+      console.log('global authorId', globalState.loggedUser.id);
     });
   }, []);
 
@@ -104,7 +107,7 @@ const SoundtrackScreen = ({
   };
 
   const getNextChapterNumber = () => {
-    for (var i = 0, previousChapterNumber = 1; i < chaptersList.length; i++) {
+    for (var i = 0, previousChapterNumber = 0; i < chaptersList.length; i++) {
       if (
         !(chaptersList[i].chapterNumber == previousChapterNumber) &&
         !(chaptersList[i].chapterNumber == previousChapterNumber + 1)
@@ -127,29 +130,6 @@ const SoundtrackScreen = ({
         closeDialog={hideDialog}
       />
     );
-  };
-
-  const getSoundtrackById = async (soundtrackId: string) => {
-    const response = await fetch(`${BACKEND_URL}/soundtracks/${soundtrackId}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      const message = `An error has occured while loading the soundtrack info: Status error ${response.status}`;
-      alert(message);
-      console.error(message);
-      return;
-    }
-
-    const body: JsonSoundtrackParamList = await response.json();
-    setAuthorId(body.author);
-    const soundtrackItem = await fromJsonToSoundtrackItem(body);
-
-    return soundtrackItem;
   };
 
   const getSoundtrackChapters = async (): Promise<
@@ -212,32 +192,34 @@ const SoundtrackScreen = ({
         bookTitle={soundtrackInfo.bookTitle}
         author={soundtrackInfo.author}
       />
-      {globalState.loggedUser.id === authorId ? (
+
+      {globalState.loggedUser.given_name === authorId && (
         <View style={styles.container}>
           <AddChapterButton
             onPress={showDialog}
             message="ADD CHAPTER"
             propStyles={styles.addChapterButton}
           />
-          {!chaptersList.length ? (
-            <AddChapterMesage />
-          ) : (
-            chaptersList.map((chapter, index) => (
-              <ChapterItem
-                key={index}
-                chapterId={chapter.chapterId}
-                chapterNumber={chapter.chapterNumber}
-                theme={chapter.theme}
-                chapterTitle={chapter.chapterTitle}
-                onPress={() => {
-                  Linking.openURL(
-                    `https://open.spotify.com/track/${chapter.theme}`
-                  );
-                }}
-              />
-            ))
-          )}
         </View>
+      )}
+
+      {chaptersList.length ? (
+        chaptersList.map((chapter, index) => (
+          <ChapterItem
+            key={index}
+            chapterId={chapter.chapterId}
+            chapterNumber={chapter.chapterNumber}
+            theme={chapter.theme}
+            chapterTitle={chapter.chapterTitle}
+            onPress={() => {
+              Linking.openURL(
+                `https://open.spotify.com/track/${chapter.theme}`
+              );
+            }}
+          />
+        ))
+      ) : globalState.loggedUser.given_name === authorId ? (
+        <AddChapterMesage />
       ) : (
         <EmptyView icon="mySoundtracks" message={emptyMessage} />
       )}

@@ -15,14 +15,13 @@ const SoundtrackInfo = ({
     <View style={styles.container}>
       <BookCover bookCoverUrl={bookCover} styles={styles.bookCover} />
 
-      {soundtrackTitle && bookTitle && author ? (
-        <View style={styles.bookTextInfo}>
-          <Title>{soundtrackTitle}</Title>
-          <Text style={styles.bookDescription}>
-            {bookTitle} · by {author}
-          </Text>
-        </View>
-      ) : null}
+      <View style={styles.bookTextInfo}>
+        <Title>{soundtrackTitle ?? ''}</Title>
+        <Text style={styles.bookDescription}>
+          {bookTitle ?? ''} {bookTitle && author && '·'}
+          {author && `by ${author}`}
+        </Text>
+      </View>
     </View>
   );
 };
