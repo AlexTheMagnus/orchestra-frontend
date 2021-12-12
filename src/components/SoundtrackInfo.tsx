@@ -19,7 +19,7 @@ const SoundtrackInfo = ({
         <Title>{soundtrackTitle ?? ''}</Title>
         <Text style={styles.bookDescription}>
           {bookTitle ?? ''} {bookTitle && author && '·'}
-          {author && `by ${author}`}
+          {author && ` by ${author}`}
         </Text>
       </View>
     </View>

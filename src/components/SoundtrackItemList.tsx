@@ -22,7 +22,8 @@ const SoundtrackItemList = ({
             bookCover={soundtrack.bookCover}
             soundtrackTitle={soundtrack.soundtrackTitle}
             bookTitle={soundtrack.bookTitle}
-            author={soundtrack.author}
+            authorId={soundtrack.authorId}
+            authorName={soundtrack.authorName}
           />
         ))}
       </ScrollView>

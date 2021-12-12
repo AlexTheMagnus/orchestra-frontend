@@ -83,7 +83,8 @@ export type SoundtrackItemParamList = {
   bookCover: string;
   soundtrackTitle: string;
   bookTitle: string;
-  author: string;
+  authorId: string;
+  authorName: string;
   soundtrackId: string;
 };
 
