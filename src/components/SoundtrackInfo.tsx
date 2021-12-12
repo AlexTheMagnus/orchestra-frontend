@@ -9,7 +9,7 @@ const SoundtrackInfo = ({
   bookCover,
   soundtrackTitle,
   bookTitle,
-  author
+  authorName
 }: SoundtrackInfoParamList) => {
   return (
     <View style={styles.container}>
@@ -18,8 +18,8 @@ const SoundtrackInfo = ({
       <View style={styles.bookTextInfo}>
         <Title>{soundtrackTitle ?? ''}</Title>
         <Text style={styles.bookDescription}>
-          {bookTitle ?? ''} {bookTitle && author && '·'}
-          {author && `by ${author}`}
+          {bookTitle ?? ''} {bookTitle && authorName && '·'}
+          {authorName && ` by ${authorName}`}
         </Text>
       </View>
     </View>
