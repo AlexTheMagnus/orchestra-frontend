@@ -34,6 +34,9 @@ export default {
             screens: {
               ChooseThemeScreen: 'choose-theme'
             }
+          },
+          UserProfile: {
+            path: 'user'
           }
         }
       },

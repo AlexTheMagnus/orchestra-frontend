@@ -24,10 +24,10 @@ const getAuthorName = async (authorId: string) => {
 };
 
 const setAuthorName = async (
-  soundtracksList: JsonSoundtrackParamList,
+  jsonSoundtrack: JsonSoundtrackParamList,
   soundtrackItem: SoundtrackItemParamList
 ) => {
-  soundtrackItem.author = await getAuthorName(soundtracksList.author);
+  soundtrackItem.author = await getAuthorName(jsonSoundtrack.author);
 };
 
 const getBookInfo = async (isbn: string) => {
@@ -131,4 +131,32 @@ export const getSoundtrackById = async (soundtrackId: string) => {
   const soundtrackItem = await fromJsonToSoundtrackItem(body);
 
   return soundtrackItem;
+};
+
+export const getUserSoundtracks = async (userId: string) => {
+  const response = await fetch(`${BACKEND_URL}/soundtracks/user/${userId}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    const message = `An error has occured while loading the soundtracks: Status error ${response.status}`;
+    alert(message);
+    console.error(message);
+  }
+
+  const json = await response.json();
+  var soundtrackItemList: SoundtrackItemParamList[] = [];
+
+  await Promise.all(
+    json.soundtracks_list.map(
+      async (jsonSoundtrack: JsonSoundtrackParamList) => {
+        soundtrackItemList.push(await fromJsonToSoundtrackItem(jsonSoundtrack));
+      }
+    )
+  );
+  return soundtrackItemList;
 };
