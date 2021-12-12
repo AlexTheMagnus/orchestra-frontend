@@ -49,6 +49,8 @@ const SoundtrackOptionsModal = ({
       ? globalState.loggedUserFavorites.includes(soundtrackId)
       : false;
 
+  const isAuthor = () => author === globalState.loggedUser.given_name;
+
   const showUpdateSoundtrackTitleDialog = () =>
     setIsUpdateSoundtrackTitleDialogVisible(true);
   const hideUpdateSoundtrackTitleDialog = () =>
@@ -224,24 +226,27 @@ const SoundtrackOptionsModal = ({
         author={author}
       />
 
-      {author === globalState.loggedUser.given_name ? (
-        <View>
-          <TextButton
-            style={styles.soundtrackOptions}
-            message="Change title"
-            onPress={showUpdateSoundtrackTitleDialog}
-          />
-          <TextButton
-            style={styles.soundtrackOptions}
-            message="Change book"
-            onPress={() => {
-              navigation.push('ChooseBook', {
-                soundtrackTitle,
-                soundtrackToUpdate: soundtrackId
-              } as never);
-            }}
-          />
-        </View>
+      {isAuthor() ? (
+        <TextButton
+          style={styles.soundtrackOptions}
+          message="Change title"
+          onPress={showUpdateSoundtrackTitleDialog}
+        />
+      ) : (
+        <View />
+      )}
+
+      {isAuthor() ? (
+        <TextButton
+          style={styles.soundtrackOptions}
+          message="Change book"
+          onPress={() => {
+            navigation.push('ChooseBook', {
+              soundtrackTitle,
+              soundtrackToUpdate: soundtrackId
+            } as never);
+          }}
+        />
       ) : (
         <View />
       )}
@@ -260,13 +265,17 @@ const SoundtrackOptionsModal = ({
         />
       )}
 
-      <TextButton
-        style={styles.soundtrackOptions}
-        message="Go to author"
-        onPress={() => console.log(isFavorite())}
-      />
+      {!isAuthor() ? (
+        <TextButton
+          style={styles.soundtrackOptions}
+          message="Go to author"
+          onPress={() => console.log(isFavorite())}
+        />
+      ) : (
+        <View />
+      )}
 
-      {author === globalState.loggedUser.given_name ? (
+      {isAuthor() ? (
         <TextButton
           style={styles.soundtrackOptions}
           message="Delete"
