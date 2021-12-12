@@ -93,7 +93,6 @@ export default function SearchScreen() {
 
         if (foundSoundtracks) {
           soundtrackResults.push(...foundSoundtracks);
-          console.log('soundtrackResults', soundtrackResults);
         }
         i++;
       }
