@@ -85,8 +85,6 @@ const SoundtrackScreen = ({
         setChaptersList(
           chapters.sort((a, b) => a.chapterNumber - b.chapterNumber)
         );
-      console.log('authorId', authorId);
-      console.log('global authorId', globalState.loggedUser.id);
     });
   }, []);
 
