@@ -15,6 +15,7 @@ import FavoritesScreen from '../screens/FavoritesScreen';
 import SearchScreen from '../screens/SearchScreen';
 import MyProfileScreen from '../screens/MyProfileScreen';
 import SoundtrackScreen from '../screens/SoundtrackScreen';
+import UserProfileScreen from '../screens/UserProfileScreen';
 import {
   BottomTabParamList,
   MySoundtracksParamList,
@@ -33,7 +34,7 @@ export default function BottomTabNavigator() {
       initialRouteName="My soundtracks"
       tabBarOptions={{ activeTintColor: OrchestraColors[colorScheme].tint }}
       screenOptions={({ route }) => ({
-        tabBarButton: ['Soundtrack'].includes(route.name)
+        tabBarButton: ['Soundtrack', 'UserProfile'].includes(route.name)
           ? () => {
               return null;
             }
@@ -75,6 +76,7 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen name="Soundtrack" component={SoundtrackScreen} />
+      <BottomTab.Screen name="UserProfile" component={UserProfileScreen} />
     </BottomTab.Navigator>
   );
 }

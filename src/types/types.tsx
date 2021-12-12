@@ -31,6 +31,9 @@ export type StackParamList = ModalsParamList & {
   Soundtrack: {
     soundtrackId: string;
   };
+  UserProfile: {
+    userId: string;
+  };
   ChooseTheme: {
     soundtrackId: string;
     chapterNumber: number;
@@ -54,6 +57,9 @@ export type BottomTabParamList = {
   'My profile': undefined;
   Soundtrack: {
     soundtrackId: string;
+  };
+  UserProfile: {
+    userId: string;
   };
 };
 
