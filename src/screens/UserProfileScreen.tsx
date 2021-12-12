@@ -10,21 +10,28 @@ import AppContext from '../../AppContext';
 import SoundtrackItemList from '../components/SoundtrackItemList';
 
 const UserProfileScreen = ({
+  route,
   navigation
 }: StackScreenProps<StackParamList, 'UserProfile'>) => {
+  const { userId }: { userId: string } = route.params;
   const globalState = useContext(AppContext);
 
   const [userSoundtracksList, setUserSoundtracksList] = React.useState<
     SoundtrackItemParamList[]
   >([]);
 
+  const numberOfSoundtracksMessage = (): string =>
+    `${userSoundtracksList.length} ${
+      userSoundtracksList.length == 1 ? 'soundtrack' : 'soundtracks'
+    }`;
+
   useEffect(() => {
-    if (globalState.loggedUser.id) {
-      getUserSoundtracks(globalState.loggedUser.id).then(userSoundtracks => {
+    if (userId) {
+      getUserSoundtracks(userId).then(userSoundtracks => {
         setUserSoundtracksList(userSoundtracks);
       });
     }
-  }, [globalState.loggedUser.id]);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -38,13 +45,15 @@ const UserProfileScreen = ({
           }
         />
         <Title>{globalState.loggedUser.given_name}</Title>
-
-        {userSoundtracksList.length && (
-          <View style={styles.soundtracksListContainer}>
-            <SoundtrackItemList soundtracksList={userSoundtracksList} />
-          </View>
-        )}
       </View>
+
+      <Title>{numberOfSoundtracksMessage()}</Title>
+
+      {userSoundtracksList.length != 0 && (
+        <View style={styles.soundtracksListContainer}>
+          <SoundtrackItemList soundtracksList={userSoundtracksList} />
+        </View>
+      )}
     </View>
   );
 };
@@ -56,7 +65,7 @@ const styles = StyleSheet.create({
   },
   centeredContent: {
     alignItems: 'center',
-    margin: 30
+    marginTop: 60
   },
   soundtracksListContainer: {
     flex: 1,
