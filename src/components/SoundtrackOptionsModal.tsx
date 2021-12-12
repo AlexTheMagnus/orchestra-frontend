@@ -33,8 +33,14 @@ const SoundtrackOptionsModal = ({
   route,
   navigation
 }: StackScreenProps<StackParamList, 'SoundtrackOptions'>) => {
-  const { bookCover, soundtrackTitle, bookTitle, author, soundtrackId } =
-    route.params;
+  const {
+    bookCover,
+    soundtrackTitle,
+    bookTitle,
+    authorId,
+    authorName,
+    soundtrackId
+  } = route.params;
 
   const globalState: GlobalState = useContext(AppContext);
   const [isDeleteSoundtrackDialogVisible, setIsDeleteSoundtrackDialogVisible] =
@@ -49,7 +55,7 @@ const SoundtrackOptionsModal = ({
       ? globalState.loggedUserFavorites.includes(soundtrackId)
       : false;
 
-  const isAuthor = () => author === globalState.loggedUser.given_name;
+  const isAuthor = () => authorId === globalState.loggedUser.id;
 
   const showUpdateSoundtrackTitleDialog = () =>
     setIsUpdateSoundtrackTitleDialogVisible(true);
@@ -223,7 +229,7 @@ const SoundtrackOptionsModal = ({
         bookCover={bookCover}
         soundtrackTitle={soundtrackTitle}
         bookTitle={bookTitle}
-        author={author}
+        authorName={authorName}
       />
 
       {isAuthor() ? (
