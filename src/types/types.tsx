@@ -10,6 +10,15 @@ import {
   TextStyle
 } from 'react-native';
 
+export type GlobalState = {
+  accessToken: string | null;
+  setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
+  loggedUser: LoggedUserParamList;
+  setLoggedUser: React.Dispatch<React.SetStateAction<LoggedUserParamList>>;
+  loggedUserFavorites: string[] | null;
+  setLoggedUserFavorites: React.Dispatch<React.SetStateAction<string[] | null>>;
+};
+
 export type StackParamList = ModalsParamList & {
   Access: undefined;
   Root: undefined;

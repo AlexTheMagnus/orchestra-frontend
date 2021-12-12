@@ -26,5 +26,5 @@ export default {
   secondaryColorLight: '#F2C037',
   textColor: '#FFFFFF',
   textColorDark: '#B8B8B8',
-  transparent: '#000000'
+  transparent: 'transparent'
 };

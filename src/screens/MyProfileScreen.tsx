@@ -20,6 +20,7 @@ const MyProfileScreen = ({
       picture: ''
     });
     globalState.setAccessToken(null);
+    globalState.setLoggedUserFavorites(null);
   };
 
   const logout = () => {
@@ -44,7 +45,11 @@ const MyProfileScreen = ({
       <View style={styles.centeredContent}>
         <Avatar.Image
           size={150}
-          source={{ uri: globalState.loggedUser.picture }}
+          source={
+            globalState.loggedUser.picture
+              ? { uri: globalState.loggedUser.picture }
+              : require('../assets/images/avatar-placeholder.png')
+          }
         />
         <Title>{globalState.loggedUser.given_name}</Title>
       </View>
