@@ -13,8 +13,8 @@ import {
 export type GlobalState = {
   accessToken: string | null;
   setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
-  loggedUser: LoggedUserParamList;
-  setLoggedUser: React.Dispatch<React.SetStateAction<LoggedUserParamList>>;
+  loggedUser: UserParamList;
+  setLoggedUser: React.Dispatch<React.SetStateAction<UserParamList>>;
   loggedUserFavorites: string[] | null;
   setLoggedUserFavorites: React.Dispatch<React.SetStateAction<string[] | null>>;
 };
@@ -95,7 +95,7 @@ export type SoundtrackInfoParamList = {
   authorName: string;
 };
 
-export type LoggedUserParamList = {
+export type UserParamList = {
   id: string;
   username: string;
   avatar: string;
