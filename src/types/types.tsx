@@ -97,8 +97,8 @@ export type SoundtrackInfoParamList = {
 
 export type LoggedUserParamList = {
   id: string;
-  given_name: string;
-  picture: string;
+  username: string;
+  avatar: string;
 };
 
 export type BookResultParamList = {
