@@ -39,12 +39,12 @@ const UserProfileScreen = ({
         <Avatar.Image
           size={150}
           source={
-            globalState.loggedUser.picture
-              ? { uri: globalState.loggedUser.picture }
+            globalState.loggedUser.avatar
+              ? { uri: globalState.loggedUser.avatar }
               : require('../assets/images/avatar-placeholder.png')
           }
         />
-        <Title>{globalState.loggedUser.given_name}</Title>
+        <Title>{globalState.loggedUser.username}</Title>
       </View>
 
       <Title>{numberOfSoundtracksMessage()}</Title>

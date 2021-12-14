@@ -17,8 +17,8 @@ const App = () => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [loggedUser, setLoggedUser] = useState<LoggedUserParamList>({
     id: '',
-    given_name: '',
-    picture: ''
+    username: '',
+    avatar: ''
   });
   const [loggedUserFavorites, setLoggedUserFavorites] = useState<
     string[] | null

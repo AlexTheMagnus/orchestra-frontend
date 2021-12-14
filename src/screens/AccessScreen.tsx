@@ -100,9 +100,8 @@ const AccessScreen = ({
     globalState.setAccessToken(accessResponse.access_token);
     globalState.setLoggedUser({
       id: accessResponse.user_id,
-      given_name: accessResponse.username,
-      picture: accessResponse.user_avatar,
-      favorites: globalState.loggedUser.favorites
+      username: accessResponse.username,
+      avatar: accessResponse.user_avatar
     });
   };
 

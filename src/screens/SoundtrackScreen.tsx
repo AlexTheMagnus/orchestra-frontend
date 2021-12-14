@@ -189,7 +189,7 @@ const SoundtrackScreen = ({
         bookCover={soundtrackInfo.bookCover}
         soundtrackTitle={soundtrackInfo.soundtrackTitle}
         bookTitle={soundtrackInfo.bookTitle}
-        author={soundtrackInfo.authorName}
+        authorName={soundtrackInfo.authorName}
       />
 
       {globalState.loggedUser.id === authorId && (
@@ -217,7 +217,7 @@ const SoundtrackScreen = ({
             }}
           />
         ))
-      ) : globalState.loggedUser.given_name === authorId ? (
+      ) : globalState.loggedUser.username === authorId ? (
         <AddChapterMesage />
       ) : (
         <EmptyView icon="mySoundtracks" message={emptyMessage} />
