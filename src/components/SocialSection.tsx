@@ -60,10 +60,7 @@ const SocialSection = ({
     }
 
     const jsonResponse = await response.json();
-    const followers = jsonResponse.followers;
-    console.log('followers', followers);
-
-    return followers;
+    return jsonResponse.followers;
   };
 
   const getFollowedUsers = async (): Promise<UserResponse[]> => {
@@ -86,10 +83,7 @@ const SocialSection = ({
     }
 
     const jsonResponse = await response.json();
-    const followedUsers = jsonResponse.followed_users;
-    console.log('followedUsers', followedUsers);
-
-    return followedUsers;
+    return jsonResponse.followed_users;
   };
 
   const followUser = async () => {
