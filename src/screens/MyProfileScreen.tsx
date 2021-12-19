@@ -1,17 +1,37 @@
-import React, { useContext } from 'react';
-import { Avatar, Title, Button } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
+import React, { useContext, useEffect } from 'react';
+import { Avatar, Button, Title } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
+import { StyleSheet } from 'react-native';
 
+import { getUserSoundtracks } from '../components/utils';
+import {
+  GlobalState,
+  SoundtrackItemParamList,
+  StackParamList
+} from '../types/types';
 import { View } from '../components/Themed';
-import { StackParamList } from '../types/types';
 import AppContext from '../../AppContext';
 import OrchestraColors from '../constants/OrchestraColors';
+import SocialSection from '../components/SocialSection';
+import SoundtrackCounter from '../components/SoundtrackCounter';
+import SoundtrackItemList from '../components/SoundtrackItemList';
 
 const MyProfileScreen = ({
   navigation
 }: StackScreenProps<StackParamList, 'MyProfile'>) => {
-  const globalState = useContext(AppContext);
+  const globalState: GlobalState = useContext(AppContext);
+
+  const [mySoundtracksList, setMySoundtracksList] = React.useState<
+    SoundtrackItemParamList[]
+  >([]);
+
+  useEffect(() => {
+    if (globalState.loggedUser.id) {
+      getUserSoundtracks(globalState.loggedUser.id).then(mySoundtracks =>
+        setMySoundtracksList(mySoundtracks)
+      );
+    }
+  }, []);
 
   const cleanSessionData = () => {
     globalState.setLoggedUser({
@@ -52,7 +72,20 @@ const MyProfileScreen = ({
           }
         />
         <Title>{globalState.loggedUser.username}</Title>
+
+        <SocialSection
+          profileUserId={globalState.loggedUser.id}
+          showFollowButton={false}
+        />
       </View>
+
+      <SoundtrackCounter numberOfSountracks={mySoundtracksList.length} />
+
+      {mySoundtracksList.length != 0 && (
+        <View style={styles.soundtracksListContainer}>
+          <SoundtrackItemList soundtracksList={mySoundtracksList} />
+        </View>
+      )}
     </View>
   );
 };
@@ -64,12 +97,16 @@ const styles = StyleSheet.create({
   },
   centeredContent: {
     alignItems: 'center',
-    margin: 30
+    marginTop: 30
   },
   logoutText: {
     color: OrchestraColors.textColorDark
   },
-  logoutButton: { alignSelf: 'flex-end' }
+  logoutButton: { alignSelf: 'flex-end' },
+  soundtracksListContainer: {
+    flex: 1,
+    width: '100%'
+  }
 });
 
 export default MyProfileScreen;

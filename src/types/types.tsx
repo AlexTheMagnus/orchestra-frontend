@@ -132,11 +132,14 @@ export type OrchestraButtonProps = {
     | RecursiveArray<TextStyle>;
 };
 
-export type AccessResponse = {
-  access_token: string;
+export type UserResponse = {
   user_id: string;
   username: string;
   user_avatar: string;
+};
+
+export type AccessResponse = UserResponse & {
+  access_token: string;
 };
 
 export type ThemeParamList = {

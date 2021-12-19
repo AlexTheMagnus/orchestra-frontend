@@ -3,15 +3,17 @@ import { Avatar, Title } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
 
+import { BACKEND_URL } from '@env';
 import { getUserSoundtracks } from '../components/utils';
+import { View } from '../components/Themed';
+import SocialSection from '../components/SocialSection';
+import SoundtrackItemList from '../components/SoundtrackItemList';
 import {
   SoundtrackItemParamList,
   StackParamList,
   UserParamList
 } from '../types/types';
-import { View } from '../components/Themed';
-import SoundtrackItemList from '../components/SoundtrackItemList';
-import { BACKEND_URL } from '@env';
+import SoundtrackCounter from '../components/SoundtrackCounter';
 
 const UserProfileScreen = ({
   route
@@ -36,11 +38,6 @@ const UserProfileScreen = ({
       );
     }
   }, []);
-
-  const numberOfSoundtracksMessage = (): string =>
-    `${userSoundtracksList.length} ${
-      userSoundtracksList.length == 1 ? 'soundtrack' : 'soundtracks'
-    }`;
 
   const getUserInfo = async () => {
     const response = await fetch(`${BACKEND_URL}/users/${userId}`, {
@@ -79,7 +76,9 @@ const UserProfileScreen = ({
         <Title>{userInfo.username}</Title>
       </View>
 
-      <Title>{numberOfSoundtracksMessage()}</Title>
+      <SocialSection profileUserId={userId} showFollowButton={true} />
+
+      <SoundtrackCounter numberOfSountracks={userSoundtracksList.length} />
 
       {userSoundtracksList.length != 0 && (
         <View style={styles.soundtracksListContainer}>
