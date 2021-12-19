@@ -144,6 +144,8 @@ const SoundtrackOptionsModal = ({
       }
     );
 
+    updateLoggedUserFavoriteSoundtracks();
+
     if (!deleteResponse.ok) {
       const message = `An error has occured: Status error ${deleteResponse.status}`;
       alert(message);
