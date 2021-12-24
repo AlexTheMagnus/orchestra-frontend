@@ -10,10 +10,12 @@ import * as React from 'react';
 
 import OrchestraColors from '../constants/OrchestraColors';
 import useColorScheme from '../hooks/useColorScheme';
-import MySoundtracksScreen from '../screens/MySoundtracksScreen';
 import FavoritesScreen from '../screens/FavoritesScreen';
-import SearchScreen from '../screens/SearchScreen';
+import FollowersScreen from '../screens/FollowersScreen';
+import FollowingScreen from '../screens/FollowingScreen';
 import MyProfileScreen from '../screens/MyProfileScreen';
+import MySoundtracksScreen from '../screens/MySoundtracksScreen';
+import SearchScreen from '../screens/SearchScreen';
 import SoundtrackScreen from '../screens/SoundtrackScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import {
@@ -34,7 +36,12 @@ export default function BottomTabNavigator() {
       initialRouteName="My soundtracks"
       tabBarOptions={{ activeTintColor: OrchestraColors[colorScheme].tint }}
       screenOptions={({ route }) => ({
-        tabBarButton: ['Soundtrack', 'UserProfile'].includes(route.name)
+        tabBarButton: [
+          'Soundtrack',
+          'UserProfile',
+          'Followers',
+          'Following'
+        ].includes(route.name)
           ? () => {
               return null;
             }
@@ -77,6 +84,8 @@ export default function BottomTabNavigator() {
       />
       <BottomTab.Screen name="Soundtrack" component={SoundtrackScreen} />
       <BottomTab.Screen name="UserProfile" component={UserProfileScreen} />
+      <BottomTab.Screen name="Followers" component={FollowersScreen} />
+      <BottomTab.Screen name="Following" component={FollowingScreen} />
     </BottomTab.Navigator>
   );
 }
