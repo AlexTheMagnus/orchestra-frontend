@@ -1,12 +1,15 @@
 import React, { useContext, useEffect } from 'react';
-import { Button, Subheading } from 'react-native-paper';
+import { Button, Subheading, TouchableRipple } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
-import AppContext from '../../AppContext';
+import { useNavigation } from '@react-navigation/core';
 
-import OrchestraColors from '../constants/OrchestraColors';
 import { BACKEND_URL } from '@env';
+import { getFollowers, getFollowedUsers } from './utils';
 import { UserResponse } from '../types/types';
 import { View } from '../components/Themed';
+import AppContext from '../../AppContext';
+import OrchestraColors from '../constants/OrchestraColors';
 
 const SocialSection = ({
   profileUserId,
@@ -19,12 +22,13 @@ const SocialSection = ({
   const [followers, setFollowers] = React.useState<UserResponse[]>([]);
   const [followedUsers, setFollowedUsers] = React.useState<UserResponse[]>([]);
   const [isFollower, setIsFollower] = React.useState(false);
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const followerMessage = 'Following';
   const nonFollowerMessage = 'Follow';
 
   useEffect(() => {
-    getFollowers().then(result => {
+    getFollowers(profileUserId).then(result => {
       setFollowers(result);
       result
         .map(follower => follower.user_id)
@@ -35,56 +39,10 @@ const SocialSection = ({
   }, [isFollower]);
 
   useEffect(() => {
-    getFollowedUsers().then(result => {
+    getFollowedUsers(profileUserId).then(result => {
       setFollowedUsers(result);
     });
   }, []);
-
-  const getFollowers = async (): Promise<UserResponse[]> => {
-    const response = await fetch(
-      `${BACKEND_URL}/users/${profileUserId}/followers`,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-
-    if (!response.ok) {
-      const message = `An error has occured when loading the followers: Status error ${response.status}`;
-      alert(message);
-      console.error(message);
-      return [];
-    }
-
-    const jsonResponse = await response.json();
-    return jsonResponse.followers;
-  };
-
-  const getFollowedUsers = async (): Promise<UserResponse[]> => {
-    const response = await fetch(
-      `${BACKEND_URL}/users/${profileUserId}/followed-users`,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-
-    if (!response.ok) {
-      const message = `An error has occured when loading the followers: Status error ${response.status}`;
-      alert(message);
-      console.error(message);
-      return [];
-    }
-
-    const jsonResponse = await response.json();
-    return jsonResponse.followed_users;
-  };
 
   const followUser = async () => {
     const response = await fetch(`${BACKEND_URL}/users/follow`, {
@@ -131,6 +89,20 @@ const SocialSection = ({
     setIsFollower(false);
   };
 
+  const openFollowersScreen = (userId: string) => {
+    navigation.push('Root', {
+      screen: 'Followers',
+      params: { userId }
+    });
+  };
+
+  const openFollowingScreen = (userId: string) => {
+    navigation.push('Root', {
+      screen: 'Following',
+      params: { userId }
+    });
+  };
+
   return (
     <View>
       {showFollowButton && (
@@ -150,18 +122,28 @@ const SocialSection = ({
       )}
 
       <View style={styles.counterSection}>
-        <View style={styles.counterContainer}>
-          <Subheading style={styles.primmaryText}>
-            {followers.length}
-          </Subheading>
-          <Subheading style={styles.secondaryText}>Followers</Subheading>
-        </View>
-        <View style={styles.counterContainer}>
-          <Subheading style={styles.primmaryText}>
-            {followedUsers.length}
-          </Subheading>
-          <Subheading style={styles.secondaryText}>Following</Subheading>
-        </View>
+        <TouchableRipple
+          onPress={() => openFollowersScreen(profileUserId)}
+          rippleColor="transparent"
+        >
+          <View style={styles.counterContainer}>
+            <Subheading style={styles.primmaryText}>
+              {followers.length}
+            </Subheading>
+            <Subheading style={styles.secondaryText}>Followers</Subheading>
+          </View>
+        </TouchableRipple>
+        <TouchableRipple
+          onPress={() => openFollowingScreen(profileUserId)}
+          rippleColor="transparent"
+        >
+          <View style={styles.counterContainer}>
+            <Subheading style={styles.primmaryText}>
+              {followedUsers.length}
+            </Subheading>
+            <Subheading style={styles.secondaryText}>Following</Subheading>
+          </View>
+        </TouchableRipple>
       </View>
     </View>
   );

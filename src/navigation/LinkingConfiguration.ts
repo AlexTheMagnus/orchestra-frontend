@@ -37,6 +37,12 @@ export default {
           },
           UserProfile: {
             path: 'user'
+          },
+          Followers: {
+            path: 'followers'
+          },
+          Following: {
+            path: 'following'
           }
         }
       },

@@ -61,6 +61,12 @@ export type BottomTabParamList = {
   UserProfile: {
     userId: string;
   };
+  Followers: {
+    userId: string;
+  };
+  Following: {
+    userId: string;
+  };
 };
 
 export type MySoundtracksParamList = {

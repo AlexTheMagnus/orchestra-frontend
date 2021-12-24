@@ -1,7 +1,8 @@
 import { BACKEND_URL } from '@env';
 import {
   JsonSoundtrackParamList,
-  SoundtrackItemParamList
+  SoundtrackItemParamList,
+  UserResponse
 } from '../types/types';
 
 const getAuthorName = async (authorId: string) => {
@@ -160,4 +161,54 @@ export const getUserSoundtracks = async (userId: string) => {
     )
   );
   return soundtrackItemList;
+};
+
+export const getFollowers = async (
+  profileUserId: string
+): Promise<UserResponse[]> => {
+  const response = await fetch(
+    `${BACKEND_URL}/users/${profileUserId}/followers`,
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+
+  if (!response.ok) {
+    const message = `An error has occured when loading the followers: Status error ${response.status}`;
+    alert(message);
+    console.error(message);
+    return [];
+  }
+
+  const jsonResponse = await response.json();
+  return jsonResponse.followers;
+};
+
+export const getFollowedUsers = async (
+  profileUserId: string
+): Promise<UserResponse[]> => {
+  const response = await fetch(
+    `${BACKEND_URL}/users/${profileUserId}/followed-users`,
+    {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+
+  if (!response.ok) {
+    const message = `An error has occured when loading the followers: Status error ${response.status}`;
+    alert(message);
+    console.error(message);
+    return [];
+  }
+
+  const jsonResponse = await response.json();
+  return jsonResponse.followed_users;
 };
