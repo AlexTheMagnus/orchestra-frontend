@@ -29,8 +29,9 @@ const UserList = ({ userList }: { userList: UserResponse[] }) => {
   return (
     <View style={styles.screeenContainer}>
       <ScrollView style={styles.favoriteSoundtrackListContainer}>
-        {userList.map(({ user_id, username, user_avatar }) => (
+        {userList.map(({ user_id, username, user_avatar }, index) => (
           <TouchableRipple
+            key={index}
             onPress={() => openUserProfileScreen(user_id)}
             rippleColor="rgba(0, 0, 0, .32)"
           >
