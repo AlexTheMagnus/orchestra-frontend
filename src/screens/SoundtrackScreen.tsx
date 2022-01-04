@@ -56,7 +56,8 @@ const SoundtrackScreen = ({
     bookCover: '',
     soundtrackTitle: '',
     bookTitle: '',
-    author: '',
+    authorId: '',
+    authorName: '',
     soundtrackId: soundtrackId
   };
 
@@ -78,15 +79,13 @@ const SoundtrackScreen = ({
 
   useEffect(() => {
     getSoundtrackById(soundtrackId).then(async soundtrack => {
-      soundtrack && setAuthorId(soundtrack.author);
+      soundtrack && setAuthorId(soundtrack.authorId);
       soundtrack && setSoundtrackInfo(soundtrack);
       const chapters = await getSoundtrackChapters();
       chapters &&
         setChaptersList(
           chapters.sort((a, b) => a.chapterNumber - b.chapterNumber)
         );
-      console.log('authorId', authorId);
-      console.log('global authorId', globalState.loggedUser.id);
     });
   }, []);
 
@@ -190,10 +189,10 @@ const SoundtrackScreen = ({
         bookCover={soundtrackInfo.bookCover}
         soundtrackTitle={soundtrackInfo.soundtrackTitle}
         bookTitle={soundtrackInfo.bookTitle}
-        author={soundtrackInfo.author}
+        authorName={soundtrackInfo.authorName}
       />
 
-      {globalState.loggedUser.given_name === authorId && (
+      {globalState.loggedUser.id === authorId && (
         <View style={styles.container}>
           <AddChapterButton
             onPress={showDialog}
@@ -218,7 +217,7 @@ const SoundtrackScreen = ({
             }}
           />
         ))
-      ) : globalState.loggedUser.given_name === authorId ? (
+      ) : globalState.loggedUser.username === authorId ? (
         <AddChapterMesage />
       ) : (
         <EmptyView icon="mySoundtracks" message={emptyMessage} />

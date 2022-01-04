@@ -29,15 +29,7 @@ const AccessScreen = ({
   const [request, response, promptAsync] = useAuthRequest(
     {
       clientId: SPOTIFY_CLIENT_ID,
-      scopes: [
-        'user-read-email',
-        'user-read-private',
-        'streaming',
-        'app-remote-control',
-        'user-read-playback-state',
-        'user-modify-playback-state',
-        'user-read-currently-playing'
-      ],
+      scopes: ['user-read-email', 'user-read-private'],
       // In order to follow the "Authorization Code Flow" to fetch token after authorizationEndpoint
       // this must be set to false
       usePKCE: false,
@@ -100,9 +92,8 @@ const AccessScreen = ({
     globalState.setAccessToken(accessResponse.access_token);
     globalState.setLoggedUser({
       id: accessResponse.user_id,
-      given_name: accessResponse.username,
-      picture: accessResponse.user_avatar,
-      favorites: globalState.loggedUser.favorites
+      username: accessResponse.username,
+      avatar: accessResponse.user_avatar
     });
   };
 

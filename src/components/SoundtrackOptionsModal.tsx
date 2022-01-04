@@ -6,7 +6,11 @@ import DialogInput from 'react-native-dialog-input';
 
 import { BACKEND_URL } from '@env';
 import { getUserFavoritesRequest } from './utils';
-import { StackParamList, GlobalState } from '../types/types';
+import {
+  StackParamList,
+  GlobalState,
+  SoundtrackItemParamList
+} from '../types/types';
 import { View } from 'react-native';
 import AppContext from '../../AppContext';
 import FullScreenModal from './FullScreenModal';
@@ -33,8 +37,14 @@ const SoundtrackOptionsModal = ({
   route,
   navigation
 }: StackScreenProps<StackParamList, 'SoundtrackOptions'>) => {
-  const { bookCover, soundtrackTitle, bookTitle, author, soundtrackId } =
-    route.params;
+  const {
+    bookCover,
+    soundtrackTitle,
+    bookTitle,
+    authorId,
+    authorName,
+    soundtrackId
+  }: SoundtrackItemParamList = route.params;
 
   const globalState: GlobalState = useContext(AppContext);
   const [isDeleteSoundtrackDialogVisible, setIsDeleteSoundtrackDialogVisible] =
@@ -48,6 +58,8 @@ const SoundtrackOptionsModal = ({
     globalState.loggedUserFavorites
       ? globalState.loggedUserFavorites.includes(soundtrackId)
       : false;
+
+  const isAuthor = () => authorId === globalState.loggedUser.id;
 
   const showUpdateSoundtrackTitleDialog = () =>
     setIsUpdateSoundtrackTitleDialogVisible(true);
@@ -131,6 +143,8 @@ const SoundtrackOptionsModal = ({
         }
       }
     );
+
+    updateLoggedUserFavoriteSoundtracks();
 
     if (!deleteResponse.ok) {
       const message = `An error has occured: Status error ${deleteResponse.status}`;
@@ -221,27 +235,30 @@ const SoundtrackOptionsModal = ({
         bookCover={bookCover}
         soundtrackTitle={soundtrackTitle}
         bookTitle={bookTitle}
-        author={author}
+        authorName={authorName}
       />
 
-      {author === globalState.loggedUser.given_name ? (
-        <View>
-          <TextButton
-            style={styles.soundtrackOptions}
-            message="Change title"
-            onPress={showUpdateSoundtrackTitleDialog}
-          />
-          <TextButton
-            style={styles.soundtrackOptions}
-            message="Change book"
-            onPress={() => {
-              navigation.push('ChooseBook', {
-                soundtrackTitle,
-                soundtrackToUpdate: soundtrackId
-              } as never);
-            }}
-          />
-        </View>
+      {isAuthor() ? (
+        <TextButton
+          style={styles.soundtrackOptions}
+          message="Change title"
+          onPress={showUpdateSoundtrackTitleDialog}
+        />
+      ) : (
+        <View />
+      )}
+
+      {isAuthor() ? (
+        <TextButton
+          style={styles.soundtrackOptions}
+          message="Change book"
+          onPress={() => {
+            navigation.push('ChooseBook', {
+              soundtrackTitle,
+              soundtrackToUpdate: soundtrackId
+            } as never);
+          }}
+        />
       ) : (
         <View />
       )}
@@ -260,13 +277,22 @@ const SoundtrackOptionsModal = ({
         />
       )}
 
-      <TextButton
-        style={styles.soundtrackOptions}
-        message="Go to author"
-        onPress={() => console.log(isFavorite())}
-      />
+      {!isAuthor() ? (
+        <TextButton
+          style={styles.soundtrackOptions}
+          message="Go to author"
+          onPress={() => {
+            navigation.push('Root', {
+              screen: 'UserProfile',
+              params: { userId: authorId }
+            } as never);
+          }}
+        />
+      ) : (
+        <View />
+      )}
 
-      {author === globalState.loggedUser.given_name ? (
+      {isAuthor() ? (
         <TextButton
           style={styles.soundtrackOptions}
           message="Delete"

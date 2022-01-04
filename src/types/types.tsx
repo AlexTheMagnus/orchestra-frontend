@@ -13,8 +13,8 @@ import {
 export type GlobalState = {
   accessToken: string | null;
   setAccessToken: React.Dispatch<React.SetStateAction<string | null>>;
-  loggedUser: LoggedUserParamList;
-  setLoggedUser: React.Dispatch<React.SetStateAction<LoggedUserParamList>>;
+  loggedUser: UserParamList;
+  setLoggedUser: React.Dispatch<React.SetStateAction<UserParamList>>;
   loggedUserFavorites: string[] | null;
   setLoggedUserFavorites: React.Dispatch<React.SetStateAction<string[] | null>>;
 };
@@ -30,6 +30,9 @@ export type StackParamList = ModalsParamList & {
   MyProfile: undefined;
   Soundtrack: {
     soundtrackId: string;
+  };
+  UserProfile: {
+    userId: string;
   };
   ChooseTheme: {
     soundtrackId: string;
@@ -55,6 +58,15 @@ export type BottomTabParamList = {
   Soundtrack: {
     soundtrackId: string;
   };
+  UserProfile: {
+    userId: string;
+  };
+  Followers: {
+    userId: string;
+  };
+  Following: {
+    userId: string;
+  };
 };
 
 export type MySoundtracksParamList = {
@@ -77,7 +89,8 @@ export type SoundtrackItemParamList = {
   bookCover: string;
   soundtrackTitle: string;
   bookTitle: string;
-  author: string;
+  authorId: string;
+  authorName: string;
   soundtrackId: string;
 };
 
@@ -85,13 +98,13 @@ export type SoundtrackInfoParamList = {
   bookCover: string;
   soundtrackTitle: string;
   bookTitle: string;
-  author: string;
+  authorName: string;
 };
 
-export type LoggedUserParamList = {
+export type UserParamList = {
   id: string;
-  given_name: string;
-  picture: string;
+  username: string;
+  avatar: string;
 };
 
 export type BookResultParamList = {
@@ -125,11 +138,14 @@ export type OrchestraButtonProps = {
     | RecursiveArray<TextStyle>;
 };
 
-export type AccessResponse = {
-  access_token: string;
+export type UserResponse = {
   user_id: string;
   username: string;
   user_avatar: string;
+};
+
+export type AccessResponse = UserResponse & {
+  access_token: string;
 };
 
 export type ThemeParamList = {
