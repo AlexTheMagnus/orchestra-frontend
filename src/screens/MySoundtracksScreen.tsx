@@ -2,17 +2,15 @@ import React, { useContext, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import DialogInput from 'react-native-dialog-input';
 import { StackScreenProps } from '@react-navigation/stack';
-import { BACKEND_URL } from '@env';
 
 import { View } from '../components/Themed';
 import AppContext from '../../AppContext';
 import {
-  JsonSoundtrackParamList,
   OrchestraButtonProps,
   SoundtrackItemParamList,
   StackParamList
 } from '../types/types';
-import { fromJsonToSoundtrackItem } from '../components/utils';
+import { getUserSoundtracks } from '../components/utils';
 import EmptyView from '../components/EmptyView';
 import OrchestraButton from '../components/OrchestraButton';
 import SoundtrackItemList from '../components/SoundtrackItemList';
@@ -75,36 +73,6 @@ const MySoundtracksScreen = ({
     );
   };
 
-  const getUserSoundtracks = async (userId: string) => {
-    const response = await fetch(`${BACKEND_URL}/soundtracks/user/${userId}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'
-      }
-    });
-
-    if (!response.ok) {
-      const message = `An error has occured while loading your soundtracks: Status error ${response.status}`;
-      alert(message);
-      console.error(message);
-    }
-
-    const json = await response.json();
-    var soundtrackItemList: SoundtrackItemParamList[] = [];
-
-    await Promise.all(
-      json.soundtracks_list.map(
-        async (jsonSoundtrack: JsonSoundtrackParamList) => {
-          soundtrackItemList.push(
-            await fromJsonToSoundtrackItem(jsonSoundtrack)
-          );
-        }
-      )
-    );
-    return soundtrackItemList;
-  };
-
   return (
     <View style={styles.screeenContainer}>
       <CreateSoundtrackButton
@@ -117,7 +85,7 @@ const MySoundtracksScreen = ({
           <EmptyView icon="mySoundtracks" message={emptyMessage} />
         </View>
       ) : (
-        <View style={styles.mySoundtrackListContainer}>
+        <View style={styles.mySoundtracksListContainer}>
           <SoundtrackItemList
             soundtracksList={userSoundtracksList}
             styles={styles.soundtrackItemList}
@@ -140,7 +108,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 200
   },
-  mySoundtrackListContainer: {
+  mySoundtracksListContainer: {
     flex: 1,
     width: '100%'
   },

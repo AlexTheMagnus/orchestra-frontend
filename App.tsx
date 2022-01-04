@@ -5,7 +5,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import React, { useState } from 'react';
 
 import AppContext from './AppContext';
-import { LoggedUserParamList, GlobalState } from './src/types/types';
+import { UserParamList, GlobalState } from './src/types/types';
 import useCachedResources from './src/hooks/useCachedResources';
 import useColorScheme from './src/hooks/useColorScheme';
 import Navigation from './src/navigation';
@@ -15,10 +15,10 @@ const App = () => {
   const colorScheme = useColorScheme();
 
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [loggedUser, setLoggedUser] = useState<LoggedUserParamList>({
+  const [loggedUser, setLoggedUser] = useState<UserParamList>({
     id: '',
-    given_name: '',
-    picture: ''
+    username: '',
+    avatar: ''
   });
   const [loggedUserFavorites, setLoggedUserFavorites] = useState<
     string[] | null
