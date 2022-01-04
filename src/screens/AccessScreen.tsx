@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { useAuthRequest } from 'expo-auth-session';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -38,8 +38,9 @@ const AccessScreen = ({
     discovery
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (response?.type === 'success') {
+      console.log('response', response);
       const { code } = response.params;
       sendAccessRequest(code).then(accessResponse => {
         setUserInfoOnLogin(accessResponse);
