@@ -158,7 +158,11 @@ const ChapterOptionsModal = ({
       <TextButton
         style={styles.chapterOption}
         message="Change theme"
-        onPress={() => {}}
+        onPress={() => {
+          navigation.push('ChooseTheme', {
+            chapterToUpdate: chapterId
+          } as never);
+        }}
       />
 
       <TextButton

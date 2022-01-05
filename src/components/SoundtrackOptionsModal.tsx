@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
-import { TouchableRipple, Dialog, Portal } from 'react-native-paper';
+import { TouchableRipple } from 'react-native-paper';
 
 import { BACKEND_URL } from '@env';
 import { getUserFavoritesRequest } from './utils';
@@ -13,11 +13,10 @@ import {
 import { View } from 'react-native';
 import AppContext from '../../AppContext';
 import ChooseSoundtrackTitleModal from './ChooseSoundtrackTitleModal';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 import FullScreenModal from './FullScreenModal';
-import OrchestraColors from '../constants/OrchestraColors';
 import SoundtrackInfo from './SoundtrackInfo';
 import TextButton from './TextButton';
-import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 const SoundtrackOptionModal = ({
   route,
@@ -209,7 +208,6 @@ const SoundtrackOptionModal = ({
           message="Change book"
           onPress={() => {
             navigation.push('ChooseBook', {
-              soundtrackTitle,
               soundtrackToUpdate: soundtrackId
             } as never);
           }}
