@@ -127,26 +127,24 @@ const ChooseBookScreen = ({
   };
 
   const listResults = () => {
-    return resultsList.map((result, index) => {
-      return (
-        <TouchableRipple
-          onPress={
-            soundtrackToUpdate
-              ? () => updateSoundtrack(result.isbn)
-              : () => createSoundtrack(result.isbn)
-          }
-          rippleColor="rgba(0, 0, 0, .32)"
+    return resultsList.map((result, index) => (
+      <TouchableRipple
+        onPress={
+          soundtrackToUpdate
+            ? () => updateSoundtrack(result.isbn)
+            : () => createSoundtrack(result.isbn)
+        }
+        rippleColor="rgba(0, 0, 0, .32)"
+        key={index}
+      >
+        <BookSearchItem
+          bookTitle={result.title}
+          author={result.author}
+          bookCover={result.cover}
           key={index}
-        >
-          <BookSearchItem
-            bookTitle={result.title}
-            author={result.author}
-            bookCover={result.cover}
-            key={index}
-          />
-        </TouchableRipple>
-      );
-    });
+        />
+      </TouchableRipple>
+    ));
   };
 
   return (

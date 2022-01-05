@@ -38,6 +38,7 @@ export type StackParamList = ModalsParamList & {
     soundtrackId: string;
     chapterNumber: number;
     chapterTitle: string;
+    chapterToUpdate: string;
   };
   NotFound: undefined;
   Modal: {

@@ -18,7 +18,8 @@ const ChooseThemeScreen = ({
   route,
   navigation
 }: StackScreenProps<StackParamList, 'ChooseTheme'>) => {
-  const { soundtrackId, chapterNumber, chapterTitle } = route.params;
+  const { soundtrackId, chapterNumber, chapterTitle, chapterToUpdate } =
+    route.params;
   const appNavigation = useNavigation<StackNavigationProp<any>>();
   const globalState = useContext(AppContext);
   const [resultsList, setResultsList] = useState<Array<ThemeParamList>>([]);
@@ -91,18 +92,46 @@ const ChooseThemeScreen = ({
     });
   };
 
-  const listResults = () => {
-    return resultsList.map((result, index) => {
-      return (
-        <ThemeItem
-          title={result.title}
-          author={result.author}
-          themeUri={result.themeUri}
-          key={index}
-          onPress={() => createChapter(result.themeUri)}
-        />
-      );
+  const updateChapter = async (newTheme: string) => {
+    const updateResponse = await fetch(
+      `${BACKEND_URL}/chapters/update/${chapterToUpdate}`,
+      {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          theme: newTheme
+        })
+      }
+    );
+
+    if (!updateResponse.ok) {
+      const message = `An error has occured: Status error ${updateResponse.status}`;
+      alert(message);
+    }
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Root' }]
     });
+  };
+
+  const listResults = () => {
+    return resultsList.map((result, index) => (
+      <ThemeItem
+        title={result.title}
+        author={result.author}
+        themeUri={result.themeUri}
+        key={index}
+        onPress={
+          chapterToUpdate
+            ? () => updateChapter(result.themeUri)
+            : () => createChapter(result.themeUri)
+        }
+      />
+    ));
   };
 
   return (
