@@ -17,6 +17,7 @@ import FullScreenModal from './FullScreenModal';
 import OrchestraColors from '../constants/OrchestraColors';
 import SoundtrackInfo from './SoundtrackInfo';
 import TextButton from './TextButton';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 const SoundtrackOptionModal = ({
   route,
@@ -170,33 +171,6 @@ const SoundtrackOptionModal = ({
     });
   };
 
-  const DeleteSoundtrackModal = () => {
-    return (
-      <Portal>
-        <Dialog
-          visible={isDeleteSoundtrackDialogVisible}
-          onDismiss={hideDeleteSoundtrackDialog}
-        >
-          <Dialog.Title style={{ textAlign: 'center' }}>
-            {'Are you sure you want to\n delete it?'}
-          </Dialog.Title>
-          <Dialog.Actions style={styles.dialogActions}>
-            <TextButton
-              style={styles.dialogCancelButton}
-              message={'Cancel'}
-              onPress={hideDeleteSoundtrackDialog}
-            />
-            <TextButton
-              style={styles.dialogDeleteButton}
-              message={'Delete'}
-              onPress={() => deleteSoundtrack()}
-            />
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    );
-  };
-
   return (
     <FullScreenModal>
       <ChooseSoundtrackTitleModal
@@ -205,7 +179,11 @@ const SoundtrackOptionModal = ({
         onClose={hideChooseSoundtrackTitleModal}
       />
       <TouchableRipple onPress={() => {}}>
-        <DeleteSoundtrackModal />
+        <ConfirmDeleteModal
+          isVisible={isDeleteSoundtrackDialogVisible}
+          onDismiss={hideDeleteSoundtrackDialog}
+          onConfirm={deleteSoundtrack}
+        />
       </TouchableRipple>
 
       <SoundtrackInfo
@@ -286,19 +264,6 @@ const styles = StyleSheet.create({
   soundtrackOption: {
     fontSize: 25,
     fontWeight: 'bold',
-    padding: 10
-  },
-  dialogActions: {
-    justifyContent: 'space-evenly'
-  },
-  dialogDeleteButton: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    padding: 10,
-    color: OrchestraColors.secondaryColor
-  },
-  dialogCancelButton: {
-    fontSize: 25,
     padding: 10
   }
 });

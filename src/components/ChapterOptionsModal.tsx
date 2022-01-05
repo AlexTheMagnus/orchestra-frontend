@@ -17,6 +17,7 @@ import FullScreenModal from './FullScreenModal';
 import OrchestraColors from '../constants/OrchestraColors';
 import TextButton from './TextButton';
 import ChooseChapterNumberModal from './ChooseChapterNumberModal';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 
 const ChapterOptionsModal = ({
   route,
@@ -90,6 +91,30 @@ const ChapterOptionsModal = ({
     });
   };
 
+  const deleteChapter = async () => {
+    const deleteResponse = await fetch(
+      `${BACKEND_URL}/chapters/delete/${chapterId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    if (!deleteResponse.ok) {
+      const message = `An error has occured: Status error ${deleteResponse.status}`;
+      alert(message);
+    }
+
+    hideDeleteChapterModal();
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Root' }]
+    });
+  };
+
   return (
     <FullScreenModal>
       <ChooseChapterTitleModal
@@ -109,9 +134,13 @@ const ChapterOptionsModal = ({
         onClose={hideChooseChapterNumberModal}
       />
 
-      {/* <TouchableRipple onPress={() => {}}>
-        <DeleteChapterModal />
-      </TouchableRipple> */}
+      <TouchableRipple onPress={() => {}}>
+        <ConfirmDeleteModal
+          isVisible={isDeleteChapterModalVisible}
+          onDismiss={hideDeleteChapterModal}
+          onConfirm={deleteChapter}
+        />
+      </TouchableRipple>
 
       {/* <SoundtrackInfo
         bookCover={bookCover}
