@@ -3,22 +3,23 @@
  * https://reactnavigation.org/docs/getting-started
  *
  */
-import {
-  NavigationContainer,
-  DefaultTheme,
-  DarkTheme
-} from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer
+} from '@react-navigation/native';
 
+import { ModalsParamList, StackParamList } from '../types/types';
 import AccessScreen from '../screens/AccessScreen';
+import BottomTabNavigator from './BottomTabNavigator';
+import ChapterOptionsModal from '../components/ChapterOptionsModal';
 import ChooseBookScreen from '../screens/ChooseBookScreen';
 import ChooseThemeScreen from '../screens/ChooseThemeScreen';
-import NotFoundScreen from '../screens/NotFoundScreen';
-import { ModalsParamList, StackParamList } from '../types/types';
-import BottomTabNavigator from './BottomTabNavigator';
 import LinkingConfiguration from './LinkingConfiguration';
+import NotFoundScreen from '../screens/NotFoundScreen';
 import SoundtrackOptionsModal from '../components/SoundtrackOptionsModal';
 
 export default function Navigation({
@@ -60,6 +61,10 @@ function ModalStackNavigator() {
       <ModalStack.Screen
         name="SoundtrackOptions"
         component={SoundtrackOptionsModal}
+      />
+      <ModalStack.Screen
+        name="ChapterOptions"
+        component={ChapterOptionsModal}
       />
     </ModalStack.Navigator>
   );
