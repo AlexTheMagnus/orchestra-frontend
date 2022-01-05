@@ -40,7 +40,6 @@ const AccessScreen = ({
 
   useEffect(() => {
     if (response?.type === 'success') {
-      console.log('response', response);
       const { code } = response.params;
       sendAccessRequest(code).then(accessResponse => {
         setUserInfoOnLogin(accessResponse);
