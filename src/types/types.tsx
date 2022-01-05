@@ -48,6 +48,7 @@ export type StackParamList = ModalsParamList & {
 
 export type ModalsParamList = {
   SoundtrackOptions: SoundtrackItemParamList;
+  ChapterOptions: ChapterOptionsModalParamList;
 };
 
 export type BottomTabParamList = {
@@ -173,13 +174,26 @@ export type ChapterParamList = {
 };
 
 export type ChapterItemParamList = {
-  chapterId: string;
   chapterNumber: number;
   chapterTitle: string;
   theme: string;
   onPress(): void;
+  optionsOnPress?(): void;
+};
+
+export type ChapterOptionsModalParamList = {
+  chapterId: string;
+  chapterNumber: number;
+  chapterTitle: string;
+  theme: string;
 };
 
 export type SoundtrackLikeProps = {
   soundtrackId: string;
+};
+
+export type ChooseModalParamList = {
+  isVisible: boolean;
+  onSubmit(inputText: string | number): void;
+  onClose(): void;
 };

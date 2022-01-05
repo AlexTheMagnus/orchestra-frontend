@@ -1,27 +1,26 @@
 import React, { useEffect, useContext } from 'react';
+import { BACKEND_URL } from '@env';
+import { IconButton, Title, Text } from 'react-native-paper';
+import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import * as Linking from 'expo-linking';
-import { IconButton, Title, Text } from 'react-native-paper';
-import DialogInput from 'react-native-dialog-input';
-import { StackScreenProps } from '@react-navigation/stack';
-import { BACKEND_URL } from '@env';
 
-import { getSoundtrackById } from '../components/utils';
 import {
-  StackParamList,
-  JsonChapterParamList,
   ChapterParamList,
+  GlobalState,
+  JsonChapterParamList,
   OrchestraButtonProps,
   SoundtrackItemParamList,
-  GlobalState
+  StackParamList
 } from '../types/types';
+import { getSoundtrackById } from '../components/utils';
 import AppContext from '../../AppContext';
+import ChapterItem from '../components/ChapterItem';
+import ChooseChapterTitleModal from '../components/ChooseChapterTitleModal';
 import EmptyView from '../components/EmptyView';
 import OrchestraButton from '../components/OrchestraButton';
 import SoundtrackInfo from '../components/SoundtrackInfo';
-import ChapterItem from '../components/ChapterItem';
 import SoundtrackLike from '../components/SoundtrackLike';
-import OrchestraColors from '../constants/OrchestraColors';
 
 const AddChapterButton = ({
   onPress,
@@ -118,19 +117,6 @@ const SoundtrackScreen = ({
     return previousChapterNumber + 1;
   };
 
-  const ChooseChapterTitleModal = () => {
-    return (
-      <DialogInput
-        isDialogVisible={isDialogVisible}
-        title="Choose a title for your chapter"
-        textInputProps={styles.modalTitle}
-        submitText="Next"
-        submitInput={(inputText: string) => chooseTheme(inputText)}
-        closeDialog={hideDialog}
-      />
-    );
-  };
-
   const getSoundtrackChapters = async (): Promise<
     ChapterParamList[] | undefined
   > => {
@@ -164,9 +150,32 @@ const SoundtrackScreen = ({
     });
   };
 
+  const openChapterOptions = (chapter: ChapterParamList) => {
+    const { chapterId, chapterNumber, chapterTitle, theme } = chapter;
+
+    navigation.navigate(
+      // 'as never' is being used to avoid the 'type string is not assignable to never' error
+      // This error occurs due to a ts error. There is an open issue to fix it
+      'Modal' as never,
+      {
+        screen: 'ChapterOptions',
+        params: {
+          chapterId,
+          chapterNumber,
+          chapterTitle,
+          theme
+        }
+      } as never
+    );
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <ChooseChapterTitleModal />
+      <ChooseChapterTitleModal
+        isVisible={isDialogVisible}
+        onSubmit={(inputText: string) => chooseTheme(inputText)}
+        onClose={hideDialog}
+      />
       <SoundtrackLike soundtrackId={soundtrackId} />
       <IconButton
         icon="dots-vertical"
@@ -206,7 +215,6 @@ const SoundtrackScreen = ({
         chaptersList.map((chapter, index) => (
           <ChapterItem
             key={index}
-            chapterId={chapter.chapterId}
             chapterNumber={chapter.chapterNumber}
             theme={chapter.theme}
             chapterTitle={chapter.chapterTitle}
@@ -215,6 +223,11 @@ const SoundtrackScreen = ({
                 `https://open.spotify.com/track/${chapter.theme}`
               );
             }}
+            optionsOnPress={
+              globalState.loggedUser.id === authorId
+                ? () => openChapterOptions(chapter)
+                : undefined
+            }
           />
         ))
       ) : globalState.loggedUser.username === authorId ? (
@@ -230,7 +243,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center'
   },
-
   optionsButton: {
     position: 'absolute',
     right: 5,
@@ -240,12 +252,6 @@ const styles = StyleSheet.create({
   addChapterButton: { marginVertical: 10 },
   addChapterMessageContainer: {
     alignItems: 'center'
-  },
-  modalTitle: {
-    fontSize: 20,
-    lineHeight: 24,
-    textAlign: 'center',
-    color: OrchestraColors.textColor
   }
 });
 
