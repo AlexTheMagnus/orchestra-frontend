@@ -1,23 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
-import { Dialog, Portal, Text, TouchableRipple } from 'react-native-paper';
-import { View } from 'react-native';
-import DialogInput from 'react-native-dialog-input';
+import { TouchableRipple } from 'react-native-paper';
 
 import { BACKEND_URL } from '@env';
-import {
-  ChapterOptionsModalParamList,
-  GlobalState,
-  StackParamList
-} from '../types/types';
-import AppContext from '../../AppContext';
+import { ChapterOptionsModalParamList, StackParamList } from '../types/types';
 import ChooseChapterTitleModal from './ChooseChapterTitleModal';
 import FullScreenModal from './FullScreenModal';
 import OrchestraColors from '../constants/OrchestraColors';
 import TextButton from './TextButton';
 import ChooseChapterNumberModal from './ChooseChapterNumberModal';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
+import ChapterInfo from './ChapterInfo';
 
 const ChapterOptionsModal = ({
   route,
@@ -30,7 +24,6 @@ const ChapterOptionsModal = ({
     theme
   }: ChapterOptionsModalParamList = route.params;
 
-  const globalState: GlobalState = useContext(AppContext);
   const [
     isChooseChapterTitleModalVisible,
     setIsChooseChapterTitleModalVisible
@@ -142,12 +135,11 @@ const ChapterOptionsModal = ({
         />
       </TouchableRipple>
 
-      {/* <SoundtrackInfo
-        bookCover={bookCover}
-        soundtrackTitle={soundtrackTitle}
-        bookTitle={bookTitle}
-        authorName={authorName}
-      /> */}
+      <ChapterInfo
+        themeUri={theme}
+        chapterNumber={chapterNumber}
+        chapterTitle={chapterTitle}
+      />
 
       <TextButton
         style={styles.chapterOption}
