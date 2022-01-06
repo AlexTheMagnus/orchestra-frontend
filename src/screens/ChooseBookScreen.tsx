@@ -142,7 +142,6 @@ const ChooseBookScreen = ({
           bookTitle={result.title}
           author={result.author}
           bookCover={result.cover}
-          key={index}
         />
       </TouchableRipple>
     ));
