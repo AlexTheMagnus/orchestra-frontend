@@ -1,19 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { IconButton, Text } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
-import { SPOTIFY_API_URL } from '../constants/OrchestraConstants';
 
-import AppContext from '../../AppContext';
 import { ChapterItemParamList, ThemeParamList } from '../types/types';
+import { SPOTIFY_API_URL } from '../constants/OrchestraConstants';
 import { View } from './Themed';
+import AppContext from '../../AppContext';
 import ThemeItem from './ThemeItem';
 
 const ChapterItem = ({
-  chapterId,
   chapterNumber,
   chapterTitle,
   theme,
-  onPress
+  onPress,
+  optionsOnPress
 }: ChapterItemParamList) => {
   const globalState = useContext(AppContext);
   const [themeInfo, setThemeInfo] = useState<ThemeParamList>({
@@ -52,6 +52,17 @@ const ChapterItem = ({
         <Text style={styles.chapterNumber}>Chapter {chapterNumber}</Text>
         {chapterTitle && <Text> - {chapterTitle}</Text>}
       </Text>
+
+      {optionsOnPress && (
+        <IconButton
+          icon="dots-vertical"
+          onPress={optionsOnPress}
+          color="black"
+          size={20}
+          style={styles.optionsButton}
+        />
+      )}
+
       <ThemeItem
         title={themeInfo.title}
         author={themeInfo.author}
@@ -65,6 +76,11 @@ const ChapterItem = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'flex-start'
+  },
+  optionsButton: {
+    position: 'absolute',
+    right: 0,
+    zIndex: 10
   },
   chapterItemTitle: {
     marginLeft: 10,

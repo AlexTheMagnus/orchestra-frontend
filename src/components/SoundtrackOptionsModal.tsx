@@ -1,42 +1,27 @@
-import React, { useContext } from 'react';
-import { StyleSheet } from 'react-native';
-import { Text, TouchableRipple, Dialog, Portal } from 'react-native-paper';
+import React, { useContext, useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import DialogInput from 'react-native-dialog-input';
+import { StyleSheet } from 'react-native';
+import { TouchableRipple } from 'react-native-paper';
 
 import { BACKEND_URL } from '@env';
 import { getUserFavoritesRequest } from './utils';
 import {
-  StackParamList,
   GlobalState,
-  SoundtrackItemParamList
+  SoundtrackItemParamList,
+  StackParamList
 } from '../types/types';
 import { View } from 'react-native';
 import AppContext from '../../AppContext';
+import ChooseSoundtrackTitleModal from './ChooseSoundtrackTitleModal';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 import FullScreenModal from './FullScreenModal';
-import OrchestraColors from '../constants/OrchestraColors';
 import SoundtrackInfo from './SoundtrackInfo';
+import TextButton from './TextButton';
 
-const TextButton = ({
-  message,
-  onPress,
-  style
-}: {
-  message: string;
-  onPress: () => void;
-  style: any;
-}) => {
-  return (
-    <TouchableRipple onPress={onPress}>
-      <Text style={style}>{message}</Text>
-    </TouchableRipple>
-  );
-};
-
-const SoundtrackOptionsModal = ({
+const SoundtrackOptionModal = ({
   route,
   navigation
-}: StackScreenProps<StackParamList, 'SoundtrackOptions'>) => {
+}: StackScreenProps<StackParamList, 'SoundtrackOption'>) => {
   const {
     bookCover,
     soundtrackTitle,
@@ -48,11 +33,11 @@ const SoundtrackOptionsModal = ({
 
   const globalState: GlobalState = useContext(AppContext);
   const [isDeleteSoundtrackDialogVisible, setIsDeleteSoundtrackDialogVisible] =
-    React.useState(false);
+    useState(false);
   const [
-    isUpdateSoundtrackTitleDialogVisible,
-    setIsUpdateSoundtrackTitleDialogVisible
-  ] = React.useState(false);
+    isChooseSoundtrackTitleModalVisible,
+    setIsChooseSoundtrackTitleModalVisible
+  ] = useState(false);
 
   const isFavorite = () =>
     globalState.loggedUserFavorites
@@ -61,10 +46,10 @@ const SoundtrackOptionsModal = ({
 
   const isAuthor = () => authorId === globalState.loggedUser.id;
 
-  const showUpdateSoundtrackTitleDialog = () =>
-    setIsUpdateSoundtrackTitleDialogVisible(true);
-  const hideUpdateSoundtrackTitleDialog = () =>
-    setIsUpdateSoundtrackTitleDialogVisible(false);
+  const showChooseSoundtrackTitleModal = () =>
+    setIsChooseSoundtrackTitleModalVisible(true);
+  const hideChooseSoundtrackTitleModal = () =>
+    setIsChooseSoundtrackTitleModalVisible(false);
 
   const showDeleteSoundtrackDialog = () =>
     setIsDeleteSoundtrackDialogVisible(true);
@@ -158,19 +143,6 @@ const SoundtrackOptionsModal = ({
     });
   };
 
-  const UpdateSoundtrackTitleModal = () => {
-    return (
-      <DialogInput
-        isDialogVisible={isUpdateSoundtrackTitleDialogVisible}
-        title="Choose a title for your soundtrack"
-        textInputProps={styles.modalTitle}
-        submitText="Next"
-        submitInput={(newTitle: string) => updateSoundtrackTitle(newTitle)}
-        closeDialog={hideUpdateSoundtrackTitleDialog}
-      />
-    );
-  };
-
   const updateSoundtrackTitle = async (newTitle: string) => {
     const updateResponse = await fetch(
       `${BACKEND_URL}/soundtracks/update/${soundtrackId}`,
@@ -191,46 +163,28 @@ const SoundtrackOptionsModal = ({
       alert(message);
     }
 
-    hideUpdateSoundtrackTitleDialog();
+    hideChooseSoundtrackTitleModal();
     navigation.reset({
       index: 0,
       routes: [{ name: 'Root' }]
     });
   };
 
-  const DeleteSoundtrackModal = () => {
-    return (
-      <Portal>
-        <Dialog
-          visible={isDeleteSoundtrackDialogVisible}
-          onDismiss={hideDeleteSoundtrackDialog}
-        >
-          <Dialog.Title style={{ textAlign: 'center' }}>
-            {'Are you sure you want to\n delete it?'}
-          </Dialog.Title>
-          <Dialog.Actions style={styles.dialogActions}>
-            <TextButton
-              style={styles.dialogCancelButton}
-              message={'Cancel'}
-              onPress={hideDeleteSoundtrackDialog}
-            />
-            <TextButton
-              style={styles.dialogDeleteButton}
-              message={'Delete'}
-              onPress={() => deleteSoundtrack()}
-            />
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    );
-  };
-
   return (
     <FullScreenModal>
-      <UpdateSoundtrackTitleModal />
+      <ChooseSoundtrackTitleModal
+        isVisible={isChooseSoundtrackTitleModalVisible}
+        onSubmit={(newTitle: string) => updateSoundtrackTitle(newTitle)}
+        onClose={hideChooseSoundtrackTitleModal}
+      />
       <TouchableRipple onPress={() => {}}>
-        <DeleteSoundtrackModal />
+        <ConfirmDeleteModal
+          isVisible={isDeleteSoundtrackDialogVisible}
+          onDismiss={hideDeleteSoundtrackDialog}
+          onConfirm={deleteSoundtrack}
+        />
       </TouchableRipple>
+
       <SoundtrackInfo
         bookCover={bookCover}
         soundtrackTitle={soundtrackTitle}
@@ -240,9 +194,9 @@ const SoundtrackOptionsModal = ({
 
       {isAuthor() ? (
         <TextButton
-          style={styles.soundtrackOptions}
+          style={styles.soundtrackOption}
           message="Change title"
-          onPress={showUpdateSoundtrackTitleDialog}
+          onPress={showChooseSoundtrackTitleModal}
         />
       ) : (
         <View />
@@ -250,11 +204,10 @@ const SoundtrackOptionsModal = ({
 
       {isAuthor() ? (
         <TextButton
-          style={styles.soundtrackOptions}
+          style={styles.soundtrackOption}
           message="Change book"
           onPress={() => {
             navigation.push('ChooseBook', {
-              soundtrackTitle,
               soundtrackToUpdate: soundtrackId
             } as never);
           }}
@@ -265,13 +218,13 @@ const SoundtrackOptionsModal = ({
 
       {isFavorite() ? (
         <TextButton
-          style={styles.soundtrackOptions}
+          style={styles.soundtrackOption}
           message="Remove from favorites"
           onPress={() => removeSoundtrackFromFavorites()}
         />
       ) : (
         <TextButton
-          style={styles.soundtrackOptions}
+          style={styles.soundtrackOption}
           message="Add to favorites"
           onPress={() => addSoundtrackToFavorites()}
         />
@@ -279,7 +232,7 @@ const SoundtrackOptionsModal = ({
 
       {!isAuthor() ? (
         <TextButton
-          style={styles.soundtrackOptions}
+          style={styles.soundtrackOption}
           message="Go to author"
           onPress={() => {
             navigation.push('Root', {
@@ -294,7 +247,7 @@ const SoundtrackOptionsModal = ({
 
       {isAuthor() ? (
         <TextButton
-          style={styles.soundtrackOptions}
+          style={styles.soundtrackOption}
           message="Delete"
           onPress={showDeleteSoundtrackDialog}
         />
@@ -306,30 +259,11 @@ const SoundtrackOptionsModal = ({
 };
 
 const styles = StyleSheet.create({
-  modalTitle: {
-    fontSize: 20,
-    lineHeight: 24,
-    textAlign: 'center',
-    color: OrchestraColors.textColor
-  },
-  soundtrackOptions: {
+  soundtrackOption: {
     fontSize: 25,
     fontWeight: 'bold',
-    padding: 10
-  },
-  dialogActions: {
-    justifyContent: 'space-evenly'
-  },
-  dialogDeleteButton: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    padding: 10,
-    color: OrchestraColors.secondaryColor
-  },
-  dialogCancelButton: {
-    fontSize: 25,
     padding: 10
   }
 });
 
-export default SoundtrackOptionsModal;
+export default SoundtrackOptionModal;

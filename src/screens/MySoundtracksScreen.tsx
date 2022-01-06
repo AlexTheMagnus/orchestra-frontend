@@ -15,6 +15,7 @@ import EmptyView from '../components/EmptyView';
 import OrchestraButton from '../components/OrchestraButton';
 import SoundtrackItemList from '../components/SoundtrackItemList';
 import OrchestraColors from '../constants/OrchestraColors';
+import ChooseSoundtrackTitleModal from '../components/ChooseSoundtrackTitleModal';
 
 const CreateSoundtrackButton = ({ onPress, message }: OrchestraButtonProps) => {
   return (
@@ -60,26 +61,19 @@ const MySoundtracksScreen = ({
     }
   };
 
-  const ChooseSoundtrackTitleModal = () => {
-    return (
-      <DialogInput
-        isDialogVisible={isDialogVisible}
-        title="Choose a title for your soundtrack"
-        textInputProps={styles.modalTitle}
-        submitText="Next"
-        submitInput={(inputText: string) => chooseBook(inputText)}
-        closeDialog={hideDialog}
-      />
-    );
-  };
-
   return (
     <View style={styles.screeenContainer}>
       <CreateSoundtrackButton
         onPress={showDialog}
         message="CREATE SOUNDTRACK"
       />
-      <ChooseSoundtrackTitleModal />
+
+      <ChooseSoundtrackTitleModal
+        isVisible={isDialogVisible}
+        onSubmit={(inputText: string) => chooseBook(inputText)}
+        onClose={hideDialog}
+      />
+
       {!userSoundtracksList.length ? (
         <View style={styles.content}>
           <EmptyView icon="mySoundtracks" message={emptyMessage} />
@@ -97,7 +91,11 @@ const MySoundtracksScreen = ({
 };
 
 const styles = StyleSheet.create({
-  createSoundtrackButton: { marginTop: 10, position: 'absolute', zIndex: 10 },
+  createSoundtrackButton: {
+    marginTop: 10,
+    position: 'absolute',
+    zIndex: 10
+  },
   screeenContainer: {
     flex: 1,
     alignItems: 'center'
@@ -120,24 +118,8 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center'
   },
-  modalTitle: {
-    fontSize: 20,
-    lineHeight: 24,
-    textAlign: 'center',
-    color: OrchestraColors.textColor
-  },
   modal: {
     backgroundColor: OrchestraColors.primaryColor
-  },
-  textInput: {
-    width: '100%'
-  },
-  nextButton: {
-    color: OrchestraColors.secondaryColor,
-    fontWeight: 'bold'
-  },
-  cancelButton: {
-    color: OrchestraColors.textColorDark
   }
 });
 
