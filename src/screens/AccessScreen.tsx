@@ -42,24 +42,30 @@ const AccessScreen = ({
     if (response?.type === 'success') {
       const { code } = response.params;
       sendAccessRequest(code).then(accessResponse => {
-        setUserInfoOnLogin(accessResponse);
-        getUserFavoritesRequest(accessResponse.user_id).then(userFavorites =>
-          globalState.setLoggedUserFavorites(
-            userFavorites.favorite_soundtracks_list
-          )
-        );
-      });
+        if (!accessResponse.ok) {
+          handleErrorResponse(accessResponse);
+          return;
+        }
 
-      console.info('Successful login!');
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Root' }]
+        accessResponse.json().then(responseBody => {
+          setUserInfoOnLogin(responseBody);
+          getUserFavoritesRequest(responseBody.user_id).then(userFavorites =>
+            globalState.setLoggedUserFavorites(
+              userFavorites.favorite_soundtracks_list
+            )
+          );
+        });
+        console.info('Successful login!');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Root' }]
+        });
       });
     }
   }, [response]);
 
-  const sendAccessRequest = async (code: string) => {
-    const accessResponse = await fetch(`${BACKEND_URL}/users`, {
+  const sendAccessRequest = async (code: string): Promise<Response> =>
+    await fetch(`${BACKEND_URL}/users`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -69,14 +75,6 @@ const AccessScreen = ({
         access_code: code
       })
     });
-
-    if (!accessResponse.ok) {
-      handleErrorResponse(accessResponse);
-      return;
-    }
-
-    return accessResponse.json();
-  };
 
   const handleErrorResponse = (response: Response) => {
     navigation.reset({
