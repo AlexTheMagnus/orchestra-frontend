@@ -40,11 +40,12 @@ const ChooseBookScreen = ({
 
     setResultsList([]);
     json.items.forEach((result: any) => {
-      const isbn13IndustryIdentifier =
-        result.volumeInfo.industryIdentifiers.find(
-          (industryIdentifier: { type: string; identifier: string }) =>
-            industryIdentifier.type == 'ISBN_13'
-        );
+      const isbn13IndustryIdentifier = result.volumeInfo.industryIdentifiers
+        ? result.volumeInfo.industryIdentifiers.find(
+            (industryIdentifier: { type: string; identifier: string }) =>
+              industryIdentifier.type == 'ISBN_13'
+          )
+        : '';
 
       if (isbn13IndustryIdentifier) {
         var book: BookResultParamList = {
@@ -54,15 +55,16 @@ const ChooseBookScreen = ({
           author: ''
         };
 
-        result.volumeInfo.imageLinks.smallThumbnail
-          ? (book.cover = result.volumeInfo.imageLinks.smallThumbnail!)
-          : result.volumeInfo.imageLinks.thumbnail
-          ? (book.cover = result.volumeInfo.imageLinks.thumbnail!)
-          : null;
+        if (result.volumeInfo.imageLinks) {
+          book.cover =
+            result.volumeInfo.imageLinks.smallThumbnail ??
+            result.volumeInfo.imageLinks.thumbnail;
+        }
 
-        result.volumeInfo.authors[0]
-          ? (book.author = result.volumeInfo.authors[0]!)
-          : (book.author = '');
+        console.log(result.volumeInfo.authors);
+        if (result.volumeInfo.authors) {
+          book.author = result.volumeInfo.authors.join(', ');
+        }
         setResultsList(resultsList => resultsList.concat(book));
       }
     });
