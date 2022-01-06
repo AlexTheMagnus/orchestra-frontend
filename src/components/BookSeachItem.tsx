@@ -12,14 +12,12 @@ const renderBookCover = (bookCover: string) => {
 const BookSearchItem = ({
   bookCover,
   bookTitle,
-  author,
-  key
+  author
 }: BookSearchItemParamList) => {
   return (
     <List.Item
       title={bookTitle}
       description={author}
-      key={key}
       left={() => renderBookCover(bookCover)}
     />
   );
