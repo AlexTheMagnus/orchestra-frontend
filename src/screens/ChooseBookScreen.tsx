@@ -61,7 +61,6 @@ const ChooseBookScreen = ({
             result.volumeInfo.imageLinks.thumbnail;
         }
 
-        console.log(result.volumeInfo.authors);
         if (result.volumeInfo.authors) {
           book.author = result.volumeInfo.authors.join(', ');
         }
