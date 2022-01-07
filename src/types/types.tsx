@@ -120,7 +120,6 @@ export type BookSearchItemParamList = {
   bookCover: string;
   bookTitle: string;
   author: string;
-  key: number;
 };
 
 export type JsonSoundtrackParamList = {

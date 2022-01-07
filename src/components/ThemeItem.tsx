@@ -1,24 +1,10 @@
 import React from 'react';
-import WebView from 'react-native-webview';
-import { StyleSheet } from 'react-native';
 import { List, TouchableRipple } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
 
 import { ThemeItemParamList } from '../types/types';
 import { View } from './Themed';
-
-const SpotifyPreview = ({ themeUri }: { themeUri: string }) => {
-  return (
-    <WebView
-      style={styles.spotifyPreview}
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}
-      originWhitelist={['*']}
-      source={{
-        html: `<head><meta name="viewport" content="width=device-width, initial-scale=1"></meta><head/><iframe src="https://open.spotify.com/embed/track/${themeUri}" width="80" height="80" frameBorder="0" allowtransparency="true" allow="encrypted-media"></iframe>`
-      }}
-    />
-  );
-};
+import SpotifyPreview from './SpotifyPreview';
 
 const ThemeItem = ({
   title,
@@ -28,7 +14,7 @@ const ThemeItem = ({
 }: ThemeItemParamList) => {
   return (
     <View style={styles.container}>
-      <SpotifyPreview themeUri={themeUri} />
+      <SpotifyPreview themeUri={themeUri} style={styles.spotifyPreview} />
       <TouchableRipple
         style={styles.itemBody}
         onPress={onPress}
