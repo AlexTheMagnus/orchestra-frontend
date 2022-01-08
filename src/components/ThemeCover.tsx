@@ -11,7 +11,7 @@ const ThemeCover = ({
   return (
     <Image
       source={
-        !sourceUrl
+        sourceUrl
           ? {
               uri: sourceUrl
             }
