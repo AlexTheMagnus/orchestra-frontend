@@ -25,6 +25,14 @@ const ChooseThemeScreen = ({
   const [resultsList, setResultsList] = useState<Array<ThemeParamList>>([]);
   const emptyMessage: string = 'Choose a theme for your chapter';
 
+  const logout = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Access' }]
+    });
+    globalState.cleanSessionData();
+  };
+
   const searchThemes = async (textToSearch: string) => {
     const response = await fetch(
       `${SPOTIFY_API_URL}/search?query=${textToSearch}&type=track&offset=0&limit=10&market=ES`,
@@ -64,6 +72,7 @@ const ChooseThemeScreen = ({
       method: 'POST',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${globalState.accessToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -76,6 +85,13 @@ const ChooseThemeScreen = ({
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${response.status}`;
+        alert(message);
+        return;
+      }
+
       navigation.reset({
         index: 0,
         routes: [{ name: 'Root' }]
@@ -99,6 +115,7 @@ const ChooseThemeScreen = ({
         method: 'PUT',
         headers: {
           Accept: 'application/json',
+          Authorization: `Bearer ${globalState.accessToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -108,6 +125,13 @@ const ChooseThemeScreen = ({
     );
 
     if (!updateResponse.ok) {
+      if (updateResponse.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${updateResponse.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured: Status error ${updateResponse.status}`;
       alert(message);
     }
