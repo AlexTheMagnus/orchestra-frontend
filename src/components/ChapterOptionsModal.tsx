@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { BACKEND_URL } from '@env';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 
-import { BACKEND_URL } from '@env';
-import { ChapterOptionsModalParamList, StackParamList } from '../types/types';
+import {
+  ChapterOptionsModalParamList,
+  GlobalState,
+  StackParamList
+} from '../types/types';
+import AppContext from '../../AppContext';
+import ChapterInfo from './ChapterInfo';
+import ChooseChapterNumberModal from './ChooseChapterNumberModal';
 import ChooseChapterTitleModal from './ChooseChapterTitleModal';
+import ConfirmDeleteModal from './ConfirmDeleteModal';
 import FullScreenModal from './FullScreenModal';
 import OrchestraColors from '../constants/OrchestraColors';
 import TextButton from './TextButton';
-import ChooseChapterNumberModal from './ChooseChapterNumberModal';
-import ConfirmDeleteModal from './ConfirmDeleteModal';
-import ChapterInfo from './ChapterInfo';
 
 const ChapterOptionsModal = ({
   route,
@@ -23,6 +28,8 @@ const ChapterOptionsModal = ({
     chapterTitle,
     theme
   }: ChapterOptionsModalParamList = route.params;
+
+  const globalState: GlobalState = useContext(AppContext);
 
   const [
     isChooseChapterTitleModalVisible,
@@ -48,6 +55,14 @@ const ChapterOptionsModal = ({
   const showDeleteChapterModal = () => setIsDeleteChapterModalVisible(true);
   const hideDeleteChapterModal = () => setIsDeleteChapterModalVisible(false);
 
+  const logout = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Access' }]
+    });
+    globalState.cleanSessionData();
+  };
+
   const updateChapter = async ({
     newTitle,
     newNumber
@@ -61,6 +76,7 @@ const ChapterOptionsModal = ({
         method: 'PUT',
         headers: {
           Accept: 'application/json',
+          Authorization: `Bearer ${globalState.accessToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -71,6 +87,13 @@ const ChapterOptionsModal = ({
     );
 
     if (!updateResponse.ok) {
+      if (updateResponse.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${updateResponse.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured: Status error ${updateResponse.status}`;
       alert(message);
     }
@@ -91,12 +114,20 @@ const ChapterOptionsModal = ({
         method: 'DELETE',
         headers: {
           Accept: 'application/json',
+          Authorization: `Bearer ${globalState.accessToken}`,
           'Content-Type': 'application/json'
         }
       }
     );
 
     if (!deleteResponse.ok) {
+      if (deleteResponse.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${deleteResponse.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured: Status error ${deleteResponse.status}`;
       alert(message);
     }
