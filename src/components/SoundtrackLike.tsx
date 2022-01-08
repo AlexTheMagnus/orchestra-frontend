@@ -1,7 +1,9 @@
 import React, { useContext, useEffect } from 'react';
-import { IconButton } from 'react-native-paper';
-import { StyleSheet } from 'react-native';
 import { BACKEND_URL } from '@env';
+import { IconButton } from 'react-native-paper';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import AppContext from '../../AppContext';
 import { SoundtrackLikeProps } from '../types/types';
@@ -10,11 +12,21 @@ const SoundtrackLike = ({ soundtrackId }: SoundtrackLikeProps) => {
   const globalState = useContext(AppContext);
   const [isLiked, setIsLiked] = React.useState(false);
 
+  const navigation = useNavigation<StackNavigationProp<any>>();
+
   useEffect(() => {
     getIsLiked().then(result => {
       setIsLiked(result);
     });
   }, []);
+
+  const logout = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Access' }]
+    });
+    globalState.cleanSessionData();
+  };
 
   const getIsLiked = async () => {
     const response = await fetch(
@@ -46,6 +58,7 @@ const SoundtrackLike = ({ soundtrackId }: SoundtrackLikeProps) => {
       method: 'POST',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${globalState.accessToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -55,6 +68,13 @@ const SoundtrackLike = ({ soundtrackId }: SoundtrackLikeProps) => {
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${response.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured when liking the soundtrack: Status error ${response.status}`;
       alert(message);
       console.error(message);
@@ -71,12 +91,20 @@ const SoundtrackLike = ({ soundtrackId }: SoundtrackLikeProps) => {
         method: 'DELETE',
         headers: {
           Accept: 'application/json',
+          Authorization: `Bearer ${globalState.accessToken}`,
           'Content-Type': 'application/json'
         }
       }
     );
 
     if (!response.ok) {
+      if (response.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${response.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured when unliking the soundtrack: Status error ${response.status}`;
       alert(message);
       console.error(message);

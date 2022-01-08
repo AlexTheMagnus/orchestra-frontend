@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from 'react';
+import { BACKEND_URL } from '@env';
 import { Button, Subheading, TouchableRipple } from 'react-native-paper';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 
-import { BACKEND_URL } from '@env';
 import { getFollowers, getFollowedUsers } from './utils';
 import { UserResponse } from '../types/types';
 import { View } from '../components/Themed';
@@ -44,11 +44,20 @@ const SocialSection = ({
     });
   }, []);
 
+  const logout = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Access' }]
+    });
+    globalState.cleanSessionData();
+  };
+
   const followUser = async () => {
     const response = await fetch(`${BACKEND_URL}/users/follow`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${globalState.accessToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -58,6 +67,13 @@ const SocialSection = ({
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${response.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured when following the user: Status error ${response.status}`;
       alert(message);
       console.error(message);
@@ -74,12 +90,20 @@ const SocialSection = ({
         method: 'DELETE',
         headers: {
           Accept: 'application/json',
+          Authorization: `Bearer ${globalState.accessToken}`,
           'Content-Type': 'application/json'
         }
       }
     );
 
     if (!response.ok) {
+      if (response.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${response.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured when unfollowing the user: Status error ${response.status}`;
       alert(message);
       console.error(message);
