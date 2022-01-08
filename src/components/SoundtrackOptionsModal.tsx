@@ -56,6 +56,14 @@ const SoundtrackOptionModal = ({
   const hideDeleteSoundtrackDialog = () =>
     setIsDeleteSoundtrackDialogVisible(false);
 
+  const logout = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Access' }]
+    });
+    globalState.cleanSessionData();
+  };
+
   const updateLoggedUserFavoriteSoundtracks = async () => {
     getUserFavoritesRequest(globalState.loggedUser.id).then(userFavorites => {
       if (userFavorites) {
@@ -71,6 +79,7 @@ const SoundtrackOptionModal = ({
       method: 'POST',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${globalState.accessToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -82,6 +91,13 @@ const SoundtrackOptionModal = ({
     updateLoggedUserFavoriteSoundtracks();
 
     if (!addToFavResponse.ok) {
+      if (addToFavResponse.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${addToFavResponse.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured: Status error ${addToFavResponse.status}`;
       alert(message);
     }
@@ -99,6 +115,7 @@ const SoundtrackOptionModal = ({
         method: 'DELETE',
         headers: {
           Accept: 'application/json',
+          Authorization: `Bearer ${globalState.accessToken}`,
           'Content-Type': 'application/json'
         }
       }
@@ -107,6 +124,13 @@ const SoundtrackOptionModal = ({
     updateLoggedUserFavoriteSoundtracks();
 
     if (!removeFromFavResponse.ok) {
+      if (removeFromFavResponse.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${removeFromFavResponse.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured: Status error ${removeFromFavResponse.status}`;
       alert(message);
     }
@@ -124,6 +148,7 @@ const SoundtrackOptionModal = ({
         method: 'DELETE',
         headers: {
           Accept: 'application/json',
+          Authorization: `Bearer ${globalState.accessToken}`,
           'Content-Type': 'application/json'
         }
       }
@@ -132,6 +157,13 @@ const SoundtrackOptionModal = ({
     updateLoggedUserFavoriteSoundtracks();
 
     if (!deleteResponse.ok) {
+      if (deleteResponse.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${deleteResponse.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured: Status error ${deleteResponse.status}`;
       alert(message);
     }
@@ -150,6 +182,7 @@ const SoundtrackOptionModal = ({
         method: 'PUT',
         headers: {
           Accept: 'application/json',
+          Authorization: `Bearer ${globalState.accessToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -159,6 +192,13 @@ const SoundtrackOptionModal = ({
     );
 
     if (!updateResponse.ok) {
+      if (updateResponse.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${updateResponse.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured: Status error ${updateResponse.status}`;
       alert(message);
     }

@@ -17,6 +17,7 @@ export type GlobalState = {
   setLoggedUser: React.Dispatch<React.SetStateAction<UserParamList>>;
   loggedUserFavorites: string[] | null;
   setLoggedUserFavorites: React.Dispatch<React.SetStateAction<string[] | null>>;
+  cleanSessionData(): void;
 };
 
 export type StackParamList = ModalsParamList & {
