@@ -1,11 +1,15 @@
+import React, { useState, useContext } from 'react';
 import { Appbar, TextInput, TouchableRipple } from 'react-native-paper';
+import { BACKEND_URL } from '@env';
 import { ScrollView, StyleSheet } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
-import React, { useState, useContext } from 'react';
 import uuid from 'react-native-uuid';
-import { BACKEND_URL } from '@env';
 
-import { StackParamList, BookResultParamList } from '../types/types';
+import {
+  BookResultParamList,
+  GlobalState,
+  StackParamList
+} from '../types/types';
 import { View } from '../components/Themed';
 import AppContext from '../../AppContext';
 import BookSearchItem from '../components/BookSeachItem';
@@ -19,11 +23,19 @@ const ChooseBookScreen = ({
   const { soundtrackTitle, soundtrackToUpdate } = route.params;
   const emptyMessage: string = 'Choose a book for your soundtrack';
 
-  const globalState = useContext(AppContext);
+  const globalState: GlobalState = useContext(AppContext);
 
   const [resultsList, setResultsList] = useState<Array<BookResultParamList>>(
     []
   );
+
+  const logout = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Access' }]
+    });
+    globalState.cleanSessionData();
+  };
 
   const searchBooks = async (textToSearch: string) => {
     const response = await fetch(
@@ -74,6 +86,7 @@ const ChooseBookScreen = ({
       method: 'POST',
       headers: {
         Accept: 'application/json',
+        Authorization: `Bearer ${globalState.accessToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -85,6 +98,13 @@ const ChooseBookScreen = ({
     });
 
     if (!response.ok) {
+      if (response.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${response.status}`;
+        alert(message);
+        return;
+      }
+
       navigation.reset({
         index: 0,
         routes: [{ name: 'Root' }]
@@ -108,6 +128,7 @@ const ChooseBookScreen = ({
         method: 'PUT',
         headers: {
           Accept: 'application/json',
+          Authorization: `Bearer ${globalState.accessToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -117,6 +138,13 @@ const ChooseBookScreen = ({
     );
 
     if (!updateResponse.ok) {
+      if (updateResponse.status === 401) {
+        logout();
+        const message = `Session lost: Status error ${updateResponse.status}`;
+        alert(message);
+        return;
+      }
+
       const message = `An error has occured: Status error ${updateResponse.status}`;
       alert(message);
     }

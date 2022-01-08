@@ -33,22 +33,12 @@ const MyProfileScreen = ({
     }
   }, []);
 
-  const cleanSessionData = () => {
-    globalState.setLoggedUser({
-      id: '',
-      username: '',
-      avatar: ''
-    });
-    globalState.setAccessToken(null);
-    globalState.setLoggedUserFavorites(null);
-  };
-
   const logout = () => {
     navigation.reset({
       index: 0,
       routes: [{ name: 'Access' }]
     });
-    cleanSessionData();
+    globalState.cleanSessionData();
   };
 
   return (
