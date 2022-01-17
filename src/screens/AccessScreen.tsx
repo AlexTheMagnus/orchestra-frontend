@@ -1,18 +1,21 @@
 import React, { useContext, useEffect } from 'react';
+import { SPOTIFY_CLIENT_ID, LOCAL_ORCHESTRA_URL, BACKEND_URL } from '@env';
+import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet, View, Image, Text } from 'react-native';
 import { useAuthRequest } from 'expo-auth-session';
-import { StackScreenProps } from '@react-navigation/stack';
-import { SPOTIFY_CLIENT_ID, LOCAL_ORCHESTRA_URL, BACKEND_URL } from '@env';
+import { useFonts, Tangerine_700Bold } from '@expo-google-fonts/tangerine';
 
-import { StackParamList, AccessResponse } from '../types/types';
+import { getUserFavoritesRequest } from '../components/utils';
+import { LinearGradient } from 'expo-linear-gradient';
 import {
   SPOTIFY_AUTH_ENDPOINT,
   SPOTIFY_TOKEN_ENDPOINT
 } from '../constants/OrchestraConstants';
-import OrchestraColors from '../constants/OrchestraColors';
+import { StackParamList, AccessResponse } from '../types/types';
 import AppContext from '../../AppContext';
+import OrchestraColors from '../constants/OrchestraColors';
 import SpotifySignInButton from '../components/SpotifySignInButton';
-import { getUserFavoritesRequest } from '../components/utils';
+import AppLoading from 'expo-app-loading';
 
 // Endpoint
 const discovery = {
@@ -25,6 +28,10 @@ const AccessScreen = ({
 }: StackScreenProps<StackParamList, 'Access'>) => {
   const globalState = useContext(AppContext);
   const redirectUri = String(LOCAL_ORCHESTRA_URL);
+
+  let [fontsLoaded] = useFonts({
+    Tangerine_700Bold
+  });
 
   const [request, response, promptAsync] = useAuthRequest(
     {
@@ -95,24 +102,38 @@ const AccessScreen = ({
     });
   };
 
-  return (
-    <View style={styles.accessScreen}>
-      <View style={styles.logoView}>
-        <Image
-          style={styles.logo}
-          source={require('../assets/images/orchestra-icon.png')}
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
+    return (
+      <View style={styles.accessScreen}>
+        <LinearGradient
+          // Background Linear Gradient
+          colors={[
+            OrchestraColors.secondaryColor,
+            OrchestraColors.secondaryColorDark
+          ]}
+          style={styles.gradient}
         />
-        <Text style={styles.logoText}>Orchestra</Text>
-        <Text style={styles.logoSubTitle}>Conduct your book's soundtracks</Text>
+        <View style={styles.logoView}>
+          <Image
+            style={styles.logo}
+            source={require('../assets/images/orchestra-icon.png')}
+          />
+          <Text style={styles.logoText}>Orchestra</Text>
+          <Text style={styles.logoSubTitle}>
+            Conduct your book's soundtracks
+          </Text>
+        </View>
+        <View>
+          <SpotifySignInButton
+            disabled={!request}
+            onPress={() => promptAsync()}
+          />
+        </View>
       </View>
-      <View>
-        <SpotifySignInButton
-          disabled={!request}
-          onPress={() => promptAsync()}
-        />
-      </View>
-    </View>
-  );
+    );
+  }
 };
 
 const styles = StyleSheet.create({
@@ -124,26 +145,29 @@ const styles = StyleSheet.create({
     height: '100%',
     justifyContent: 'space-evenly'
   },
+  gradient: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: '100%'
+  },
   logoView: {
     alignItems: 'center'
   },
   logo: {
-    padding: 140,
-    width: 230,
-    height: 175
+    width: '70%',
+    height: undefined,
+    aspectRatio: 1
   },
   logoText: {
     color: 'black',
-    marginTop: 10,
-    fontSize: 50,
-    fontWeight: 'bold'
+    fontSize: 80,
+    fontFamily: 'Tangerine_700Bold'
   },
   logoSubTitle: {
     color: 'black',
-    marginTop: 10,
-    fontSize: 20,
-    fontWeight: 'bold',
-    margin: 10
+    fontSize: 20
   }
 });
 
