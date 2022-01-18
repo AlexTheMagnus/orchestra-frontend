@@ -108,7 +108,6 @@ const AccessScreen = ({
     return (
       <View style={styles.accessScreen}>
         <LinearGradient
-          // Background Linear Gradient
           colors={[
             OrchestraColors.secondaryColor,
             OrchestraColors.secondaryColorDark

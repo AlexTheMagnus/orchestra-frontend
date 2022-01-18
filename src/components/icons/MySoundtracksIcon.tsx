@@ -1,8 +1,17 @@
 import React from 'react';
-import { Ionicons } from '@expo/vector-icons';
+import { Fontisto } from '@expo/vector-icons';
+import { StyleProp, TextStyle } from 'react-native';
 
-const MySoundtracksIcon = ({ ...props }) => {
-  return <Ionicons name="musical-notes-outline" size={100} {...props} />;
+const MySoundtracksIcon = ({
+  size,
+  color,
+  style
+}: {
+  size: number;
+  color: string;
+  style: StyleProp<TextStyle>;
+}) => {
+  return <Fontisto name="music-note" size={size} color={color} style={style} />;
 };
 
 export default MySoundtracksIcon;

@@ -1,14 +1,36 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+
 import { Text, View } from '../components/Themed';
-
+import OrchestraColors from '../constants/OrchestraColors';
 import OrchestraIcon from './icons/OrchestraIcon';
+import useColorScheme from '../hooks/useColorScheme';
 
-const EmptyView = ({ icon, message }: { icon: string; message: string }) => {
+const EmptyView = ({
+  icon,
+  message
+}: {
+  icon: 'mySoundtracks' | 'favorites' | 'search' | 'profile';
+  message: string;
+}) => {
+  const theme = useColorScheme();
+
   return (
-    <View style={styles.content}>
-      <OrchestraIcon icon={icon} color="black" style={styles.emptyIcon} />
-      <Text style={styles.emptyMessage}>{message}</Text>
+    <View lightColor="dark" style={styles.content}>
+      <OrchestraIcon
+        size={100}
+        icon={icon}
+        color={OrchestraColors[theme].emptyViewIcon}
+        style={styles.emptyIcon}
+      />
+      <Text
+        style={[
+          { color: OrchestraColors[theme].secondaryText },
+          styles.emptyMessage
+        ]}
+      >
+        {message}
+      </Text>
     </View>
   );
 };

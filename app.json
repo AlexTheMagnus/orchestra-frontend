@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./src/assets/images/favicon.png",
     "scheme": "orchestra",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
     "splash": {
       "image": "./src/assets/images/splash.png",
       "resizeMode": "contain",
@@ -19,9 +19,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "userInterfaceStyle": "dark"
     },
     "android": {
+      "userInterfaceStyle": "dark",
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"

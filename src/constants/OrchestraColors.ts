@@ -1,23 +1,5 @@
-const tintColorLight = '#2f95dc';
-const tintColorDark = '#fff';
-
-// const goldenGradient = 'linear-gradient(90deg, rgba(255,215,0,1) 0%, rgba(190,139,0,1) 100%)';
-
-export default {
-  light: {
-    text: '#000',
-    background: '#fff',
-    tint: tintColorLight,
-    tabIconDefault: '#ccc',
-    tabIconSelected: tintColorLight
-  },
-  dark: {
-    text: '#fff',
-    background: '#000',
-    tint: tintColorDark,
-    tabIconDefault: '#ccc',
-    tabIconSelected: tintColorDark
-  },
+const transparent = 'transparent';
+const orchestraColors = {
   primaryColor: '#191919',
   primaryColorLight: '#27272C',
   primaryColorLightest: '#454548',
@@ -25,6 +7,30 @@ export default {
   secondaryColorDark: '#BE8B00',
   secondaryColorLight: '#F2C037',
   textColor: '#FFFFFF',
-  textColorDark: '#B8B8B8',
-  transparent: 'transparent'
+  textColorDark: '#B8B8B8'
+};
+
+export default {
+  ...orchestraColors,
+  transparent,
+  dark: {
+    primaryText: orchestraColors.textColor,
+    secondaryText: orchestraColors.textColorDark,
+    background: orchestraColors.primaryColor,
+    headerBackground: orchestraColors.primaryColorLight,
+    tabIconSelected: orchestraColors.textColor,
+    tabIconNonSelected: orchestraColors.textColorDark,
+    bottomTabNav: orchestraColors.primaryColorLight,
+    emptyViewIcon: orchestraColors.textColorDark
+  },
+  light: {
+    primaryText: orchestraColors.textColor,
+    secondaryText: orchestraColors.textColorDark,
+    background: orchestraColors.primaryColor,
+    headerBackground: orchestraColors.primaryColorLight,
+    tabIconSelected: orchestraColors.textColor,
+    tabIconNonSelected: orchestraColors.primaryColorLightest,
+    bottomTabNav: orchestraColors.primaryColorLight,
+    emptyViewIcon: orchestraColors.textColorDark
+  }
 };

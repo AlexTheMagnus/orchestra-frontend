@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
 import { Appbar, TextInput } from 'react-native-paper';
+import { BACKEND_URL } from '@env';
+import { StyleSheet } from 'react-native';
 
+import { fromJsonToSoundtrackItem } from '../components/utils';
 import {
   JsonSoundtrackParamList,
   SoundtrackItemParamList
 } from '../types/types';
+import { MAX_ELMENTENS_ON_SEARCH } from '../constants/OrchestraConstants';
 import { View } from '../components/Themed';
 import EmptyView from '../components/EmptyView';
 import OrchestraColors from '../constants/OrchestraColors';
 import SoundtrackItemList from '../components/SoundtrackItemList';
-import { MAX_ELMENTENS_ON_SEARCH } from '../constants/OrchestraConstants';
-import { BACKEND_URL } from '@env';
-import { fromJsonToSoundtrackItem } from '../components/utils';
+import useColorScheme from '../hooks/useColorScheme';
 
 export default function SearchScreen() {
   const emptyMessage: string = 'Search soundtracks for your books';
+  const theme = useColorScheme();
 
   const [resultsList, setResultsList] = useState<
     Array<SoundtrackItemParamList>
@@ -102,7 +104,12 @@ export default function SearchScreen() {
 
   return (
     <View style={styles.screen}>
-      <Appbar.Header style={styles.header}>
+      <Appbar.Header
+        style={[
+          { backgroundColor: OrchestraColors[theme].headerBackground },
+          styles.header
+        ]}
+      >
         <TextInput
           mode="outlined"
           placeholder="Search"
@@ -141,8 +148,7 @@ const styles = StyleSheet.create({
     height: 100,
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: OrchestraColors.primaryColorLight
+    justifyContent: 'center'
   },
   searchInput: {
     width: '80%',
