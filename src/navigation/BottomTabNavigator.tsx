@@ -125,7 +125,8 @@ function MySoundtracksNavigator() {
       screenOptions={{
         headerStyle: {
           backgroundColor: OrchestraColors[theme].headerBackground
-        }
+        },
+        headerTitleStyle: { alignSelf: 'center' }
       }}
     >
       <MySoundtracksStack.Screen
@@ -149,7 +150,8 @@ function FavoritesNavigator() {
       screenOptions={{
         headerStyle: {
           backgroundColor: OrchestraColors[theme].headerBackground
-        }
+        },
+        headerTitleStyle: { alignSelf: 'center' }
       }}
     >
       <FavoritesStack.Screen
@@ -183,7 +185,8 @@ function MyProfileNavigator() {
       screenOptions={{
         headerStyle: {
           backgroundColor: OrchestraColors[theme].headerBackground
-        }
+        },
+        headerTitleStyle: { alignSelf: 'center' }
       }}
     >
       <MyProfileStack.Screen
