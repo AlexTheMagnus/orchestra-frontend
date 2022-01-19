@@ -5,13 +5,15 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import AppContext from '../../AppContext';
 import { SoundtrackLikeProps } from '../types/types';
+import AppContext from '../../AppContext';
+import OrchestraColors from '../constants/OrchestraColors';
+import useColorScheme from '../hooks/useColorScheme';
 
 const SoundtrackLike = ({ soundtrackId }: SoundtrackLikeProps) => {
+  const theme = useColorScheme();
   const globalState = useContext(AppContext);
   const [isLiked, setIsLiked] = React.useState(false);
-
   const navigation = useNavigation<StackNavigationProp<any>>();
 
   useEffect(() => {
@@ -118,7 +120,7 @@ const SoundtrackLike = ({ soundtrackId }: SoundtrackLikeProps) => {
     <IconButton
       icon={isLiked ? 'heart' : 'heart-outline'}
       onPress={isLiked ? () => unlikeSoundtrack() : () => likeSoundtrack()}
-      color="black"
+      color={OrchestraColors[theme].secondaryText}
       size={30}
       style={styles.likeButton}
     />

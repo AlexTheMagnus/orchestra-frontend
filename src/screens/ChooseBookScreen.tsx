@@ -15,6 +15,7 @@ import AppContext from '../../AppContext';
 import BookSearchItem from '../components/BookSeachItem';
 import EmptyView from '../components/EmptyView';
 import OrchestraColors from '../constants/OrchestraColors';
+import useColorScheme from '../hooks/useColorScheme';
 
 const ChooseBookScreen = ({
   route,
@@ -22,6 +23,7 @@ const ChooseBookScreen = ({
 }: StackScreenProps<StackParamList, 'ChooseBook'>) => {
   const { soundtrackTitle, soundtrackToUpdate } = route.params;
   const emptyMessage: string = 'Choose a book for your soundtrack';
+  const theme = useColorScheme();
 
   const globalState: GlobalState = useContext(AppContext);
 
@@ -175,18 +177,37 @@ const ChooseBookScreen = ({
     ));
   };
 
+  const inputTheme = {
+    colors: {
+      placeholder: OrchestraColors[theme].primaryText,
+      text: OrchestraColors[theme].primaryText,
+      primary: OrchestraColors.transparent
+    },
+    roundness: 30
+  };
+
   return (
     <View style={styles.screen}>
-      <Appbar.Header style={styles.header}>
+      <Appbar.Header
+        style={[
+          { backgroundColor: OrchestraColors[theme].headerBackground },
+          styles.header
+        ]}
+      >
         <TextInput
           mode="outlined"
           placeholder="Search"
-          selectionColor={OrchestraColors.textColorDark}
+          selectionColor={OrchestraColors[theme].selectedText}
           outlineColor={OrchestraColors.transparent}
           onChangeText={text => {
             text ? searchBooks(text) : setResultsList([]);
           }}
-          style={styles.searchInput}
+          style={[
+            {
+              backgroundColor: OrchestraColors[theme].searchInputBackgroundColor
+            },
+            styles.searchInput
+          ]}
           theme={inputTheme}
         />
       </Appbar.Header>
@@ -219,22 +240,12 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     width: '80%',
-    height: 55,
-    backgroundColor: OrchestraColors.primaryColorLightest,
-    color: OrchestraColors.textColor
+    height: 55
   },
   bookResultsContainer: {
     flex: 1,
     width: '100%'
   }
 });
-
-const inputTheme = {
-  colors: {
-    placeholder: 'white',
-    text: 'white',
-    primary: OrchestraColors.primaryColorLightest
-  }
-};
 
 export default ChooseBookScreen;

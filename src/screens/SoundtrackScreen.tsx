@@ -19,8 +19,10 @@ import ChapterItem from '../components/ChapterItem';
 import ChooseChapterTitleModal from '../components/ChooseChapterTitleModal';
 import EmptyView from '../components/EmptyView';
 import OrchestraButton from '../components/OrchestraButton';
+import OrchestraColors from '../constants/OrchestraColors';
 import SoundtrackInfo from '../components/SoundtrackInfo';
 import SoundtrackLike from '../components/SoundtrackLike';
+import useColorScheme from '../hooks/useColorScheme';
 
 const AddChapterButton = ({
   onPress,
@@ -61,6 +63,7 @@ const SoundtrackScreen = ({
   };
 
   const globalState: GlobalState = useContext(AppContext);
+  const theme = useColorScheme();
 
   const [soundtrackInfo, setSoundtrackInfo] =
     React.useState<SoundtrackItemParamList>(defaultSoundtrackInfo);
@@ -170,7 +173,12 @@ const SoundtrackScreen = ({
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={[
+        { backgroundColor: OrchestraColors[theme].background },
+        styles.container
+      ]}
+    >
       <ChooseChapterTitleModal
         isVisible={isDialogVisible}
         onSubmit={(inputText: string) => chooseTheme(inputText)}
@@ -190,7 +198,7 @@ const SoundtrackScreen = ({
             } as never
           )
         }
-        color="black"
+        color={OrchestraColors[theme].secondaryText}
         size={30}
         style={styles.optionsButton}
       />

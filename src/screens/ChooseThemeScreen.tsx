@@ -1,18 +1,19 @@
 import React, { useState, useContext } from 'react';
-import uuid from 'react-native-uuid';
-import { ScrollView, StyleSheet } from 'react-native';
 import { Appbar, TextInput } from 'react-native-paper';
+import { BACKEND_URL } from '@env';
+import { ScrollView, StyleSheet } from 'react-native';
 import { StackScreenProps, StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
-import { BACKEND_URL } from '@env';
+import uuid from 'react-native-uuid';
 
-import { View } from '../components/Themed';
+import { SPOTIFY_API_URL } from '../constants/OrchestraConstants';
 import { StackParamList, ThemeParamList } from '../types/types';
+import { View } from '../components/Themed';
 import AppContext from '../../AppContext';
 import EmptyView from '../components/EmptyView';
-import ThemeItem from '../components/ThemeItem';
 import OrchestraColors from '../constants/OrchestraColors';
-import { SPOTIFY_API_URL } from '../constants/OrchestraConstants';
+import ThemeItem from '../components/ThemeItem';
+import useColorScheme from '../hooks/useColorScheme';
 
 const ChooseThemeScreen = ({
   route,
@@ -24,6 +25,7 @@ const ChooseThemeScreen = ({
   const globalState = useContext(AppContext);
   const [resultsList, setResultsList] = useState<Array<ThemeParamList>>([]);
   const emptyMessage: string = 'Choose a theme for your chapter';
+  const theme = useColorScheme();
 
   const logout = () => {
     navigation.reset({
@@ -158,13 +160,22 @@ const ChooseThemeScreen = ({
     ));
   };
 
+  const inputTheme = {
+    colors: {
+      placeholder: OrchestraColors[theme].primaryText,
+      text: OrchestraColors[theme].primaryText,
+      primary: OrchestraColors.transparent
+    },
+    roundness: 30
+  };
+
   return (
     <View style={styles.screen}>
       <Appbar.Header style={styles.header}>
         <TextInput
           mode="outlined"
           placeholder="Search"
-          selectionColor={OrchestraColors.textColorDark}
+          selectionColor={OrchestraColors[theme].selectedText}
           outlineColor={OrchestraColors.transparent}
           onChangeText={text => {
             text ? searchThemes(text) : setResultsList([]);
@@ -211,13 +222,5 @@ const styles = StyleSheet.create({
     width: '100%'
   }
 });
-
-const inputTheme = {
-  colors: {
-    placeholder: 'white',
-    text: 'white',
-    primary: OrchestraColors.primaryColorLightest
-  }
-};
 
 export default ChooseThemeScreen;

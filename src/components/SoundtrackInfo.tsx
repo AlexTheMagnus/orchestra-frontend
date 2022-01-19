@@ -1,9 +1,11 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Title } from 'react-native-paper';
+import { Text, Title } from 'react-native-paper';
+import { View, StyleSheet } from 'react-native';
 
 import { SoundtrackInfoParamList } from '../types/types';
 import BookCover from '../components/BookCover';
+import OrchestraColors from '../constants/OrchestraColors';
+import useColorScheme from '../hooks/useColorScheme';
 
 const SoundtrackInfo = ({
   bookCover,
@@ -11,13 +13,20 @@ const SoundtrackInfo = ({
   bookTitle,
   authorName
 }: SoundtrackInfoParamList) => {
+  const theme = useColorScheme();
+
   return (
     <View style={styles.container}>
       <BookCover bookCoverUrl={bookCover} styles={styles.bookCover} />
 
       <View style={styles.bookTextInfo}>
         <Title>{soundtrackTitle ?? ''}</Title>
-        <Text style={styles.bookDescription}>
+        <Text
+          style={[
+            { color: OrchestraColors[theme].secondaryText },
+            styles.bookDescription
+          ]}
+        >
           {bookTitle ?? ''} {bookTitle && authorName && '·'}
           {authorName && ` by ${authorName}`}
         </Text>

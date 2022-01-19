@@ -102,6 +102,15 @@ export default function SearchScreen() {
     setResultsList(soundtrackResults);
   };
 
+  const inputTheme = {
+    colors: {
+      placeholder: OrchestraColors[theme].primaryText,
+      text: OrchestraColors[theme].primaryText,
+      primary: OrchestraColors.transparent
+    },
+    roundness: 30
+  };
+
   return (
     <View style={styles.screen}>
       <Appbar.Header
@@ -113,12 +122,17 @@ export default function SearchScreen() {
         <TextInput
           mode="outlined"
           placeholder="Search"
-          selectionColor={OrchestraColors.textColorDark}
+          selectionColor={OrchestraColors[theme].selectedText}
           outlineColor={OrchestraColors.transparent}
           onChangeText={text => {
             text ? searchSoundtracks(text) : setResultsList([]);
           }}
-          style={styles.searchInput}
+          style={[
+            {
+              backgroundColor: OrchestraColors[theme].searchInputBackgroundColor
+            },
+            styles.searchInput
+          ]}
           theme={inputTheme}
         />
       </Appbar.Header>
@@ -152,9 +166,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     width: '80%',
-    height: 55,
-    backgroundColor: OrchestraColors.primaryColorLightest,
-    color: OrchestraColors.textColor
+    height: 55
   },
   content: {
     flex: 1,
@@ -167,11 +179,3 @@ const styles = StyleSheet.create({
     width: '100%'
   }
 });
-
-const inputTheme = {
-  colors: {
-    placeholder: 'white',
-    text: 'white',
-    primary: OrchestraColors.primaryColorLightest
-  }
-};

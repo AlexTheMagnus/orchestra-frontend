@@ -16,21 +16,25 @@ export default {
   dark: {
     primaryText: orchestraColors.textColor,
     secondaryText: orchestraColors.textColorDark,
+    selectedText: orchestraColors.textColorDark,
     background: orchestraColors.primaryColor,
     headerBackground: orchestraColors.primaryColorLight,
     tabIconSelected: orchestraColors.textColor,
     tabIconNonSelected: orchestraColors.textColorDark,
     bottomTabNav: orchestraColors.primaryColorLight,
-    emptyViewIcon: orchestraColors.textColorDark
+    emptyViewIcon: orchestraColors.textColorDark,
+    searchInputBackgroundColor: orchestraColors.primaryColorLightest
   },
   light: {
     primaryText: orchestraColors.textColor,
     secondaryText: orchestraColors.textColorDark,
+    selectedText: orchestraColors.textColorDark,
     background: orchestraColors.primaryColor,
     headerBackground: orchestraColors.primaryColorLight,
     tabIconSelected: orchestraColors.textColor,
     tabIconNonSelected: orchestraColors.primaryColorLightest,
     bottomTabNav: orchestraColors.primaryColorLight,
-    emptyViewIcon: orchestraColors.textColorDark
+    emptyViewIcon: orchestraColors.textColorDark,
+    searchInputBackgroundColor: orchestraColors.primaryColorLightest
   }
 };

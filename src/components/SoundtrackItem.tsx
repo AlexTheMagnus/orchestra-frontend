@@ -1,11 +1,13 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { List, TouchableRipple, IconButton } from 'react-native-paper';
+import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { SoundtrackItemParamList } from '../types/types';
-import BookCover from './BookCover';
 import { StackNavigationProp } from '@react-navigation/stack';
+import BookCover from './BookCover';
+import OrchestraColors from '../constants/OrchestraColors';
+import useColorScheme from '../hooks/useColorScheme';
 
 const renderBookCover = (bookCover: string) => {
   return <BookCover bookCoverUrl={bookCover} styles={styles.bookCover} />;
@@ -13,6 +15,7 @@ const renderBookCover = (bookCover: string) => {
 
 const renderOptionsIcon = (soundtrackInfo: SoundtrackItemParamList) => {
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const theme = useColorScheme();
 
   return (
     <IconButton
@@ -28,7 +31,7 @@ const renderOptionsIcon = (soundtrackInfo: SoundtrackItemParamList) => {
           } as never
         )
       }
-      color="black"
+      color={OrchestraColors[theme].secondaryText}
       size={30}
       style={styles.optionsIcon}
     />
