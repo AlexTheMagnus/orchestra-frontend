@@ -21,17 +21,23 @@ import ChooseThemeScreen from '../screens/ChooseThemeScreen';
 import LinkingConfiguration from './LinkingConfiguration';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import SoundtrackOptionsModal from '../components/SoundtrackOptionsModal';
+import OrchestraColors from '../constants/OrchestraColors';
 
 export default function Navigation({
   colorScheme
 }: {
   colorScheme: ColorSchemeName;
 }) {
+  const myTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: OrchestraColors[colorScheme ?? 'dark'].background
+    }
+  };
+
   return (
-    <NavigationContainer
-      linking={LinkingConfiguration}
-      theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-    >
+    <NavigationContainer linking={LinkingConfiguration} theme={myTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
