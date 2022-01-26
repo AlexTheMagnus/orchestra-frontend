@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import { Avatar, Button, Title } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import { getUserSoundtracks } from '../components/utils';
 import {
@@ -42,48 +42,48 @@ const MyProfileScreen = ({
   };
 
   return (
-    <View style={styles.container}>
-      <Button
-        uppercase={false}
-        color={OrchestraColors.textColorDark}
-        labelStyle={styles.logoutText}
-        onPress={() => logout()}
-        style={styles.logoutButton}
-      >
-        Log out
-      </Button>
-      <View style={styles.centeredContent}>
-        <Avatar.Image
-          size={150}
-          source={
-            globalState.loggedUser.avatar
-              ? { uri: globalState.loggedUser.avatar }
-              : require('../assets/images/avatar-placeholder.png')
-          }
-        />
-        <Title>{globalState.loggedUser.username}</Title>
+    <View style={styles.screenContainer}>
+      <ScrollView>
+        <Button
+          uppercase={false}
+          color={OrchestraColors.textColorDark}
+          labelStyle={styles.logoutText}
+          onPress={() => logout()}
+          style={styles.logoutButton}
+        >
+          Log out
+        </Button>
 
-        <SocialSection
-          profileUserId={globalState.loggedUser.id}
-          showFollowButton={false}
-        />
-      </View>
-
-      <SoundtrackCounter numberOfSountracks={mySoundtracksList.length} />
-
-      {mySoundtracksList.length != 0 && (
-        <View style={styles.soundtracksListContainer}>
-          <SoundtrackItemList soundtracksList={mySoundtracksList} />
+        <View style={styles.centeredContent}>
+          <Avatar.Image
+            size={150}
+            source={
+              globalState.loggedUser.avatar
+                ? { uri: globalState.loggedUser.avatar }
+                : require('../assets/images/avatar-placeholder.png')
+            }
+          />
+          <Title>{globalState.loggedUser.username}</Title>
+          <SocialSection
+            profileUserId={globalState.loggedUser.id}
+            showFollowButton={false}
+          />
+          <SoundtrackCounter numberOfSountracks={mySoundtracksList.length} />
         </View>
-      )}
+
+        {mySoundtracksList.length != 0 && (
+          <View style={styles.soundtracksListContainer}>
+            <SoundtrackItemList soundtracksList={mySoundtracksList} />
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center'
+  screenContainer: {
+    flex: 1
   },
   centeredContent: {
     alignItems: 'center',

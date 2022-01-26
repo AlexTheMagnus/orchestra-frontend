@@ -28,7 +28,7 @@ const UserList = ({ userList }: { userList: UserResponse[] }) => {
 
   return (
     <View style={styles.screeenContainer}>
-      <ScrollView style={styles.favoriteSoundtrackListContainer}>
+      <ScrollView style={styles.userListContainer}>
         {userList.map(({ user_id, username, user_avatar }, index) => (
           <TouchableRipple
             key={index}
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     textAlign: 'center'
   },
-  favoriteSoundtrackListContainer: {
+  userListContainer: {
     flex: 1,
     width: '100%'
   }

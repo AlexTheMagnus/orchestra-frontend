@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, ImageStyle, StyleProp } from 'react-native';
+import { StyleProp, ImageStyle, ScrollView, View } from 'react-native';
 
 import { SoundtrackItemParamList } from '../types/types';
 import SoundtrackItem from './SoundtrackItem';

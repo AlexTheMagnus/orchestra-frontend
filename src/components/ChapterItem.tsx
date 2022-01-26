@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { IconButton, Text } from 'react-native-paper';
+import { IconButton } from 'react-native-paper';
 import { StyleSheet } from 'react-native';
 
 import { ChapterItemParamList, ThemeParamList } from '../types/types';
 import { SPOTIFY_API_URL } from '../constants/OrchestraConstants';
-import { View } from './Themed';
+import { Text, View } from './Themed';
 import AppContext from '../../AppContext';
 import ThemeItem from './ThemeItem';
+import useColorScheme from '../hooks/useColorScheme';
+import OrchestraColors from '../constants/OrchestraColors';
 
 const ChapterItem = ({
   chapterNumber,
@@ -16,11 +18,13 @@ const ChapterItem = ({
   optionsOnPress
 }: ChapterItemParamList) => {
   const globalState = useContext(AppContext);
+  const colorTheme = useColorScheme();
   const [themeInfo, setThemeInfo] = useState<ThemeParamList>({
     title: '',
     author: '',
     themeUri: ''
   });
+  const titleSeparator = ' · ';
 
   useEffect(() => {
     getThemeInfo().then(result => {
@@ -50,14 +54,19 @@ const ChapterItem = ({
     <View style={styles.container}>
       <Text style={styles.chapterItemTitle}>
         <Text style={styles.chapterNumber}>Chapter {chapterNumber}</Text>
-        {chapterTitle && <Text> - {chapterTitle}</Text>}
+        {chapterTitle && (
+          <Text style={{ color: OrchestraColors[colorTheme].secondaryText }}>
+            {titleSeparator}
+            {chapterTitle}
+          </Text>
+        )}
       </Text>
 
       {optionsOnPress && (
         <IconButton
           icon="dots-vertical"
           onPress={optionsOnPress}
-          color="black"
+          color={OrchestraColors[colorTheme].secondaryText}
           size={20}
           style={styles.optionsButton}
         />

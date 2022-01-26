@@ -7,6 +7,7 @@ import { getFollowers } from '../components/utils';
 import { StackParamList, UserResponse } from '../types/types';
 import OrchestraColors from '../constants/OrchestraColors';
 import UserList from '../components/UserList';
+import useColorScheme from '../hooks/useColorScheme';
 
 const FollowersScreen = ({
   navigation,
@@ -14,6 +15,7 @@ const FollowersScreen = ({
 }: StackScreenProps<StackParamList, 'Followers'>) => {
   const { userId }: { userId: string } = route.params;
   const [followerList, setFollowerList] = useState<UserResponse[]>([]);
+  const theme = useColorScheme();
 
   useEffect(() => {
     getFollowers(userId).then(result => setFollowerList(result));
@@ -21,7 +23,9 @@ const FollowersScreen = ({
 
   return (
     <View style={styles.screenContainer}>
-      <Appbar.Header style={styles.header}>
+      <Appbar.Header
+        style={{ backgroundColor: OrchestraColors.primaryColorLight }}
+      >
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title="Followers" />
       </Appbar.Header>
@@ -33,9 +37,6 @@ const FollowersScreen = ({
 const styles = StyleSheet.create({
   screenContainer: {
     flex: 1
-  },
-  header: {
-    backgroundColor: OrchestraColors.primaryColorLight
   }
 });
 

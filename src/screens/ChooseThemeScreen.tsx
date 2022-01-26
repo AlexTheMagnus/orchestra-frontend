@@ -26,6 +26,7 @@ const ChooseThemeScreen = ({
   const [resultsList, setResultsList] = useState<Array<ThemeParamList>>([]);
   const emptyMessage: string = 'Choose a theme for your chapter';
   const theme = useColorScheme();
+  const maxNumberOfResults = 5;
 
   const logout = () => {
     navigation.reset({
@@ -37,7 +38,7 @@ const ChooseThemeScreen = ({
 
   const searchThemes = async (textToSearch: string) => {
     const response = await fetch(
-      `${SPOTIFY_API_URL}/search?query=${textToSearch}&type=track&offset=0&limit=10&market=ES`,
+      `${SPOTIFY_API_URL}/search?query=${textToSearch}&type=track&offset=0&limit=${maxNumberOfResults}&market=ES`,
       {
         method: 'GET',
         headers: new Headers({

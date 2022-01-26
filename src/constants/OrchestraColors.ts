@@ -23,7 +23,10 @@ export default {
     tabIconNonSelected: orchestraColors.textColorDark,
     bottomTabNav: orchestraColors.primaryColorLight,
     emptyViewIcon: orchestraColors.textColorDark,
-    searchInputBackgroundColor: orchestraColors.primaryColorLightest
+    searchInputBackgroundColor: orchestraColors.primaryColorLightest,
+    followButtonText: orchestraColors.textColor,
+    followButtonActive: orchestraColors.secondaryColor,
+    followButtonInactive: orchestraColors.textColor
   },
   light: {
     primaryText: orchestraColors.textColor,
@@ -35,6 +38,9 @@ export default {
     tabIconNonSelected: orchestraColors.primaryColorLightest,
     bottomTabNav: orchestraColors.primaryColorLight,
     emptyViewIcon: orchestraColors.textColorDark,
-    searchInputBackgroundColor: orchestraColors.primaryColorLightest
+    searchInputBackgroundColor: orchestraColors.primaryColorLightest,
+    followButtonText: orchestraColors.textColor,
+    followButtonActive: orchestraColors.secondaryColor,
+    followButtonInactive: orchestraColors.textColor
   }
 };

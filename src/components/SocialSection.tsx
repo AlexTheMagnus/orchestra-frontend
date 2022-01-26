@@ -10,6 +10,7 @@ import { UserResponse } from '../types/types';
 import { View } from '../components/Themed';
 import AppContext from '../../AppContext';
 import OrchestraColors from '../constants/OrchestraColors';
+import useColorScheme from '../hooks/useColorScheme';
 
 const SocialSection = ({
   profileUserId,
@@ -23,6 +24,7 @@ const SocialSection = ({
   const [followedUsers, setFollowedUsers] = React.useState<UserResponse[]>([]);
   const [isFollower, setIsFollower] = React.useState(false);
   const navigation = useNavigation<StackNavigationProp<any>>();
+  const theme = useColorScheme();
 
   const followerMessage = 'Following';
   const nonFollowerMessage = 'Follow';
@@ -132,11 +134,17 @@ const SocialSection = ({
       {showFollowButton && (
         <Button
           mode="outlined"
-          color={OrchestraColors.primaryColor}
+          color={OrchestraColors[theme].followButtonText}
           style={
             isFollower
-              ? [styles.button, styles.buttonActive]
-              : [styles.button, styles.buttonInactive]
+              ? [
+                  styles.button,
+                  { borderColor: OrchestraColors[theme].followButtonActive }
+                ]
+              : [
+                  styles.button,
+                  { borderColor: OrchestraColors[theme].followButtonInactive }
+                ]
           }
           labelStyle={styles.buttonText}
           onPress={isFollower ? () => unfollowUser() : () => followUser()}
@@ -176,12 +184,6 @@ const SocialSection = ({
 const styles = StyleSheet.create({
   button: {
     borderRadius: 30
-  },
-  buttonActive: {
-    borderColor: OrchestraColors.secondaryColor
-  },
-  buttonInactive: {
-    borderColor: OrchestraColors.primaryColor
   },
   buttonText: {
     fontWeight: 'bold'

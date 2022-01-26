@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { Avatar, Title } from 'react-native-paper';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import { BACKEND_URL } from '@env';
 import { getUserSoundtracks } from '../components/utils';
-import { View } from '../components/Themed';
-import SocialSection from '../components/SocialSection';
-import SoundtrackItemList from '../components/SoundtrackItemList';
 import {
   SoundtrackItemParamList,
   StackParamList,
   UserParamList
 } from '../types/types';
+import { View } from '../components/Themed';
+import SocialSection from '../components/SocialSection';
+import SoundtrackItemList from '../components/SoundtrackItemList';
 import SoundtrackCounter from '../components/SoundtrackCounter';
 
 const UserProfileScreen = ({
@@ -64,35 +64,34 @@ const UserProfileScreen = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.centeredContent}>
-        <Avatar.Image
-          size={150}
-          source={
-            userInfo.avatar
-              ? { uri: userInfo.avatar }
-              : require('../assets/images/avatar-placeholder.png')
-          }
-        />
-        <Title>{userInfo.username}</Title>
-      </View>
-
-      <SocialSection profileUserId={userId} showFollowButton={true} />
-
-      <SoundtrackCounter numberOfSountracks={userSoundtracksList.length} />
-
-      {userSoundtracksList.length != 0 && (
-        <View style={styles.soundtracksListContainer}>
-          <SoundtrackItemList soundtracksList={userSoundtracksList} />
+      <ScrollView>
+        <View style={styles.centeredContent}>
+          <Avatar.Image
+            size={150}
+            source={
+              userInfo.avatar
+                ? { uri: userInfo.avatar }
+                : require('../assets/images/avatar-placeholder.png')
+            }
+          />
+          <Title>{userInfo.username}</Title>
+          <SocialSection profileUserId={userId} showFollowButton={true} />
+          <SoundtrackCounter numberOfSountracks={userSoundtracksList.length} />
         </View>
-      )}
+
+        {userSoundtracksList.length != 0 && (
+          <View style={styles.soundtracksListContainer}>
+            <SoundtrackItemList soundtracksList={userSoundtracksList} />
+          </View>
+        )}
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center'
+    flex: 1
   },
   centeredContent: {
     alignItems: 'center',

@@ -1,9 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { SPOTIFY_API_URL } from '../constants/OrchestraConstants';
+import { StyleSheet } from 'react-native';
+import { Text, View } from './Themed';
 import { Title } from 'react-native-paper';
-import { View, Text, StyleSheet } from 'react-native';
 import AppContext from '../../AppContext';
 import ThemeCover from './ThemeCover';
+import OrchestraColors from '../constants/OrchestraColors';
+import useColorScheme from '../hooks/useColorScheme';
 
 type ThemeInfo = {
   cover: string;
@@ -20,6 +23,7 @@ const ChapterInfo = ({
   chapterTitle: string;
 }) => {
   const globalState = useContext(AppContext);
+  const theme = useColorScheme();
   const [themeInfo, setThemeInfo] = useState<ThemeInfo>({
     cover: '',
     title: ''
@@ -54,11 +58,18 @@ const ChapterInfo = ({
       <ThemeCover sourceUrl={themeInfo.cover} styles={styles.themeCover} />
 
       <View style={styles.chapterInfo}>
-        <Title>
+        <Title style={{ color: OrchestraColors[theme].primaryText }}>
           {chapterNumber ? `Chapter ${chapterNumber}` : ''}
           {chapterNumber && chapterTitle && '·'} {chapterTitle ?? ''}
         </Title>
-        <Text style={styles.themeTitle}>{themeInfo.title}</Text>
+        <Text
+          style={[
+            { color: OrchestraColors[theme].secondaryText },
+            styles.themeTitle
+          ]}
+        >
+          {themeInfo.title}
+        </Text>
       </View>
     </View>
   );

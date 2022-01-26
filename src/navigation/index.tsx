@@ -6,11 +6,7 @@
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {
-  DarkTheme,
-  DefaultTheme,
-  NavigationContainer
-} from '@react-navigation/native';
+import { DarkTheme, NavigationContainer } from '@react-navigation/native';
 
 import { ModalsParamList, StackParamList } from '../types/types';
 import AccessScreen from '../screens/AccessScreen';
@@ -28,16 +24,17 @@ export default function Navigation({
 }: {
   colorScheme: ColorSchemeName;
 }) {
-  const myTheme = {
-    ...DefaultTheme,
+  const customTheme = {
+    ...DarkTheme,
     colors: {
-      ...DefaultTheme.colors,
-      background: OrchestraColors[colorScheme ?? 'dark'].background
+      ...DarkTheme.colors,
+      background: OrchestraColors[colorScheme ?? 'dark'].background,
+      text: OrchestraColors[colorScheme ?? 'dark'].primaryText
     }
   };
 
   return (
-    <NavigationContainer linking={LinkingConfiguration} theme={myTheme}>
+    <NavigationContainer linking={LinkingConfiguration} theme={customTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
