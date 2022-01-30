@@ -29,7 +29,7 @@ Clone this repo and run `yarn` inside the project folder to install the dependen
 
 ## Configuration
 
-- **SPOTIFY_CLIENT_ID**: Spotify app client ID (Can be obtained from [Spotify for Developers](https://developer.spotify.com/dashboard/applications))
+- **SPOTIFY_CLIENT_ID**: Spotify app client ID (Can be obtained from [Spotify for Developers](https://developer.spotify.com/dashboard/applications)).
 - **LOCAL_ORCHESTRA_URL**: Orchestra frontend location.
 - **BACKEND_URL**: Orchestra backend location.
 
