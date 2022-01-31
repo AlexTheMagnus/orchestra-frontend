@@ -1,4 +1,4 @@
-![photo_2022-01-29_16-05-27](https://user-images.githubusercontent.com/37160608/151705772-053f38c8-f3d2-44b1-b6d4-ecb2da5ccf71.jpg)
+![OrchestraBanner](https://user-images.githubusercontent.com/37160608/151792937-30207875-998b-4ff3-b024-34ca88c290f3.png)
 # 🎶📖🎶 Orchestra Frontend 🎶📖🎶
 
 ## Table of contents
