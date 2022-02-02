@@ -121,7 +121,7 @@ const AccessScreen = ({
           />
           <Text style={styles.logoText}>Orchestra</Text>
           <Text style={styles.logoSubTitle}>
-            Conduct your book's soundtracks
+            Conduct your books' soundtracks
           </Text>
         </View>
         <View>
