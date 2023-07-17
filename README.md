@@ -43,6 +43,15 @@ Clone this repo and run `yarn` inside the project folder to install the dependen
 2. On the developer tools left sidebar, select `Run on Android device/emulator`.
 
 
+## Demo
+
+<p align="center">
+  <img src="https://github.com/AlexTheMagnus/orchestra-frontend/assets/37160608/fcf98515-84ae-4736-976c-218b611fe297" height="600"/>
+  &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;
+  <img src="https://github.com/AlexTheMagnus/orchestra-frontend/assets/37160608/84939bd3-ba3d-44ce-a614-2f68bd793841" height="600"/>
+</p>
+
+
 
 ## Uninstall
 
